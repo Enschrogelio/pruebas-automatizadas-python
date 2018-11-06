@@ -1,7 +1,7 @@
 import unittest
 import time
 import json
-from util.functions import db_functions, logout, login
+from util.functions import *
 from util.config import modelConfig
 
 clients = '''
@@ -63,6 +63,8 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
         time.sleep(3)
+        mi_ruta = "clients/client/screenshot/test_consult_client_success"
+        screenshot(self, mi_ruta)
 
     def tearDown(self):
         logout(self)

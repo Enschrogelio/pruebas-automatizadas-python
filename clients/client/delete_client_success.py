@@ -3,7 +3,7 @@ import time
 import json
 
 from util.config import modelConfig
-from util.functions import db_functions, logout, login
+from util.functions import *
 
 clients = '''
         [{ "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", "cpm" : "18",
@@ -96,6 +96,8 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual("deleted", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
         time.sleep(3)
+        mi_ruta = "clients/client/screenshot/test_delete_client_success"
+        screenshot(self, mi_ruta)
 
     def tearDown(self):
         logout(self)

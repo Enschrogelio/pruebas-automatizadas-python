@@ -83,6 +83,9 @@ cur.execute(sql, val)
                          .text, msg=None)
         self.assertEqual('inactive', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
+        sleep(3)
+        mi_ruta = "clients/client/screenshot/test_edit_client_success"
+        screenshot(self, mi_ruta)
 
     def tearDown(self):
         logout(self)
