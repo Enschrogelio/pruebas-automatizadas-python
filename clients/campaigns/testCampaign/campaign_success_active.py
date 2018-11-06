@@ -3,11 +3,11 @@ import unittest
 import time
 
 
-from pruebas_automatizadas.util.functions import *
-from pruebas_automatizadas.util.config import *
-from pruebas_automatizadas.util.dataCampaign import *
+from util.functions import *
+from util.config import *
+from util.dataCampaign import *
 import psycopg2 as psycopg2
-from pruebas_automatizadas.util.functions import login
+from util.functions import login
 
 
 class AddClient(unittest.TestCase):

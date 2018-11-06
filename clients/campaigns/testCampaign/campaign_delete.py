@@ -1,9 +1,9 @@
 import json
 import unittest
 
-from pruebas_automatizadas.util.functions import *
-from pruebas_automatizadas.util.config import *
-from pruebas_automatizadas.util.dataCampaign import *
+from util.functions import *
+from util.config import *
+from util.dataCampaign import *
 import psycopg2 as psycopg2
 
 campaign=[
