@@ -1,16 +1,9 @@
-import datetime
 import json
 import unittest
-import time
-from tkinter.tix import Select
-from util.functions import *
 
-from selenium import webdriver
-from self import self
-
-from util.functions import *
-from util.config import *
-from util.dataCampaign import *
+from pruebas_automatizadas.util.functions import *
+from pruebas_automatizadas.util.config import *
+from pruebas_automatizadas.util.dataCampaign import *
 import psycopg2 as psycopg2
 
 campaign=[

@@ -3,8 +3,8 @@ import unittest
 import time
 
 from selenium import webdriver
-from util.config import *
-from util.functions import *
+from pruebas_automatizadas.util.config import *
+from pruebas_automatizadas.util.functions import *
 
 
 class AddClient(unittest.TestCase):
