@@ -50,7 +50,7 @@ def screenshot(self,ruta):
     driver.save_screenshot(modelConfig.base_screenshot+ruta+"%s-hora-%s-seg_%s.png" %(today, hour, second))
     return ruta
 
-def randoms(long,tipo):
+def randoms(long, tipo):
     dato = ""
     if tipo == "letter":
         letters = [chr(random.randint(97, 122)) for _ in range(long)]

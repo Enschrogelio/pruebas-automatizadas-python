@@ -20,7 +20,7 @@ class modelConfig:
         #global x
         baseDriver = "D:/TC_VARANGAR/TC_AUTOMATE/"
         if x == "ch":
-            driver = webdriver.Chrome(baseDriver+"cerebro/util/drivers/chromedriver.exe")
+            driver = webdriver.Chrome(executable_path=baseDriver+"cerebro/util/drivers/chromedriver.exe")
             return driver
         else:
             if x == "fi":
