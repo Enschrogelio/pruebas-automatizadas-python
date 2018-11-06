@@ -3,7 +3,7 @@ import random
 import string
 
 import psycopg2
-from pruebas_automatizadas.util.config import modelConfig
+from util.config import modelConfig
 from time import *
 
 

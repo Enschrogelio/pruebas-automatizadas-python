@@ -2,7 +2,7 @@ import unittest
 import time
 import json
 from random import randint
-from util.functions import db_functions, logout, login, screenshot
+from util.functions import *
 from util.config import modelConfig
 
 clients = '''
@@ -44,13 +44,13 @@ for elemento in info:
 
         # login
         login(self)
-        time.sleep(3)
+        sleep(3)
         driver = self.driver
         self.assertIn("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/", driver.current_url,
                       msg=None)
-        time.sleep(3)
+        sleep(3)
         driver.find_element_by_xpath('//*[@id="btn-add"]').click()
-        time.sleep(1)
+        sleep(1)
         driver.find_element_by_xpath('//*[@id="id_email"]').send_keys(info[rand]['email'])
         driver.find_element_by_xpath('//*[@id="id_person_contact"]').send_keys(info[rand]['name'])
         driver.find_element_by_xpath('//*[@id="id_status"]').click()
@@ -62,10 +62,10 @@ for elemento in info:
         driver.find_element_by_xpath('//*[@id="id_address"]').send_keys(info[rand]['address'])
         driver.find_element_by_xpath('//*[@id="id_phone"]').send_keys(info[rand]['phone'])
         driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
-        time.sleep(10)
+        sleep(10)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[rand]['rfc'])
-        time.sleep(5)
+        sleep(5)
         self.assertEqual(info[rand]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
                          .text, msg=None)
         self.assertEqual(info[rand]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
@@ -78,7 +78,7 @@ for elemento in info:
                          .text, msg=None)
         mi_ruta = "clients/client/screenshot/test_add_client_success"
         screenshot(self, mi_ruta)
-        time.sleep(5)
+        sleep(5)
 
     def tearDown(self):
         logout(self)
