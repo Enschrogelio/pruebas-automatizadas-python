@@ -10,6 +10,7 @@ from time import *
 
 def db_functions(code):
     conn = None
+    # noinspection PyUnresolvedReferences
     try:
         conn = psycopg2.connect(modelConfig.connection)
         cur = conn.cursor()
@@ -25,7 +26,7 @@ def db_functions(code):
 def login(self):
     driver = self.driver
     #login
-    driver.get(modelConfig.urlLogin)
+    driver.get(modelConfig.url_login)
     driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(modelConfig.email)
     driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(modelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
@@ -33,21 +34,15 @@ def login(self):
 def logout(self):
     sleep(5)
     driver = self.driver
-    driver.get(modelConfig.baseUrl+"/admin/login")
+    driver.get(modelConfig.base_url+"/admin/login")
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
 
-
-
 def screenshot(self,ruta):
     driver = self.driver
-    now = datetime.datetime.now()
-    hour = now.hour
-    min = now.min
-    second = now.second
-    today = datetime.date.today()
-    driver.save_screenshot(modelConfig.base_screenshot+ruta+"%s-hora-%s-seg_%s.png" %(today, hour, second))
+    now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
+    driver.save_screenshot(modelConfig.base_screenshot+ruta+"%s.png" % now)
     return ruta
 
 def randoms(long, tipo):
