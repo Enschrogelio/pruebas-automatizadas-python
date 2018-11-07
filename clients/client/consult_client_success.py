@@ -1,5 +1,4 @@
 import unittest
-import time
 import json
 from util.functions import *
 from util.config import modelConfig
@@ -32,28 +31,31 @@ cur.execute(sql, val)""".format(info)
     def test_consult_client_success(self):
         browserName = self.driver.capabilities['browserName']
         #print(browserName)
+        mi_ruta = "clients/client/screenshot/test_consult_client_success"
         info = json.loads(clients)
 
         #login
         login(self)
-        time.sleep(3)
+        sleep(3)
         driver = self.driver
         self.assertIn("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/", driver.current_url,
                       msg=None)
         # time.sleep(3)
         # driver.find_element_by_xpath('//*[@id="sections-access"]/div[2]/a').click()
-        time.sleep(1)
+        sleep(1)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(rfcinexist)
-        time.sleep(3)
+        sleep(3)
         self.assertEqual("No record found", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td')
                          .text, msg=None)
-        time.sleep(3)
+        sleep(3)
+        screenshot(self, mi_ruta)
+        sleep(3)
         driver.find_element_by_id('search').clear()
         if browserName == 'internet explorer':
             driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[0]['rfc'])
-        time.sleep(3)
+        sleep(3)
         self.assertEqual(info[0]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
                          .text, msg=None)
         self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
@@ -62,9 +64,8 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
-        time.sleep(3)
-        mi_ruta = "clients/client/screenshot/test_consult_client_success"
         screenshot(self, mi_ruta)
+        sleep(3)
 
     def tearDown(self):
         logout(self)

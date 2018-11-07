@@ -33,6 +33,7 @@ cur.execute(sql, val)
 
     def test_edit_client_success(self):
         global clients
+        mi_ruta = "clients/client/screenshot/test_edit_client_success"
 
         info = json.loads(clients)
         # login
@@ -68,6 +69,7 @@ cur.execute(sql, val)
         driver.find_element_by_css_selector('#form-edit #id_address').send_keys(info[1]['address'])
         driver.find_element_by_css_selector('#form-edit #id_phone').clear()
         driver.find_element_by_css_selector('#form-edit #id_phone').send_keys(info[1]['phone'])
+        screenshot(self, mi_ruta)
         driver.find_element_by_css_selector("#modal-edit > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > button:nth-child(1)").click()
         sleep(5)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
@@ -83,9 +85,8 @@ cur.execute(sql, val)
                          .text, msg=None)
         self.assertEqual('inactive', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
-        sleep(3)
-        mi_ruta = "clients/client/screenshot/test_edit_client_success"
         screenshot(self, mi_ruta)
+        sleep(3)
 
     def tearDown(self):
         logout(self)

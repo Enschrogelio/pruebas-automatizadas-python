@@ -1,8 +1,6 @@
 import unittest
-import time
 import json
 
-from util.config import modelConfig
 from util.functions import *
 
 clients = '''
@@ -31,19 +29,19 @@ cur.execute(sql, val)""".format(info)
 
     def test_delete_client_success(self):
         info = json.loads(clients)
-
+        mi_ruta = "clients/client/screenshot/test_delete_client_success"
         #login
         login(self)
-        time.sleep(3)
+        sleep(3)
         driver = self.driver
         self.assertIn("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/", driver.current_url,
                       msg=None)
-        time.sleep(3)
+        sleep(3)
         driver.find_element_by_xpath('//*[@id="sections-access"]/div[2]/a').click()
-        time.sleep(1)
+        sleep(1)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[0]['rfc'])
-        time.sleep(3)
+        sleep(3)
         self.assertEqual(info[0]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
                          .text, msg=None)
         self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
@@ -54,13 +52,14 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual("active", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
-        time.sleep(3)
+        sleep(3)
+        screenshot(self, mi_ruta)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[3]').click()
-        time.sleep(3)
+        sleep(3)
         self.assertEqual("Deleting record", driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[2]/h2')
                          .text, msg=None)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
-        time.sleep(3)
+        sleep(3)
         self.assertEqual("Are you sure to delete this record:",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[1]/h1').text, msg=None)
         self.assertEqual("Deleting this record, will erease the campaigns and creative relating with it",
@@ -68,23 +67,25 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual("Enter the conrfirmation:",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[2]/p').text, msg=None)
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
-        time.sleep(3)
+        sleep(3)
         self.assertEqual("This field doesnt match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').text.rstrip(' '), msg=None)
+        screenshot(self, mi_ruta)
         driver.find_element_by_xpath('//*[@id="input-email"]').clear()
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys("BATALLON@GMAIL")
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
-        time.sleep(3)
+        sleep(3)
         self.assertEqual("This field doesnt match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').get_attribute('innerHTML')
                          .rstrip(' '), msg=None)
+        screenshot(self, mi_ruta)
         driver.find_element_by_xpath('//*[@id="input-email"]').clear()
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(info[0]['email'])
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
-        time.sleep(5)
+        sleep(5)
         # driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         # driver.find_element_by_id('search').send_keys(info[0]['rfc'])
-        # time.sleep(3)
+        # sleep(3)
         self.assertEqual(info[0]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
                          .text, msg=None)
         self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
@@ -95,9 +96,9 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual("deleted", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
-        time.sleep(3)
-        mi_ruta = "clients/client/screenshot/test_delete_client_success"
+
         screenshot(self, mi_ruta)
+        sleep(3)
 
     def tearDown(self):
         logout(self)

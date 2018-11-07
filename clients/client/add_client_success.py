@@ -1,5 +1,4 @@
 import unittest
-import time
 import json
 from random import randint
 from util.functions import *
@@ -38,7 +37,7 @@ for elemento in info:
 
     def test_add_client_success(self):
         global clients
-
+        mi_ruta = "clients/client/screenshot/test_add_client_success"
         info = json.loads(clients)
         rand = randint(0, len(info) - 1)
 
@@ -61,6 +60,7 @@ for elemento in info:
         driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys(info[rand]['rfc'])
         driver.find_element_by_xpath('//*[@id="id_address"]').send_keys(info[rand]['address'])
         driver.find_element_by_xpath('//*[@id="id_phone"]').send_keys(info[rand]['phone'])
+        screenshot(self, mi_ruta)
         driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
         sleep(10)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
@@ -76,7 +76,6 @@ for elemento in info:
                          .text, msg=None)
         self.assertEqual('active', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
-        mi_ruta = "clients/client/screenshot/test_add_client_success"
         screenshot(self, mi_ruta)
         sleep(5)
 
