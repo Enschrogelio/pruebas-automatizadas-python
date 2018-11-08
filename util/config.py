@@ -19,7 +19,6 @@ class modelConfig:
     base_screenshot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'\\'
 
     #Drivers
-    @property
     def drivers(x):
         global root_driver
         if x == "ch":
@@ -40,4 +39,4 @@ class modelConfig:
                     else:
                         return None
 
-    driverWeb = drivers
+    driverWeb = drivers("ed")
