@@ -1,18 +1,18 @@
 import csv
 from datetime import datetime
-from time import sleep
+from time import sleep, strftime
 import random
 import string
 import psycopg2
-from util.config import modelConfig
+from util.config import ModelConfig
 
 #login
 def login(self):
     driver = self.driver
     #login
-    driver.get(modelConfig.base_url+"/admin/login")
-    driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(modelConfig.email)
-    driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(modelConfig.password)
+    driver.get(ModelConfig.url_login)
+    driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(ModelConfig.email)
+    driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(ModelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
     sleep(2)
 
@@ -20,19 +20,19 @@ def login(self):
 def logout(self):
     sleep(5)
     driver=self.driver
-    driver.get(modelConfig.base_url+"/admin/login")
+    driver.get(ModelConfig.url_login)
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
 
 #Screenshot
-def screenshot(self,ruta):
+def screenshot(self, ruta):
     driver = self.driver
     now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
-    driver.save_screenshot(modelConfig.base_screenshot+ruta+" %s.png" % now)
+    driver.save_screenshot(ModelConfig.base_screenshot+ruta+" %s.png" % now)
 
 #Randoms
-def randoms(long,tipo):
+def randoms(long, tipo):
     dato = ""
     if tipo == "letter":
         letters = [chr(random.randint(97, 122)) for r in range(long)]
@@ -54,9 +54,9 @@ def randoms(long,tipo):
 #DB functions
 # noinspection PyUnresolvedReferences
 def db_functions(code):
-    conn=None
+    conn = None
     try:
-        conn = psycopg2.connect(modelConfig.connection)
+        conn = psycopg2.connect(ModelConfig.connection)
         cur = conn.cursor()
         exec(code)
         conn.commit()

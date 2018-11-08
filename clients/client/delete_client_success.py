@@ -1,7 +1,6 @@
 import unittest
 import json
-
-from util.functions import *
+from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 clients = '''
         [{ "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", "cpm" : "18",
@@ -13,7 +12,7 @@ clients = '''
 class DeleteClient(unittest.TestCase):
 
     def setUp(self):
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         #Preaparación de ambiente
         info = json.loads(clients)
         code = """

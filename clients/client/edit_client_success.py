@@ -1,7 +1,7 @@
 import unittest
 import json
 from selenium.webdriver.support.ui import Select
-from util.functions import *
+from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 clients = '''
         [{ "email" : "HUASTECAS1@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
@@ -19,7 +19,7 @@ class EditClient(unittest.TestCase):
 
     def setUp(self):
         global clients
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         #Preaparación de ambiente
         info = json.loads(clients)
         code = """
@@ -71,10 +71,10 @@ cur.execute(sql, val)
         driver.find_element_by_css_selector('#form-edit #id_phone').send_keys(info[1]['phone'])
         screenshot(self, mi_ruta)
         driver.find_element_by_css_selector("#modal-edit > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > button:nth-child(1)").click()
-        sleep(5)
+        sleep(3)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[1]['rfc'])
-        sleep(5)
+        sleep(3)
         self.assertEqual(info[1]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
                          .text, msg=None)
         self.assertEqual(info[1]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')

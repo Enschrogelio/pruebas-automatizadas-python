@@ -6,10 +6,10 @@ root_driver = root_files+"drivers/"
 
 class ModelConfig:
     #atributos
-    base_url="http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com"
+    base_url = "http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com"
     url_login = base_url+"/admin/login/"
-    email="admin@admin.com"
-    password="admin"
+    email = "admin@admin.com"
+    password = "admin"
     connection = "dbname='cerebro'" \
                  " user='cerebro'" \
                  " host='cerebro-stage.ct2o8jgma4vs.us-west-2.rds.amazonaws.com' password='N23E4Jz8KLRuSvGb'" \
@@ -22,7 +22,7 @@ class ModelConfig:
     def drivers(x):
         global root_driver
         if x == "ch":
-            driver = webdriver.Chrome(root_driver+"chromedriver.exe")
+            driver = webdriver.Chrome(executable_path=root_driver+"chromedriver.exe")
             return driver
         else:
             if x == "fi":
@@ -30,7 +30,7 @@ class ModelConfig:
                 return driver
             else:
                 if x == "ie":
-                    driver=webdriver.Ie(root_driver+"IEDriverServer.exe")
+                    driver = webdriver.Ie(executable_path=root_driver+"IEDriverServer.exe")
                     return driver
                 else:
                     if x == "ed":

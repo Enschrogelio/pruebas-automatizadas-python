@@ -1,7 +1,6 @@
 import unittest
 import json
-from util.functions import *
-from util.config import modelConfig
+from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 clients = '''
         [{ "email" : "RUIZ@gmail.com","name" : "OSCAR IGNACIO ALVAREZ CHAGOYA","password" : "ALVAREZ", "cpm" : "99",
@@ -14,7 +13,7 @@ rfcinexist="AEAS860120H3A"
 class ConsultClient(unittest.TestCase):
 
     def setUp(self):
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         #Preaparación de ambiente
         info = json.loads(clients)
         code = """
