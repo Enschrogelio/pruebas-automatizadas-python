@@ -39,4 +39,4 @@ class ModelConfig:
                     else:
                         return None
 
-    driverWeb = drivers("ed")
+    driver_web = drivers("ed")
