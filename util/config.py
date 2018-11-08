@@ -4,7 +4,7 @@ from selenium import webdriver
 root_files = os.path.dirname(os.path.abspath(__file__))+'\\'
 root_driver = root_files+"drivers/"
 
-class modelConfig:
+class ModelConfig:
     #atributos
     base_url="http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com"
     url_login = base_url+"/admin/login/"
