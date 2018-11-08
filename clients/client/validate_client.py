@@ -1,11 +1,11 @@
 import unittest
-from util.functions import *
+from util.functions import ModelConfig, login, logout, sleep, screenshot
 
 class ValidateClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.driver = modelConfig.driverWeb
+        cls.driver = ModelConfig.driver_web
     #def setUp(self):
         # self.driver = modelConfig.driverWeb
 
@@ -179,6 +179,7 @@ class ValidateClient(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        logout(cls)
         cls.driver.close()
 
 if __name__ == "__main__":

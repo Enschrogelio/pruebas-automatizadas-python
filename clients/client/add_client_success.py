@@ -2,7 +2,7 @@ import unittest
 import json
 from random import randint
 from util.functions import *
-from util.config import modelConfig
+from util.config import ModelConfig
 
 clients = '''
         [{ "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
@@ -25,7 +25,7 @@ class AddClient(unittest.TestCase):
 
     def setUp(self):
         global clients
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         #Preaparación de ambiente
         info = json.loads(clients)
         code = """
