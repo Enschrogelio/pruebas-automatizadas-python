@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import Select
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 clients = '''
-        [{ "email" : "HUASTECAS1@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
+        [{ "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
         "budget" : "15000.90", "company" : "AUTOTRANSPORTES RAPIDOS DOS HUASTECAS S A DE C V", "rfc" : "ASS001002KX0",
         "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
         "phone" : "3125256987"
@@ -70,8 +70,10 @@ cur.execute(sql, val)
         driver.find_element_by_css_selector('#form-edit #id_phone').clear()
         driver.find_element_by_css_selector('#form-edit #id_phone').send_keys(info[1]['phone'])
         screenshot(self, mi_ruta)
-        driver.find_element_by_css_selector("#modal-edit > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > button:nth-child(1)").click()
         sleep(3)
+        driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
+        #self.assertIn("Record successfully updated", driver.page_source)
+        sleep(5)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[1]['rfc'])
         sleep(3)

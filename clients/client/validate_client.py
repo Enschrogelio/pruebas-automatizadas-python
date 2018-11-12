@@ -1,181 +1,253 @@
 import unittest
-from util.functions import ModelConfig, login, logout, sleep, screenshot
+import json
+from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
+#CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
+typo = "add" #"edit" "detail" "add"
+
+clients = '''
+        [{ "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
+        "budget" : "15000.90", "company" : "AUTOTRANSPORTES RAPIDOS DOS HUASTECAS S A DE C V", "rfc" : "ASS001002KX0",
+        "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
+        "phone" : "3125256987"
+        }]'''
 
 class ValidateClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.driver = ModelConfig.driver_web
-    #def setUp(self):
-        # self.driver = modelConfig.driverWeb
+        #Preaparación de ambiente
+        info = json.loads(clients)
+        code = """
+info = {0}
+cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
+sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, password, company_name, rfc, phone, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)'
+val = (info[0]['name'], info[0]['cpm'], info[0]['budget'], 1, info[0]['email'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), info[0]['password'], info[0]['company'], info[0]['rfc'], info[0]['phone'],info[0]['address'])
+cur.execute(sql, val)
+""".format(info)
+        db_functions(code)
 
-    def test_required(self):
+
+    def function_type(self, typo,refresh):
         driver = self.driver
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
-        sleep(1)
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
-        sleep(2)
-        self.assertEqual('This field is empty', driver.find_element_by_xpath('//*[@id="form-add"]/div[1]/span')
-                         .text, msg=None)
-        self.assertEqual('This field is empty', driver.find_element_by_xpath('//*[@id="form-add"]/div[4]/span')
-                         .text, msg=None)
-        self.assertEqual('This field is empty', driver.find_element_by_xpath('//*[@id="form-add"]/div[5]/span')
-                         .text, msg=None)
-        self.assertEqual('This field is empty.', driver.find_element_by_xpath('//*[@id="form-add"]/div[6]/span')
-                         .text, msg=None) #quitar punto
-        self.assertEqual('This field is empty', driver.find_element_by_xpath('//*[@id="form-add"]/div[7]/span')
-                         .text, msg=None)
-        mi_ruta = "clients/client/screenshot/test_required"
-        screenshot(self, mi_ruta)
-        sleep(3)
+        info = json.loads(clients)
+        if typo == "add":
+            driver.refresh()
+            form = '#form-add'
+            modal = '#modal-add'
+            driver.find_element_by_xpath('//*[@id="btn-add"]').click()
+            return form, modal
+        else:
+            if typo == "edit":
+                form = '#form-edit'
+                modal = '#modal-edit'
+                if refresh == 0:
+                    driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
+                    driver.find_element_by_id('search').send_keys(info[0]['rfc'])
+                    sleep(5)
+                    driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[2]').click()
+                    return form, modal
+                else:
+                    driver.refresh()
+                return form, modal
+            else:
+                if typo == "detail":
+                    form = '#form-edit'
+                    modal = '#modal-edit'
+                    if refresh == 0:
+                        driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
+                        driver.find_element_by_id('search').send_keys(info[0]['rfc'])
+                        sleep(5)
+                        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]').click()
+                        sleep(3)
+                        self.assertEqual(info[0]['company'],
+                                         driver.find_element_by_xpath('//*[@id="client-info-header"]/a[2]').text, msg=None)
+                        driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
+                        return form, modal
+                    else:
+                        driver.refresh()
+                    return form, modal
 
-        driver.refresh()
+                else:
+                    return "cambiar variable typo: add, edit o detail"
 
     def test_client_exist(self):
         #login
         driver = self.driver
+        refresh = 0
         login(self)
-        sleep(2)
-
-        self.assertIn("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/",
-                      driver.current_url, msg=None)
-        sleep(3)
-        driver.find_element_by_xpath('//*[@id="sections-access"]/div[2]/a').click()
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_email"]').send_keys("sonia.amezcua@varangard.com")
-        driver.find_element_by_xpath('//*[@id="id_status"]').click()
-        driver.find_element_by_xpath('//*[@id="id_password"]').send_keys("123")
-        driver.find_element_by_xpath('//*[@id="id_cpm"]').send_keys("12")
-        driver.find_element_by_xpath('//*[@id="id_budget"]').send_keys("12")
-        driver.find_element_by_xpath('//*[@id="id_company_name"]')\
+        sleep(5)
+        form, modal = self.function_type(typo, refresh)
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_email').clear()
+        driver.find_element_by_css_selector(form+' #id_email').send_keys("sonia.amezcua@varangard.com")
+        driver.find_element_by_css_selector(form+' #id_status').click()
+        driver.find_element_by_css_selector(form+' #id_password').clear()
+        driver.find_element_by_css_selector(form+' #id_password').send_keys("123")
+        driver.find_element_by_css_selector(form+' #id_cpm').clear()
+        driver.find_element_by_css_selector(form+' #id_cpm').send_keys("12")
+        driver.find_element_by_css_selector(form+' #id_budget').clear()
+        driver.find_element_by_css_selector(form+' #id_budget').send_keys("12")
+        driver.find_element_by_css_selector(form+' #id_company_name').clear()
+        driver.find_element_by_css_selector(form+' #id_company_name') \
             .send_keys("AUTOLINEAS UNIDAS SALVADOR ALMAGUER, S.A.DE C.V")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
         self.assertEqual('Client with this Email already exists.',
-                         driver.find_element_by_xpath('//*[@id="form-add"]/div[1]/span').text, msg=None)
-        mi_ruta = "clients/client/screenshot/test_client_exist"
+                         driver.find_element_by_css_selector(form+' > div.form-group.has-error > span').text, msg=None)
+        mi_ruta = "clients/client/screenshot/test_client_exist"+form
         screenshot(self, mi_ruta)
         sleep(3)
-        driver.refresh()
+
+    def test_required(self):
+        driver = self.driver
+        refresh = 1
+        form, modal = self.function_type(typo, refresh)
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_email').clear()
+        driver.find_element_by_css_selector(form+' #id_person_contact').clear()
+        driver.find_element_by_css_selector(form+' #id_password').clear()
+        driver.find_element_by_css_selector(form+' #id_cpm').clear()
+        driver.find_element_by_css_selector(form+' #id_budget').clear()
+        driver.find_element_by_css_selector(form+' #id_company_name').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_address').clear()
+        driver.find_element_by_css_selector(form+' #id_phone').clear()
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
+        sleep(2)
+        self.assertEqual('This field is empty', driver.find_element_by_css_selector(form+' > div:nth-child(2) > span')
+                         .text, msg=None)
+        self.assertEqual('This field is empty', driver.find_element_by_css_selector(form+' > div:nth-child(5) > span')
+                         .text, msg=None)
+        self.assertEqual('This field is empty', driver.find_element_by_css_selector(form+' > div:nth-child(6) > span')
+                         .text, msg=None)
+        self.assertEqual('This field is empty.', driver.find_element_by_css_selector(form+' > div:nth-child(7) > span')
+                         .text, msg=None) #quitar punto
+        self.assertEqual('This field is empty', driver.find_element_by_css_selector(form+' > div:nth-child(8) > span')
+                         .text, msg=None)
+        mi_ruta = "clients/client/screenshot/test_required_"+form
+        screenshot(self, mi_ruta)
+        sleep(3)
 
     def test_data_type(self):
         driver = self.driver
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_cpm"]').send_keys("aa")
-        driver.find_element_by_xpath('//*[@id="id_budget"]').send_keys("aa")
-        driver.find_element_by_xpath('//*[@id="id_phone"]').send_keys("aa")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        refresh = 1
+        form, modal = self.function_type(typo, refresh)
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_cpm').clear()
+        driver.find_element_by_css_selector(form+' #id_cpm').send_keys("aa")
+        driver.find_element_by_css_selector(form+' #id_budget').clear()
+        driver.find_element_by_css_selector(form+' #id_budget').send_keys("aa")
+        driver.find_element_by_css_selector(form+' #id_phone').clear()
+        driver.find_element_by_css_selector(form+' #id_phone').send_keys("aa")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
         self.assertEqual('Enter a valid budget. Maximum allowed decimals: 2',
-                         driver.find_element_by_xpath('//*[@id="form-add"]/div[6]/span').text, msg=None)
-        mi_ruta = "clients/client/screenshot/test_data_type"
+                         driver.find_element_by_css_selector(form+' > div:nth-child(7) > span').text, msg=None)
+        mi_ruta = "clients/client/screenshot/test_data_type"+form
         screenshot(self, mi_ruta)
-        sleep(5)
-        driver.refresh()
+        sleep(3)
 
     def test_format_email(self):
-        mi_ruta = "clients/client/screenshot/test_format_email"
         driver = self.driver
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
+        refresh = 1
+        form, modal = self.function_type(typo, refresh)
+        mi_ruta = "clients/client/screenshot/test_format_email"+form
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_email').clear()
+        driver.find_element_by_css_selector(form+' #id_email').send_keys("sonia.amezcua")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_email"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_email"]').send_keys("sonia.amezcua")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
-        sleep(1)
-        self.assertEqual('Enter valid email', driver.find_element_by_xpath('//*[@id="form-add"]/div[1]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid email',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(2) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_email"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_email"]').send_keys("sonia.amezcua@")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_email').clear()
+        driver.find_element_by_css_selector(form+' #id_email').send_keys("sonia.amezcua@")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        self.assertEqual('Enter valid email', driver.find_element_by_xpath('//*[@id="form-add"]/div[1]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid email',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(2) > span').text, msg=None)
         screenshot(self, mi_ruta)
         # sleep(1)
-        # driver.find_element_by_xpath('//*[@id="id_email"]').clear()
-        # driver.find_element_by_xpath('//*[@id="id_email"]').send_keys("sonia.amezcua@varangard")
-        # driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        # driver.find_element_by_css_selector(form+' #id_email').clear()
+        # driver.find_element_by_css_selector(form+' #id_email').send_keys("sonia.amezcua@varangard")
+        # driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         # sleep(1)
-        # self.assertEqual('Enter valid email', driver.find_element_by_xpath('//*[@id="form-add"]/div[1]/span').text, msg=None)
+        # self.assertEqual('Enter valid email',
+        #                  driver.find_element_by_css_selector(form+' > div:nth-child(2) > span').text, msg=None)
         sleep(5)
         screenshot(self, mi_ruta)
-        driver.refresh()
 
     def test_max_min(self):
-        mi_ruta = "clients/client/screenshot/test_max_min"
         driver = self.driver
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_budget"]').send_keys("-0.01")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        refresh = 1
+        form, modal = self.function_type(typo, refresh)
+        mi_ruta = "clients/client/screenshot/test_max_min"+form
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_budget').clear()
+        driver.find_element_by_css_selector(form+' #id_budget').send_keys("-0.01")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
         self.assertEqual('Enter a valid budget. Maximum allowed decimals: 2',
-                         driver.find_element_by_xpath('//*[@id="form-add"]/div[6]/span').text, msg=None)
+                         driver.find_element_by_css_selector(form+' > div:nth-child(7) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_budget"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_budget"]').send_keys("999999999999999999.99")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_budget').clear()
+        driver.find_element_by_css_selector(form+' #id_budget').send_keys("999999999999999999.99")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
         self.assertEqual('Enter a valid budget. Maximum allowed decimals: 2',
-                         driver.find_element_by_xpath('//*[@id="form-add"]/div[6]/span').text, msg=None)
+                         driver.find_element_by_css_selector(form+' > div:nth-child(7) > span').text, msg=None)
         sleep(3)
         screenshot(self, mi_ruta)
-        driver.refresh()
 
     def test_format_rfc(self):
-        mi_ruta = "clients/client/screenshot/test_format_rfc"
         driver = self.driver
-        driver.find_element_by_xpath('//*[@id="btn-add"]').click()
+        refresh = 1
+        form, modal = self.function_type(typo, refresh)
+        mi_ruta = "clients/client/screenshot/test_format_rfc"+form
+        sleep(5)
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').send_keys("AEAS850120H3A2")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys("AEAS850120H3A2")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
-        sleep(1)
-        self.assertEqual('Enter valid RFC', driver.find_element_by_xpath('//*[@id="form-add"]/div[8]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid RFC',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(9) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys("AEA850120H3A2")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').send_keys("AEA850120H3A2")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        self.assertEqual('Enter valid RFC', driver.find_element_by_xpath('//*[@id="form-add"]/div[8]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid RFC',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(9) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys("AEAS8R0120H3A")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').send_keys("AEAS8R0120H3A")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        self.assertEqual('Enter valid RFC', driver.find_element_by_xpath('//*[@id="form-add"]/div[8]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid RFC',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(9) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys("AAS8R0120H3A")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').send_keys("AAS8R0120H3A")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        self.assertEqual('Enter valid RFC', driver.find_element_by_xpath('//*[@id="form-add"]/div[8]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid RFC',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(9) > span').text, msg=None)
         screenshot(self, mi_ruta)
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').clear()
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys("A#AS850120H3A")
-        driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
+        driver.find_element_by_css_selector(form+' #id_rfc').clear()
+        driver.find_element_by_css_selector(form+' #id_rfc').send_keys("A#AS850120H3A")
+        driver.find_element_by_css_selector(modal+'> div > div > div.modal-footer.col-md-12 > button').click()
         sleep(1)
-        self.assertEqual('Enter valid RFC', driver.find_element_by_xpath('//*[@id="form-add"]/div[8]/span')
-                         .text, msg=None)
+        self.assertEqual('Enter valid RFC',
+                         driver.find_element_by_css_selector(form+' > div:nth-child(9) > span').text, msg=None)
         sleep(4)
         screenshot(self, mi_ruta)
-        driver.refresh()
-
-    #def tearDown(self):
-        #self..driver.close()
 
     @classmethod
     def tearDownClass(cls):
