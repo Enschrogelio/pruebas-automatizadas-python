@@ -1,59 +1,41 @@
-import datetime
+import csv
+from datetime import datetime
+from time import sleep
 import random
 import string
-
 import psycopg2
-from pruebas_automatizadas.util.config import modelConfig
-from time import *
+from util.config import modelConfig
 
-
-
-def db_functions(code):
-    conn = None
-    try:
-        conn = psycopg2.connect(modelConfig.connection)
-        cur = conn.cursor()
-        exec(code)
-        conn.commit()
-        cur.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
-
+#login
 def login(self):
     driver = self.driver
     #login
-    driver.get(modelConfig.urlLogin)
+    driver.get(modelConfig.base_url+"/admin/login")
     driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(modelConfig.email)
     driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(modelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
+    sleep(2)
 
+#logout
 def logout(self):
     sleep(5)
-    driver = self.driver
-    driver.get(modelConfig.baseUrl+"/admin/login")
+    driver=self.driver
+    driver.get(modelConfig.base_url+"/admin/login")
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
 
-
-
+#Screenshot
 def screenshot(self,ruta):
     driver = self.driver
-    now = datetime.datetime.now()
-    hour = now.hour
-    min = now.min
-    second = now.second
-    today = datetime.date.today()
-    driver.save_screenshot(modelConfig.base_screenshot+ruta+"%s-hora-%s-seg_%s.png" %(today, hour, second))
-    return ruta
+    now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
+    driver.save_screenshot(modelConfig.base_screenshot+ruta+" %s.png" % now)
 
-def randoms(long, tipo):
+#Randoms
+def randoms(long,tipo):
     dato = ""
     if tipo == "letter":
-        letters = [chr(random.randint(97, 122)) for _ in range(long)]
+        letters = [chr(random.randint(97, 122)) for r in range(long)]
         dato = ''.join(letters)
     else:
         if tipo == "number":
@@ -68,3 +50,38 @@ def randoms(long, tipo):
                     specials = [random.choice(string.punctuation) for r in range(long)]
                     dato = ''.join(specials)
     return dato
+
+#DB functions
+# noinspection PyUnresolvedReferences
+def db_functions(code):
+    conn = None
+    result = ""
+    try:
+        conn = psycopg2.connect(modelConfig.connection)
+        cur = conn.cursor()
+        exec(code)
+        try:
+            result = cur.fetchmany()
+        except Exception as errorFetch:
+            print(errorFetch)
+        conn.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+        return result
+
+#Read csv
+def read_csv(root):
+    csv_list = []
+    with open(root, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        title = reader.__next__()
+        for row in reader:
+            listcsv = {}
+            for column in range(len(title)):
+                listcsv[title[column]] = row[column]
+            csv_list.append(listcsv)
+    return csv_list
