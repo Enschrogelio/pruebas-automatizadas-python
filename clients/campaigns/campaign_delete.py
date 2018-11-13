@@ -9,10 +9,13 @@ from pruebas_automatizadas.util.dataCampaign import *
 import psycopg2 as psycopg2
 from pruebas_automatizadas.util.functions import login
 
+from util.config import ModelConfig
+from util.functions import screenshot, logout
+
 
 class AddClient(unittest.TestCase):
     def setUp(self):
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         self.driver.maximize_window()
 
 
@@ -29,7 +32,7 @@ class AddClient(unittest.TestCase):
         time.sleep(1)
         #llenado de Form
         #name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(dataCampign.name)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys("dsasd")
         time.sleep(2)
         #Seleccionar Select contenedor ACTIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]').click()
@@ -49,11 +52,11 @@ class AddClient(unittest.TestCase):
         #Seleccionar CELULARES
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[4]/select/option[6]').click()
         #BUGET
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(dataCampign.budget)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(2)
         #URL
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys(dataCampign.url)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("https://www.g.com")
         #OBJETIVE
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(dataCampign.objetive)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(100)
         #enter
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
         mi_ruta="clients/campaigns/testCampaign/screenshot/"

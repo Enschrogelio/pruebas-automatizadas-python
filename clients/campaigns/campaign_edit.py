@@ -11,7 +11,7 @@ from util.functions import login
 
 campaign='''
     [{"name" : "RogelioElim","budget":"2.00", "url":"https://www.google.com","objetive":"2","industry":"Automotriz","category":"llantas","camcode":"ENSCH-75"},
-    {"name" : "Rogelio 2","budget":"4.0","url":"https://www.facebook.com/","objetive":"4.0"}]'''
+    {"name" : "Rogelio 2","budget":"4.0","url":"https://www.facebook.com/a","objetive":"4.0"}]'''
 
 class EditCampaign(unittest.TestCase):
     def setUp(self):
