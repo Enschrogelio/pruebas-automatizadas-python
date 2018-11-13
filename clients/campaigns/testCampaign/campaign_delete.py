@@ -1,24 +1,36 @@
-import datetime
+import json
 import unittest
-import time
-
 
 from pruebas_automatizadas.util.functions import *
 from pruebas_automatizadas.util.config import *
 from pruebas_automatizadas.util.dataCampaign import *
 import psycopg2 as psycopg2
-from pruebas_automatizadas.util.functions import login
+
+campaign=[
+    {"name" : "Rogelio","budget":"2","url":"https://www.google.es/","objetive":"2"},
+    {"name" : "Rogelio 2","budget":"4","url":"https://www.facebook.com/","objetive":"4"}]
+
+global campaign
 
 
 class AddClient(unittest.TestCase):
     def setUp(self):
         self.driver = modelConfig.driverWeb
+        info = json.loads(campaign)
         self.driver.maximize_window()
-
+        code = """
+info={0}
+cur.execute("DELETE FROM campaigns WHERE id = '%'" info[1]['id'])
+sql = 'INSERT INTO campaigns (name, budget,url,objetive) VALUES (%s, %s, %s, %s)'
+val = (info[0]['name'],info[0]['budget'],info[0]['url',info[0]['objetive'])
+cur.execute(sql,val)
+""".format(info)
+        db_functions(code)
 
     def testAddClient(self):
         driver = self.driver
-        #login
+        info = json.loads(campaign)
+    #login
         login(self)
         time.sleep(2)
         #Click en clientes
@@ -56,11 +68,18 @@ class AddClient(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(dataCampign.objetive)
         #enter
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
-        mi_ruta="clients/campaigns/testCampaign/screenshot/"
-        screenshot(self,mi_ruta)
-        logout(self)
 
 
+
+
+    # def screenshot(self):
+    #     driver = self.driver
+    #     now = datetime.datetime.now()
+    #     hour = now.hour
+    #     min = now.min
+    #     second = now.second
+    #     today = datetime.date.today()
+    #     driver.save_screenshot(modelConfig.screen+"testCampaign/screenshot/empty%s-hora-%s-seg_%s.png" %(today,hour,second))
 
     def tearDown(self):
         self.driver.close()
