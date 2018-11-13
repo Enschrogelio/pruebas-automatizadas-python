@@ -1,0 +1,210 @@
+1540857647655	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.z2pS7xM99JUq"
+1540857661337	Marionette	INFO	Listening on port 56380
+1540857661945	Marionette	WARN	TLS certificate errors will be ignored for this session
+1540857667079	Marionette	DEBUG	[4294967297] Frame script loaded
+1540857667107	Marionette	DEBUG	[4294967297] Frame script registered
+1540857667196	Marionette	DEBUG	[4294967297] Received DOM event beforeunload for about:blank
+1540857667566	Marionette	DEBUG	[4294967297] Received DOM event pagehide for about:blank
+1540857669370	Marionette	DEBUG	[4294967297] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1540857669892	Marionette	DEBUG	[4294967297] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1540857670441	Marionette	DEBUG	[4294967297] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1540857671233	Marionette	DEBUG	[4294967297] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1540857671234	Marionette	DEBUG	[4294967297] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1540857672779	Marionette	DEBUG	[4294967297] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1540857673078	Marionette	DEBUG	[4294967297] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1540857673309	Marionette	DEBUG	[4294967297] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1540857673475	Marionette	DEBUG	[4294967297] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1540857673478	Marionette	DEBUG	[4294967297] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1540857673744	Marionette	DEBUG	[4294967297] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857673859	Marionette	DEBUG	[4294967297] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857676116	Marionette	DEBUG	[4294967297] Canceled page load listener because no navigation has been detected
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/form-validation.js, line 255: TypeError: this.submit is not a function
+1540857678642	Marionette	DEBUG	[4294967297] Canceled page load listener because no navigation has been detected
+1540857680655	Marionette	DEBUG	[4294967297] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857681101	Marionette	DEBUG	[4294967297] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857681112	Marionette	DEBUG	[4294967297] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857681682	Marionette	DEBUG	[4294967297] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857681894	Marionette	DEBUG	[4294967297] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1540857687160	Marionette	DEBUG	[4294967297] Canceled page load listener because no navigation has been detected
+1540857690144	Marionette	DEBUG	[4294967297] Canceled page load listener because no navigation has been detected
+1540857696306	Marionette	DEBUG	[4294967297] Canceled page load listener because no navigation has been detected
+1540857699318	Marionette	INFO	Stopped listening on port 56380
+[Parent 19444, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 19444, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 20092, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 20092, Chrome_ChildThread] [GPU 11616, 
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541114083731	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.mK7ZuERvrp0i"
+1541114091803	Marionette	INFO	Listening on port 51020
+1541114092615	Marionette	WARN	TLS certificate errors will be ignored for this session
+1541114092670	Marionette	DEBUG	[6442450945] Frame script loaded
+1541114092731	Marionette	DEBUG	[6442450945] Frame script registered
+1541114093898	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for about:blank
+1541114096358	Marionette	DEBUG	[6442450945] Received DOM event pagehide for about:blank
+1541114097260	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541114097504	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541114097919	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541114098618	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541114098618	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541114099733	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541114102310	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+JavaScript error: https://d260gejhgij5g1.cloudfront.net/js/libs/index.min.js?ca=CEREBRO-DEBUG-CA-01&ct=CEREBRO-DEBUG-CT-01, line 50: ReferenceError: mouse_over_timer is not defined
+1541114102441	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541114102591	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541114102593	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541114102906	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541114103123	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+JavaScript error: https://d260gejhgij5g1.cloudfront.net/js/libs/index.min.js?ca=CEREBRO-DEBUG-CA-01&ct=CEREBRO-DEBUG-CT-01, line 50: ReferenceError: mouse_over_timer is not defined
+1541114105373	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/form-validation.js, line 255: TypeError: this.submit is not a function
+1541114108525	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/admin/modals-manager.js, line 3: TypeError: $(...).find(...)[0] is undefined
+1541114110534	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541114110963	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541114110974	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541114111977	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541114112182	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+JavaScript error: https://d260gejhgij5g1.cloudfront.net/js/libs/index.min.js?ca=CEREBRO-DEBUG-CA-01&ct=CEREBRO-DEBUG-CT-01, line 50: ReferenceError: mouse_over_timer is not defined
+1541114117544	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541114120845	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541114126232	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541114129254	Marionette	INFO	Stopped listening on port 51020
+[Parent 13156, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 13156, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 8904, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 8904,[Parent 13156, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 5972, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 5972, Chrome[GPU 6684, 
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541563470802	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.OpOvvF794AD3"
+[Child 3652, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 3652, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+1541563488425	Marionette	INFO	Listening on port 60687
+1541563488909	Marionette	WARN	TLS certificate errors will be ignored for this session
+1541563488949	Marionette	DEBUG	[6442450945] Frame script loaded
+1541563489046	Marionette	DEBUG	[6442450945] Frame script registered
+1541563489388	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for about:blank
+1541563489914	Marionette	DEBUG	[6442450945] Received DOM event pagehide for about:blank
+1541563491148	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541563491487	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541563491789	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541563492456	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541563492457	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541563494089	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541563497313	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541563500382	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541563500609	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541563500617	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541563500773	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563501030	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563503304	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/form-validation.js, line 255: TypeError: this.submit is not a function
+1541563506987	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541563509016	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563509434	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563509439	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563510235	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563510561	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541563516317	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541563518812	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541563524151	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541563527155	Marionette	INFO	Stopped listening on port 60687
+[Child 14448, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 15612, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 15612, Gecko_IOThread] WARNING: file z:/build/build/src/ipc/chromium/src/base/process_util_win.cc, line 188
+[Child 2552, Chrome_ChildThread] WARNING: pipe error: 232: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 513
+[Child 2552, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 2552, Chrome_Chi[Parent 15612, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 4880, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 4880, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/b[Parent 15612, Gecko_IOThread] WARNING: file z:/build/build/src/ipc/chromium/src/base/process_util_win.cc, line 188
+[GPU 1574
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541696600799	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.TLLybQa28jCq"
+1541696609310	Marionette	INFO	Listening on port 52419
+1541696610208	Marionette	WARN	TLS certificate errors will be ignored for this session
+1541696610240	Marionette	DEBUG	[6442450945] Frame script loaded
+1541696610269	Marionette	DEBUG	[6442450945] Frame script registered
+1541696611245	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for about:blank
+1541696612132	Marionette	DEBUG	[6442450945] Received DOM event pagehide for about:blank
+1541696613860	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541696614498	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541696615056	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541696615806	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541696615807	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/login/
+1541696616899	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541696618276	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541696621314	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541696621495	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541696621498	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/clients/?next=/admin/login/
+1541696621644	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696621859	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696624110	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/form-validation.js, line 255: TypeError: this.submit is not a function
+1541696626525	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541696628532	Marionette	DEBUG	[6442450945] Received DOM event beforeunload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696628936	Marionette	DEBUG	[6442450945] Received DOM event pagehide for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696628938	Marionette	DEBUG	[6442450945] Received DOM event unload for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696630099	Marionette	DEBUG	[6442450945] Received DOM event DOMContentLoaded for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696630106	Marionette	DEBUG	[6442450945] Received DOM event pageshow for http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/users/
+1541696635426	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541696638070	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541696643466	Marionette	DEBUG	[6442450945] Canceled page load listener because no navigation has been detected
+1541696646482	Marionette	INFO	Stopped listening on port 52419
+[Parent 13756, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 17052, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 17052, Chrome_[Child 13296, Chrome_ChildThread] WARNING: pipe error: 232: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 513
+[Child 13296, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 13296, Chrome_ChildThr[Parent 13756, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 24060, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 24060, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line[GPU 452
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541696664571	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.REYBITelc5wF"
+1541696668269	Marionette	INFO	Listening on port 52569
+1541696668425	Marionette	WARN	TLS certificate errors will be ignored for this session
+1541696668453	Marionette	DEBUG	[6442450945] Frame script loaded
+1541696668598	Marionette	DEBUG	[6442450945] Frame script registered
+[Parent 16704, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 16704, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 23776, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 23776, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 16704, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 12312, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 123121541697771135	Marionette	INFO	Stopped listening on port 52569
+[GPU 3376, Ch
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541697917312	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.4h6dZjNjodry"
+1541697921048	Marionette	INFO	Listening on port 54334
+1541697921149	Marionette	WARN	TLS certificate errors will be ignored for this session
+1541697921181	Marionette	DEBUG	[6442450945] Frame script loaded
+1541697921184	Marionette	DEBUG	[6442450945] Frame script registered
+[Child 22144, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 22144, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/sr[Parent 20896, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 11504, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 11504, Chrome_ChildThre1541698123666	Marionette	INFO	Stopped listening on port 54334
+[GPU 18532,
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1541709142786	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.tgmJFGjAHTWv"
+1541718625311	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\janet\\AppData\\Local\\Temp\\rust_mozprofile.CoTGXFs2N36B"
+1541718632599	Marionette	INFO	Listening on port 54285
+1541718632938	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/static/js/form-validation.js, line 255: TypeError: this.submit is not a function
+JavaScript error: , line 0: InvalidStateError: An attempt was made to use an object that is not, or is no longer, usable
+JavaScript error: , line 0: InvalidStateError: An attempt was made to use an object that is not, or is no longer, usable
+1541718675804	Marionette	INFO	Stopped listening on port 54285
+[Parent 22160, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 5536, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 5536, Chrome_ChildThread] WARNIN[Parent 22160, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 17912, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 17912, Chrome_Chi[Parent 22160, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
