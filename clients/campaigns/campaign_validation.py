@@ -3,14 +3,16 @@ import unittest
 import time
 
 from selenium import webdriver
-from pruebas_automatizadas.util.config import *
-from pruebas_automatizadas.util.functions import *
+from xmlrunner import xmlrunner
+
+from util.config import *
+from util.functions import *
 
 
 class AddClient(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
         self.driver.maximize_window()
 
     def testAddClient(self):
@@ -84,10 +86,10 @@ class AddClient(unittest.TestCase):
         self.assertEqual(titleModalCampaign,'Objetive')
 
 
-    def testMax(self):
+    def testm_max(self):
         driver = self.driver
         #name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear(modelConfig.randoms(5,"letter"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear(randoms(5,"letter"))
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys()
         time.sleep(1)
         #Seleccionar Select contenedor ACTIVE
@@ -109,13 +111,13 @@ class AddClient(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[4]/select/option[6]').click()
         #BUGET
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(modelConfig.randoms(5,"number"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(5,"number"))
         #URL
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("https://WWW."+modelConfig.randoms(5,"number")+".com")
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("https://WWW."+randoms(5,"number")+".com")
         #OBJETIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(modelConfig.randoms(5,"number"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(5,"number"))
         #enter
         #self.screenshot()
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
@@ -125,7 +127,7 @@ class AddClient(unittest.TestCase):
         #llenado de Form
         #name
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(modelConfig.randoms(5,"special"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(randoms(5,"special"))
         time.sleep(1)
         #Seleccionar Select contenedor ACTIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]').click()
@@ -146,13 +148,13 @@ class AddClient(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[4]/select/option[6]').click()
         #BUGET
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(modelConfig.randoms(5,"special"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(5,"special"))
         #URL
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("http://www.google.com")
         #OBJETIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(modelConfig.randoms(5,"special"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(5,"special"))
         #enter
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
         time.sleep(2)
@@ -200,4 +202,4 @@ class AddClient(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='./clients/campaigns/report/'))
