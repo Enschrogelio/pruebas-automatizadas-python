@@ -51,14 +51,17 @@ cur.execute(sql, val)
         #message "Deleting record"
         driver.find_element_by_xpath("//button[@class='btn-green text-uppercase col-sm-12']").click()
         #message confirmaion
-        driver.find_element_by_xpath("//input[@id='input-email']").send_keys("%s"%valor[0])
         sleep(2)
+        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys((info[0]['name']))
+        sleep(2)
+        driver.find_element_by_xpath("//button[@id='btn-submit']").click()
         screenshot(self,mi_ruta)
         logout(self)
 
 
 
     def tearDown(self):
+        logout(self)
         self.driver.close()
 
 if __name__ == "__main__":
