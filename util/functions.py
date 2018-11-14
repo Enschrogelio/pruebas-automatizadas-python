@@ -1,7 +1,6 @@
 import datetime
 import random
 import string
-
 import psycopg2
 from util.config import ModelConfig
 from time import *

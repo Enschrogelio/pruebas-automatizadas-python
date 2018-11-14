@@ -38,5 +38,4 @@ class ModelConfig:
                         return driver
                     else:
                         return None
-
     driver_web = drivers("ch")
