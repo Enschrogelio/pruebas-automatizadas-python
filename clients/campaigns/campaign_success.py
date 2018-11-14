@@ -13,7 +13,7 @@ campaign='''
     [{"name" : "Rogelio","budget":"2.00", "url":"https://www.google.com","objetive":"2"},
     {"name" : "Rogelio 2","budget":"5.0","url":"https://www.facebook.com/","objetive":"4.0"}]'''
 
-class AddCampaign(unittest.TestCase):
+class AddCampaignSuccess(unittest.TestCase):
     def setUp(self):
         global campaign
         self.driver = ModelConfig.driver_web

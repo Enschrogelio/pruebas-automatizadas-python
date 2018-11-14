@@ -14,7 +14,7 @@ campaign='''
     {"name" : "Rogelio 2","budget":"4.0","url":"https://www.facebook.com/a","objetive":"4.0"}]'''
 valor=""
 
-class AddClient(unittest.TestCase):
+class DeleteCampaign(unittest.TestCase):
     def setUp(self):
         global campaign, valor
         self.driver = ModelConfig.driver_web
@@ -31,7 +31,7 @@ cur.execute(sql, val)
         #print(valor)
 
 
-    def testAddClient(self):
+    def test_add_client(self):
         global campaign, valor
         info = json.loads(campaign)
         driver = self.driver

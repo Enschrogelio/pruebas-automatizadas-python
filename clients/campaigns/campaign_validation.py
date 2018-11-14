@@ -7,13 +7,13 @@ from util.config import *
 from util.functions import *
 
 
-class AddClient(unittest.TestCase):
+class CampaignValiadation(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.driver = ModelConfig.driverWeb
         self.driver.maximize_window()
 
-    def testAddClient(self):
+    def test_campaign_validation(self):
         driver = self.driver
     #login
         login(self)
@@ -30,7 +30,7 @@ class AddClient(unittest.TestCase):
         time.sleep(2)
 
 
-    def testAssertcampaign(self):
+    def test_assert_campaign(self):
         driver = self.driver
         time.sleep(2)
 
@@ -84,7 +84,7 @@ class AddClient(unittest.TestCase):
         self.assertEqual(titleModalCampaign,'Objetive')
 
 
-    def testMax(self):
+    def test_max(self):
         driver = self.driver
         #name
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear(randoms(5,"letter"))
@@ -120,7 +120,7 @@ class AddClient(unittest.TestCase):
         #self.screenshot()
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
 
-    def testEspecial(self):
+    def test_special(self):
         driver = self.driver
         #llenado de Form
         #name
@@ -158,7 +158,7 @@ class AddClient(unittest.TestCase):
         time.sleep(2)
         #self.screenshot()
 
-    def testMin(self):
+    def test_min(self):
         driver = self.driver
         #llenado de Form
         #name
