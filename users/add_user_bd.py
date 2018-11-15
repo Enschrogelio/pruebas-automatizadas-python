@@ -3,19 +3,19 @@ import time
 from selenium import webdriver
 import json
 from random import randint
-from cerebro.util.config import *
-from cerebro.util.functions import db_functions, logout
-from cerebro.util.login import Login
+from util.config import *
+from util.functions import db_functions, logout, login
+from util.functions import screenshot
 
 class AddUserBd(unittest.TestCase):
     def setUp(self):
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
 
     def testAddUsersSuccess(self):
         users = '''
         [{"email" : "fernanda222@gmail.com", "password" : "223344556677:", "confirm_password" : "223344556677:", "name" : "Fernanda Sánchez González"},
          {"email" : "cesar444@gmail.com", "password" : "46546554:", "confirm_password" : "46546554", "name" : "César López Aguirre"},
-         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121", "name" : "Anita Becerra de la O"}
+         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121?", "name" : "Anita Becerra de la O"}
         ]'''
 
         info = json.loads(users)
@@ -32,10 +32,8 @@ print(cur.rowcount)
         db_functions(code)
 
         driver = self.driver
-
-        Login.testlogin(self)
+        login(self)
         time.sleep(3)
-
         driver.find_element_by_xpath('//*[@id="sections-access"]/div[1]/a').click()
         time.sleep(2)
 
@@ -47,8 +45,15 @@ print(cur.rowcount)
         driver.find_element_by_xpath('//*[@id="id_password1"]').send_keys(info[rand]['password'])
         driver.find_element_by_xpath('//*[@id="id_password2"]').send_keys(info[rand]['confirm_password'])
         driver.find_element_by_xpath('//*[@id="id_name"]').send_keys(info[rand]['name'])
+
+        mi_ruta="/users/screenshot/"
+        screenshot(self, mi_ruta)
+
         driver.find_element_by_xpath('//*[@id="modal-add"]/div/div/div[3]/button').click()
         time.sleep(2)
+
+        #realizar el screenshot
+        screenshot(self, mi_ruta)
 
         driver.refresh()
 
