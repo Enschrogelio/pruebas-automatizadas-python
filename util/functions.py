@@ -6,7 +6,6 @@ from util.config import ModelConfig
 from time import *
 
 
-
 def db_functions(code):
     conn = None
     valor=""
@@ -14,7 +13,10 @@ def db_functions(code):
         conn = psycopg2.connect(ModelConfig.connection)
         cur = conn.cursor()
         exec(code)
-        valor = cur.fetchmany()
+        try:
+            valor = cur.fetchmany()
+        except Exception as errorvalor:
+            print(errorvalor)
         conn.commit()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
