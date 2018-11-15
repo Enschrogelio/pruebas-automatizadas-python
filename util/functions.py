@@ -6,52 +6,52 @@ import string
 import psycopg2
 from util.config import ModelConfig
 
-#login
+
 def login(self):
     driver = self.driver
-    #login
     driver.get(ModelConfig.url_login)
     driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(ModelConfig.email)
     driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(ModelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
     sleep(2)
-
-#logout
+    
+    
 def logout(self):
     sleep(5)
-    driver=self.driver
+    driver = self.driver
     driver.get(ModelConfig.url_login)
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
 
-#Screenshot
-def screenshot(self, ruta):
+
+def screenshot(self, path):
     driver = self.driver
     now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
-    driver.save_screenshot(ModelConfig.base_screenshot+ruta+" %s.png" % now)
+    driver.save_screenshot(ModelConfig.base_screenshot+path+" %s.png" % now)
 
-#Randoms
-def randoms(long, tipo):
-    dato = ""
-    if tipo == "letter":
+
+def randoms(long, _type):
+    _data = ""
+    if _type == "letter":
         letters = [chr(random.randint(97, 122)) for r in range(long)]
-        dato = ''.join(letters)
+        _data = ''.join(letters)
     else:
-        if tipo == "number":
+        if _type == "number":
             numbers = [str(random.randint(0, 9)) for r in range(long)]
-            dato = ''.join(numbers)
+            _data = ''.join(numbers)
         else:
-            if tipo == "alpha":
+            if _type == "alpha":
                 alpha = [random.choice(string.ascii_letters + string.digits) for r in range(long)]
-                dato = ''.join(alpha)
+                _data = ''.join(alpha)
             else:
-                if tipo == "special":
+                if _type == "special":
                     specials = [random.choice(string.punctuation) for r in range(long)]
-                    dato = ''.join(specials)
-    return dato
+                    _data = ''.join(specials)
+    return _data
 
-#DB functions
+
+# DB functions
 # noinspection PyUnresolvedReferences
 def db_functions(code):
     conn = None
@@ -67,16 +67,17 @@ def db_functions(code):
         if conn is not None:
             conn.close()
 
-#Read csv
+
+# Read csv
 def read_csv(root):
     csv_list = []
     print(root)
-    with open(root, newline='') as csvfile:
-        reader = csv.reader(csvfile)
+    with open(root, newline='') as csv_file:
+        reader = csv.reader(csv_file)
         title = reader.__next__()
         for row in reader:
-            listcsv = {}
+            list_csv = {}
             for column in range(len(title)):
-                listcsv[title[column]] = row[column]
-            csv_list.append(listcsv)
+                list_csv[title[column]] = row[column]
+            csv_list.append(list_csv)
     return csv_list

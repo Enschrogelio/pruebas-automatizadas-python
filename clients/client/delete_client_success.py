@@ -2,18 +2,26 @@ import unittest
 import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
+# DATA SET
 clients = '''
-        [{ "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", "cpm" : "18",
-        "budget" : "10000.52", "company" : "ASESORIA Y SERVICIOS ECOLOGICOS INTEGRALES S.A.", "rfc" : "ASE0009266M0",
-        "address" : "BRONCE #9326 CD INDUSTRIAL MITRAS GARCIA N.L. C.P. 66000",
+        [{ "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", 
+        "cpm" : "18", "budget" : "10000.52", "company" : "ASESORIA Y SERVICIOS ECOLOGICOS INTEGRALES S.A.", 
+        "rfc" : "ASE0009266M0", "address" : "BRONCE #9326 CD INDUSTRIAL MITRAS GARCIA N.L. C.P. 66000",
         "phone" : "3128256987"
+        },
+        { "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", 
+        "cpm" : "1", "budget" : "15000.90", "company" : "AUTOTRANSPORTES RAPIDOS DOS HUASTECAS S A DE C V", 
+        "rfc" : "ASS001002KX0", "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
+        "phone" : "3125256987"
         }]'''
+
 
 class DeleteClient(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
-        #Preaparación de ambiente
+
+        # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
@@ -28,8 +36,8 @@ cur.execute(sql, val)""".format(info)
 
     def test_delete_client_success(self):
         info = json.loads(clients)
-        mi_ruta = "clients/client/screenshot/test_delete_client_success"
-        #login
+        path = "clients/client/screenshot/test_delete_client_success"
+        # login
         login(self)
         sleep(3)
         driver = self.driver
@@ -52,7 +60,7 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual("active", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
         sleep(3)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[3]').click()
         sleep(3)
         self.assertEqual("Deleting record", driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[2]/h2')
@@ -61,15 +69,15 @@ cur.execute(sql, val)""".format(info)
         sleep(3)
         self.assertEqual("Are you sure to delete this record:",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[1]/h1').text, msg=None)
-        self.assertEqual("Deleting this record, will erease the campaigns and creative relating with it",
+        self.assertEqual("Deleting this record, will eraser the campaigns and creative relating with it",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[1]/p').text, msg=None)
-        self.assertEqual("Enter the conrfirmation:",
+        self.assertEqual("Enter the confirmation:",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[2]/p').text, msg=None)
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         sleep(3)
         self.assertEqual("This field doesnt match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').text.rstrip(' '), msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         driver.find_element_by_xpath('//*[@id="input-email"]').clear()
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys("BATALLON@GMAIL")
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
@@ -77,7 +85,7 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual("This field doesnt match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').get_attribute('innerHTML')
                          .rstrip(' '), msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         driver.find_element_by_xpath('//*[@id="input-email"]').clear()
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(info[0]['email'])
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
@@ -96,12 +104,13 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual("deleted", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
 
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         sleep(3)
 
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()

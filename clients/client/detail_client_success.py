@@ -2,37 +2,40 @@ import unittest
 import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
+# DATA SET
 clients = '''
         [{ "email" : "RUIZ@gmail.com","name" : "OSCAR IGNACIO ALVAREZ CHAGOYA","password" : "ALVAREZ", "cpm" : "99",
         "budget" : "0.08", "company" : "AUTO TRANSPORTES DE CARGA RUIZ HERMANOS SA DE CV", "rfc" : "ATC900103NR1",
-         "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
+        "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
         "phone" : "3121256985"
         }]'''
+
 
 class DetailClient(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
-        #Preaparación de ambiente
+
+        # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
 cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
 sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
-   'password, company_name, rfc, phone, address) ' \
-   'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
+'password, company_name, rfc, phone, address) ' \
+'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
 val = (info[0]['name'], info[0]['cpm'], info[0]['budget'], 1, info[0]['email'], strftime("%Y/%m/%d"), \
-   strftime("%Y/%m/%d"), info[0]['password'], info[0]['company'], info[0]['rfc'], info[0]['phone'], info[0]['address'])
+strftime("%Y/%m/%d"), info[0]['password'], info[0]['company'], info[0]['rfc'], info[0]['phone'], info[0]['address'])
 cur.execute(sql, val)""".format(info)
         db_functions(code)
 
     def test_detail_client_success(self):
-        browserName = self.driver.capabilities['browserName']
-        #print(browserName)
-        mi_ruta = "clients/client/screenshot/test_detail_client_success"
+        # browser_name = self.driver.capabilities['browserName']
+        # print(browser_name)
+        path = "clients/client/screenshot/test_detail_client_success"
         info = json.loads(clients)
 
-        #login
+        # login
         login(self)
         sleep(3)
         driver = self.driver
@@ -49,18 +52,18 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td[6]/a[1]').click()
         sleep(3)
         self.assertIn(ModelConfig.base_url+"/admin/client/detail/", driver.current_url, msg=None)
         self.assertEqual(info[0]['company'], driver.find_element_by_xpath('//*[@id="client-info-header"]/h2')
                          .text, msg=None)
         sleep(3)
-        self.assertEqual("Clients /", (driver.find_element_by_xpath('//*[@id="client-info-header"]/a[1]').text)
+        self.assertEqual("Clients /", driver.find_element_by_xpath('//*[@id="client-info-header"]/a[1]').text
                          .capitalize(), msg=None)
-        self.assertEqual("Email", (driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/label').text)
+        self.assertEqual("Email", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/label').text
                          .capitalize(), msg=None)
-        self.assertEqual("Password", (driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/label').text)
+        self.assertEqual("Password", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/label').text
                          .capitalize(), msg=None)
         self.assertEqual("RFC", (driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/label')
                          .text).upper(), msg=None)
@@ -97,11 +100,13 @@ cur.execute(sql, val)""".format(info)
                          .text).rstrip(), msg=None)
         self.assertEqual(info[0]['cpm'], (driver.find_element_by_xpath('//*[@id="client-info"]/div/div[9]/p')
                          .text).rstrip(), msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         sleep(3)
+
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()
