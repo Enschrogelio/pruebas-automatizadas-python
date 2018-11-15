@@ -3,13 +3,14 @@ import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 # DATA SET
-_type = "add"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
+_type = "detail"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
 clients = '''
         [{ "email" : "MATAMOROS@gmail.com","name" : "OMAR IZHAR ALVAREZ CASTILLO","password" : "ALCANTARA", 
         "cpm" : "1", "budget" : "15000.90", "company" : "AUTOTRANSPORTES MATAMOROS MAZATLAN DIVISION", 
         "rfc" : "ATM850415695", "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
         "phone" : "3125256987"
         }]'''
+refresh = 0
 
 
 class ValidateClient(unittest.TestCase):
@@ -17,6 +18,7 @@ class ValidateClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = ModelConfig.driver_web
+        login(cls)
 
         # ENVIROMENT SETTING
         info = json.loads(clients)
@@ -31,7 +33,8 @@ strftime("%Y/%m/%d"), info[0]['password'], info[0]['company'], info[0]['rfc'], i
 cur.execute(sql, val)""".format(info)
         db_functions(code)
 
-    def function_type(self, __type, refresh):
+    def function_type(self, __type):
+        global refresh
         driver = self.driver
         info = json.loads(clients)
         if _type == "add":
@@ -49,6 +52,7 @@ cur.execute(sql, val)""".format(info)
                     driver.find_element_by_id('search').send_keys(info[0]['rfc'])
                     sleep(5)
                     driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[2]').click()
+                    refresh = 1
                     return form, modal
                 else:
                     driver.refresh()
@@ -67,6 +71,7 @@ cur.execute(sql, val)""".format(info)
                                          driver.find_element_by_xpath('//*[@id="client-info-header"]/a[2]')
                                          .text, msg=None)
                         driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
+                        refresh = 1
                         return form, modal
                     else:
                         driver.refresh()
@@ -75,12 +80,9 @@ cur.execute(sql, val)""".format(info)
                     return "cambiar variable _type: add, edit o detail"
 
     def test_client_exist(self):
-        # login
         driver = self.driver
-        refresh = 0
-        login(self)
         sleep(5)
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         sleep(5)
         driver.find_element_by_css_selector(form+' #id_email').clear()
         driver.find_element_by_css_selector(form+' #id_email').send_keys("sonia.amezcua@varangard.com")
@@ -104,8 +106,7 @@ cur.execute(sql, val)""".format(info)
 
     def test_required(self):
         driver = self.driver
-        refresh = 1
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         sleep(5)
         driver.find_element_by_css_selector(form+' #id_email').clear()
         driver.find_element_by_css_selector(form+' #id_person_contact').clear()
@@ -134,8 +135,7 @@ cur.execute(sql, val)""".format(info)
 
     def test_data_type(self):
         driver = self.driver
-        refresh = 1
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         sleep(5)
         driver.find_element_by_css_selector(form+' #id_cpm').clear()
         driver.find_element_by_css_selector(form+' #id_cpm').send_keys("aa")
@@ -153,8 +153,7 @@ cur.execute(sql, val)""".format(info)
 
     def test_format_email(self):
         driver = self.driver
-        refresh = 1
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         path = "clients/client/screenshot/test_format_email"+form
         sleep(5)
         driver.find_element_by_css_selector(form+' #id_email').clear()
@@ -184,8 +183,7 @@ cur.execute(sql, val)""".format(info)
 
     def test_max_min(self):
         driver = self.driver
-        refresh = 1
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         path = "clients/client/screenshot/test_max_min"+form
         sleep(5)
         driver.find_element_by_css_selector(form+' #id_budget').clear()
@@ -207,8 +205,7 @@ cur.execute(sql, val)""".format(info)
 
     def test_format_rfc(self):
         driver = self.driver
-        refresh = 1
-        form, modal = self.function_type(_type, refresh)
+        form, modal = self.function_type(_type)
         path = "clients/client/screenshot/test_format_rfc"+form
         sleep(8)
         driver.find_element_by_css_selector(form+' #id_rfc').clear()
