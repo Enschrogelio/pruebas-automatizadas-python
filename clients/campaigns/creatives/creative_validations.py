@@ -3,7 +3,7 @@ import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from util.config import ModelConfig, root_files
-from util.functions import login, logout, db_functions
+from util.functions import login, logout, db_functions, screenshot
 
 # Variables globales
 types = [
@@ -125,6 +125,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver.find_element_by_xpath('/html/body/div[13]/div/div/div[2]/form/div[6]/div[2]/p/a').click()
         sleep(5)
         driver.switch_to_window(driver.window_handles[0])
+        sleep(2)
 
         for position_file in range(4):
             print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
@@ -169,6 +170,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                                  driver.find_element_by_xpath('//*[@id="form-edit-creative"]/div[6]/div[1]/span')
                                  .get_attribute("innerText"),
                                  msg=None)
+            path = "clients/campaigns/creatives/screenshot/file_validation"
+            screenshot(self, path)
         sleep(2)
 
     @classmethod
