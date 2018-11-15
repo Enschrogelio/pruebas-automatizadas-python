@@ -1,15 +1,16 @@
 import unittest
 from time import sleep
-from util.config import modelConfig, root_files
+from util.config import ModelConfig, root_files
 from util.functions import db_functions, read_csv, login, logout
 
 browser_name = None
-# Specify ID client and ID campaign to run the test
+#  Specify ID client and ID campaign to run the test
 client = 3
 campaign = 10
 creative_name = "editado3"
 
-class upload_csv_validation(unittest.TestCase):
+
+class UploadCsvValidation(unittest.TestCase):
 
     def setUp(self):
         global browser_name,campaign
@@ -26,7 +27,7 @@ for creative in csv_list:
             "RETURNING id;" % (creative["name"],creative["url"],creative["measure"],creative["type"],campaign))
 """.format(csv_list,campaign,creative_name)
         db_functions(code)
-        self.driver = modelConfig.driver_web
+        self.driver = ModelConfig.driver_web
         browser_name = self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
@@ -37,19 +38,19 @@ for creative in csv_list:
         login(self)
         sleep(2)
 
-        assert "%s/admin/clients/" % modelConfig.base_url in driver.current_url
+        assert "%s/admin/clients/" % ModelConfig.base_url in driver.current_url
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        assert "%s/admin/client/detail/" % modelConfig.base_url in driver.current_url
-        posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).\
+        assert "%s/admin/client/detail/" % ModelConfig.base_url in driver.current_url
+        position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).\
             location_once_scrolled_into_view
-        driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
+        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).click()
         sleep(2)
 
-        assert "%s/admin/campaign/detail/" % modelConfig.base_url in driver.current_url
+        assert "%s/admin/campaign/detail/" % ModelConfig.base_url in driver.current_url
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[3]/button').click()
         sleep(1)
 
@@ -75,10 +76,10 @@ for creative in csv_list:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(4)
 
-
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()

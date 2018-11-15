@@ -2,12 +2,10 @@ import random
 import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
-from util.config import modelConfig, root_files
-
-
-#Variables globales
+from util.config import ModelConfig, root_files
 from util.functions import login, logout, db_functions
 
+# Variables globales
 types = [
     {"type": "IMAGE", "file": root_files+"creatives/png.png"},
     {"type": "GIF", "file": root_files+"creatives/gif.gif"},
@@ -23,6 +21,7 @@ browser_name = None
 client = 2
 campaign = 2
 creative = None
+
 
 class EditCreativeSuccessful(unittest.TestCase):
 
@@ -48,7 +47,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             % (list_creatives[rand]["name"].upper(), id, id))
 """.format(list_creatives,campaign)
         creative = db_functions(code)[0][0]
-        self.driver = modelConfig.driver_web
+        self.driver = ModelConfig.driver_web
         browser_name=self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
@@ -57,13 +56,12 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         global types, client, campaign, creative
         driver = self.driver
         login(self)
-        self.assertIn("%s/admin/clients/" %modelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        self.assertIn("%s/admin/client/detail/" %modelConfig.base_url, driver.current_url, msg=None)
-
+        self.assertIn("%s/admin/client/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(2)
         band = 0
         while band == 0:
@@ -73,15 +71,15 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                     if browser_name == "internet explorer":
                         print(browser_name)
                     if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
-                        posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
+                        position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
                             .location_once_scrolled_into_view
-                        driver.execute_script("window.scrollTo(0, %d);" %(posicion["y"]+110))
+                        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
                         sleep(2)
             except NoSuchElementException:
                 if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                     sleep(2)
-                driver.find_element_by_css_selector("#campaigntable_paginate > ul > li.next > a").click()
+                driver.find_element_by_css_selector("# campaigntable_paginate > ul > li.next > a").click()
                 sleep(2)
                 band = 0
 
@@ -89,78 +87,78 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
 
         sleep(2)
 
-        self.assertIn("%s/admin/campaign/detail/" % modelConfig.base_url, driver.current_url, msg=None)
-        for posicion_file in range(4):
+        self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
+        for position_file in range(4):
             rand_creative = random.randint(0, len(list_creatives)-1)
-            print("\n<<<------ %s ------>>>\n" % types[posicion_file]["type"])
-            posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
+            print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
+            position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
                                                     % (campaign, creative)).location_once_scrolled_into_view
-            driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
+            driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
             sleep(2)
             driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%d"]'
                                          % (campaign, creative)).click()
             sleep(2)
             self.assertIn("%s/admin/campaign/detail/%d/creative/update/%d"
-                          % (modelConfig.base_url, campaign, creative), driver.current_url, msg=None)
+                          % (ModelConfig.base_url, campaign, creative), driver.current_url, msg=None)
             sleep(2)
-            driver.find_element_by_css_selector('#form-edit-creative #id_name').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_name')\
+            driver.find_element_by_css_selector('# form-edit-creative # id_name').clear()
+            driver.find_element_by_css_selector('# form-edit-creative # id_name')\
                 .send_keys(list_creatives[rand_creative]["name"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_status').click()
+            driver.find_element_by_css_selector('# form-edit-creative # id_status').click()
             sleep(1)
             rand = random.randint(0,2)
-            driver.find_element_by_css_selector('#form-edit-creative #id_status > option[value="%d"]'
+            driver.find_element_by_css_selector('# form-edit-creative # id_status > option[value="%d"]'
                                                 % rand).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_measure').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_measure')\
+            driver.find_element_by_css_selector('# form-edit-creative # id_measure').clear()
+            driver.find_element_by_css_selector('# form-edit-creative # id_measure')\
                 .send_keys(list_creatives[rand_creative]["measure"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_url').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_url')\
+            driver.find_element_by_css_selector('# form-edit-creative # id_url').clear()
+            driver.find_element_by_css_selector('# form-edit-creative # id_url')\
                 .send_keys(list_creatives[rand_creative]["url"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
+            driver.find_element_by_css_selector('# form-edit-creative # id_type').click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_type > option[value="%s"]'
-                                                % types[posicion_file]["type"]).click()
+            driver.find_element_by_css_selector('# form-edit-creative # id_type > option[value="%s"]'
+                                                % types[position_file]["type"]).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
+            driver.find_element_by_css_selector('# form-edit-creative # id_type').click()
             sleep(1)
             driver.find_element_by_xpath('/html/body/div[13]/div/div/div[2]/form/div[6]/div[2]/p/a').click()
             sleep(5)
             driver.switch_to_window(driver.window_handles[0])
             sleep(2)
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
-                posicion=driver.find_element_by_xpath('/html/body/div[13]/div/div/div[3]/button') \
+                position=driver.find_element_by_xpath('/html/body/div[13]/div/div/div[3]/button') \
                     .location_once_scrolled_into_view
-                driver.execute_script("window.scrollTo(0, %d);" %(posicion["y"]))
-            #for i in range(0,10):
-            #    sleep(1)
-            #    driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
+                driver.execute_script("window.scrollTo(0, %d);" %(position["y"]))
+            # for i in range(0,10):
+            #     sleep(1)
+            #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
             sleep(2)
-            Imagepath = types[posicion_file]["file"]
-            driver.find_element_by_css_selector('#form-edit-creative #id_file').send_keys(Imagepath)
+            Imagepath = types[position_file]["file"]
+            driver.find_element_by_css_selector('# form-edit-creative # id_file').send_keys(Imagepath)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[3]/button').click()
             sleep(3)
             try:
                 while driver.find_element_by_css_selector\
-                            ('#form-edit-creative div div.loader-input-file.center span'):
-                    print("Cargando %s ..." % types[posicion_file]["type"])
+                            ('# form-edit-creative div div.loader-input-file.center span'):
+                    print("Cargando %s ..." % types[position_file]["type"])
                     sleep(2)
             except Exception:
-                print("Archivo %s cargado" % types[posicion_file]["type"])
+                print("Archivo %s cargado" % types[position_file]["type"])
 
-        posicion = driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative)\
+        position = driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative)\
             .location_once_scrolled_into_view
-        driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
+        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
 
-
     def tearDown(self):
         logout(self)
         self.driver.quit()
+
 
 if __name__ == "__main__":
     unittest.main()

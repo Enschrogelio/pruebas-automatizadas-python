@@ -2,10 +2,10 @@ import random
 import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
-from util.config import modelConfig, root_files
+from util.config import ModelConfig, root_files
 from util.functions import login, logout, db_functions
 
-#Variables globales
+# Variables globales
 types = [
     {"type": "IMAGE", "file": root_files+"creatives/png.png"},
     {"type": "GIF", "file": root_files+"creatives/gif.gif"},
@@ -21,6 +21,7 @@ browser_name = None
 client = 2
 campaign = 2
 creative = None
+
 
 class ValidateCreative(unittest.TestCase):
 
@@ -47,7 +48,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             % (list_creatives[rand]["name"].upper(), id, id))
 """.format(list_creatives,campaign)
         creative = db_functions(code)[0][0]
-        cls.driver = modelConfig.driver_web
+        cls.driver = ModelConfig.driver_web
         browser_name=cls.driver.capabilities['browserName']
         if browser_name == "chrome":
             cls.driver.maximize_window()
@@ -55,16 +56,16 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
     def setUp(self):
         pass
 
-    def test_1_go_to_creative(self):
+    def go_to_creative(self):
         global types, client, campaign, creative
         driver = self.driver
         login(self)
-        self.assertIn("%s/admin/clients/" %modelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/clients/" %ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        self.assertIn("%s/admin/client/detail/" %modelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/client/detail/" %ModelConfig.base_url, driver.current_url, msg=None)
 
         sleep(2)
         band = 0
@@ -75,9 +76,9 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                     if browser_name == "internet explorer":
                         print(browser_name)
                     if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
-                        posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
+                        position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
                             .location_once_scrolled_into_view
-                        driver.execute_script("window.scrollTo(0, %d);" %(posicion["y"]+110))
+                        driver.execute_script("window.scrollTo(0, %d);" %(position["y"]+110))
                         sleep(2)
             except NoSuchElementException:
                 if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
@@ -88,21 +89,22 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 band = 0
         driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).click()
         sleep(2)
-        self.assertIn("%s/admin/campaign/detail/" % modelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(2)
 
-    def test_2_file_creative_validation(self):
+    def test_1_file_creative_validation(self):
         global types, client, campaign, creative
+        self.go_to_creative()
         driver = self.driver
-        posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
+        position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
                                                 % (campaign, creative)).location_once_scrolled_into_view
-        driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
+        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%d"]'
                                      % (campaign, creative)).click()
         sleep(2)
         self.assertIn("%s/admin/campaign/detail/%d/creative/update/%d"
-                      % (modelConfig.base_url, campaign, creative), driver.current_url, msg=None)
+                      % (ModelConfig.base_url, campaign, creative), driver.current_url, msg=None)
         sleep(2)
         driver.find_element_by_css_selector('#form-edit-creative #id_name').clear()
         rand_creative = random.randint(0, len(list_creatives)-1)
@@ -124,22 +126,27 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(5)
         driver.switch_to_window(driver.window_handles[0])
 
-        for posicion_file in range(4):
-            print("\n<<<------ %s ------>>>\n" % types[posicion_file]["type"])
+        for position_file in range(4):
+            print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
             driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
             sleep(1)
             driver.find_element_by_css_selector('#form-edit-creative #id_type > option[value="%s"]'
-                                                % types[posicion_file]["type"]).click()
+                                                % types[position_file]["type"]).click()
             sleep(1)
             driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
             sleep(1)
             sleep(2)
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
-                posicion=driver.find_element_by_xpath('/html/body/div[13]/div/div/div[3]/button') \
+                position=driver.find_element_by_xpath('/html/body/div[13]/div/div/div[3]/button') \
                     .location_once_scrolled_into_view
-                driver.execute_script("window.scrollTo(0, %d);" %(posicion["y"]))
+                driver.execute_script("window.scrollTo(0, %d);" %(position["y"]))
             sleep(2)
-            Imagepath = types[posicion_file]["file"]
+            if position_file == len(types)-1:
+                Imagepath = types[0]["file"]
+            else:
+                Imagepath = types[position_file+1]["file"]
+            if position_file == 0:
+                Imagepath = types[3]["file"]
             driver.find_element_by_css_selector('#form-edit-creative #id_file').send_keys(Imagepath)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[3]/button').click()
@@ -147,22 +154,28 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             try:
                 while driver.find_element_by_css_selector \
                             ('#form-edit-creative div div.loader-input-file.center span'):
-                    print("Cargando %s ..." % types[posicion_file]["type"])
+                    print("Cargando %s ..." % types[position_file]["type"])
                     sleep(2)
             except Exception:
-                print("Archivo %s cargado" % types[posicion_file]["type"])
+                print("Archivo %s cargado" % types[position_file]["type"])
                 sleep(2)
-        posicion = driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative) \
-            .location_once_scrolled_into_view
-        driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
-        sleep(2)
-        driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
+            if types[position_file]["type"] == "HTML5":
+                self.assertEqual("The file must be a html or html compressed in zip format.",
+                                 driver.find_element_by_xpath('//*[@id="form-edit-creative"]/div[6]/div[1]/span')
+                                 .get_attribute("innerText"),
+                                 msg=None)
+            else:
+                self.assertEqual("The file must be a: %s" % types[position_file]["type"],
+                                 driver.find_element_by_xpath('//*[@id="form-edit-creative"]/div[6]/div[1]/span')
+                                 .get_attribute("innerText"),
+                                 msg=None)
         sleep(2)
 
     @classmethod
     def tearDownClass(cls):
         logout(cls)
         cls.driver.quit()
+
 
 if __name__ == "__main__":
     unittest.main()
