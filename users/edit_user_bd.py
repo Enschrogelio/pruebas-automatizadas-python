@@ -3,9 +3,9 @@ import time
 from selenium import webdriver
 import json
 from random import randint
-from cerebro.util.config import *
-from cerebro.util.functions import db_functions, logout
-from cerebro.util.login import Login
+from util.config import *
+from util.functions import db_functions, logout, login
+from util.functions import screenshot
 from selenium.webdriver.support.ui import Select
 
 users = '''
@@ -17,9 +17,9 @@ users = '''
 class EditUserBd(unittest.TestCase):
     def setUp(self):
         global users
-        self.driver = modelConfig.driverWeb
+        self.driver = ModelConfig.driver_web
 
-        #Preparación de ambiente
+        # Preparación de ambiente
         info = json.loads(users)
         #rand=randint(0, len(info)-1)  #para mandar los registros del JSON
         code = """
@@ -41,7 +41,7 @@ print(cur.fetchone()[0])
         driver = self.driver
 
         # login
-        Login.testlogin(self)
+        login(self)
         time.sleep(3)
 
         driver.find_element_by_xpath('//*[@id="sections-access"]/div[1]/a').click()
@@ -53,14 +53,15 @@ print(cur.fetchone()[0])
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
         time.sleep(5)
 
-        # editar usuario
+        #editar usuario
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)
+
+        # editar estatus
         driver.find_element_by_css_selector('#form-edit #id_status').click()
         aleatorio=randint(0,2)
         driver.find_element_by_css_selector('#form-edit #id_status > option[value="%d"]' %aleatorio).click()
         print(driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'))
-        time.sleep(2)
 
         assert "Raw passwords are not stored, so there is no way to see this user's password, but you can change the password using this" in driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML')
         time.sleep(3)
@@ -76,6 +77,17 @@ print(cur.fetchone()[0])
 
         assert "Record successfully updated" not in driver.page_source
         time.sleep(3)
+
+        # realizar lo del screenshot
+        mi_ruta="/users/screenshot/editar/"
+        screenshot(self, mi_ruta)
+        time.sleep(2)
+
+        # búsqueda de usuario
+        driver.find_element_by_id('inputSrc').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
+        time.sleep(5)
 
         #driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
 
