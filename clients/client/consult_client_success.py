@@ -2,19 +2,22 @@ import unittest
 import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
+# DATA SET
 clients = '''
         [{ "email" : "RUIZ@gmail.com","name" : "OSCAR IGNACIO ALVAREZ CHAGOYA","password" : "ALVAREZ", "cpm" : "99",
         "budget" : "0.08", "company" : "AUTO TRANSPORTES DE CARGA RUIZ HERMANOS SA DE CV", "rfc" : "ATC900103NR1",
-         "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
+        "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
         "phone" : "3121256985"
         }]'''
-rfcinexist="AEAS860120H3A"
+rfc_inexist = "AEAS860120H3A"
+
 
 class ConsultClient(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
-        #Preaparación de ambiente
+
+        # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
@@ -28,12 +31,12 @@ cur.execute(sql, val)""".format(info)
         db_functions(code)
 
     def test_consult_client_success(self):
-        browserName = self.driver.capabilities['browserName']
-        #print(browserName)
-        mi_ruta = "clients/client/screenshot/test_consult_client_success"
+        browser_name = self.driver.capabilities['browserName']
+        # print(browserName)
+        path = "clients/client/screenshot/test_consult_client_success"
         info = json.loads(clients)
 
-        #login
+        # login
         login(self)
         sleep(3)
         driver = self.driver
@@ -43,15 +46,15 @@ cur.execute(sql, val)""".format(info)
         # driver.find_element_by_xpath('//*[@id="sections-access"]/div[2]/a').click()
         sleep(1)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
-        driver.find_element_by_id('search').send_keys(rfcinexist)
+        driver.find_element_by_id('search').send_keys(rfc_inexist)
         sleep(3)
         self.assertEqual("No record found", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td')
                          .text, msg=None)
         sleep(3)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         sleep(3)
         driver.find_element_by_id('search').clear()
-        if browserName == 'internet explorer':
+        if browser_name == 'internet explorer':
             driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[0]['rfc'])
         sleep(3)
@@ -63,12 +66,13 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         sleep(3)
 
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()
