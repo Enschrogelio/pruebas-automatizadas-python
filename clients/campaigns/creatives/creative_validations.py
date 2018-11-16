@@ -60,12 +60,12 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         global types, client, campaign, creative
         driver = self.driver
         login(self)
-        self.assertIn("%s/admin/clients/" %ModelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        self.assertIn("%s/admin/client/detail/" %ModelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/client/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
 
         sleep(2)
         band = 0
@@ -78,7 +78,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                     if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                         position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
                             .location_once_scrolled_into_view
-                        driver.execute_script("window.scrollTo(0, %d);" %(position["y"]+110))
+                        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
                         sleep(2)
             except NoSuchElementException:
                 if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
@@ -143,12 +143,12 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 driver.execute_script("window.scrollTo(0, %d);" %(position["y"]))
             sleep(2)
             if position_file == len(types)-1:
-                Imagepath = types[0]["file"]
+                image_path = types[0]["file"]
             else:
-                Imagepath = types[position_file+1]["file"]
+                image_path = types[position_file+1]["file"]
             if position_file == 0:
-                Imagepath = types[3]["file"]
-            driver.find_element_by_css_selector('#form-edit-creative #id_file').send_keys(Imagepath)
+                image_path = types[3]["file"]
+            driver.find_element_by_css_selector('#form-edit-creative #id_file').send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[3]/button').click()
             sleep(3)

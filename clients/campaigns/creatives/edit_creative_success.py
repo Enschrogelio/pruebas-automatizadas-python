@@ -20,13 +20,13 @@ list_creatives = [
 browser_name = None
 client = 2
 campaign = 2
-creative = None
+creative: None
 
 
 class EditCreativeSuccessful(unittest.TestCase):
 
     def setUp(self):
-        global browser_name,creative
+        global browser_name, creative
         code = """
 campaign = {1}
 list_creatives = {0}
@@ -35,8 +35,8 @@ for creative in list_creatives:
 rand = random.randint(0, len(list_creatives)-1)
 cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id) VALUES "
             "('%s','%s','%s','%s',%d,current_timestamp,current_timestamp,%d) RETURNING id;" 
-            % (list_creatives[rand]["name"],list_creatives[rand]["url"],list_creatives[rand]["measure"],
-               list_creatives[rand]["type"],list_creatives[rand]["status"],campaign))
+            % (list_creatives[rand]["name"], list_creatives[rand]["url"], list_creatives[rand]["measure"],
+               list_creatives[rand]["type"], list_creatives[rand]["status"], campaign))
 id = cur.fetchone()[0]
 cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             "redirect_url = 'https://hnz3ccup03.execute-api.us-west-2.amazonaws.com/stage/"
@@ -45,10 +45,10 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             "js/libs/cer.min.js?ca=PRUEBA-2&ct=CESAR-17></script>' "
             "WHERE ID = %d RETURNING id;"
             % (list_creatives[rand]["name"].upper(), id, id))
-""".format(list_creatives,campaign)
+""".format(list_creatives, campaign)
         creative = db_functions(code)[0][0]
         self.driver = ModelConfig.driver_web
-        browser_name=self.driver.capabilities['browserName']
+        browser_name = self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
 
@@ -130,7 +130,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                 position=driver.find_element_by_xpath('/html/body/div[13]/div/div/div[3]/button') \
                     .location_once_scrolled_into_view
-                driver.execute_script("window.scrollTo(0, %d);" %(position["y"]))
+                driver.execute_script("window.scrollTo(0, %d);" % (position["y"]))
             # for i in range(0,10):
             #     sleep(1)
             #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
