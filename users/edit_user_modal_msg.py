@@ -17,7 +17,7 @@ users = '''
         ]'''
 
 
-class EditUserBd(unittest.TestCase):
+class EditModal(unittest.TestCase):
 
     def setUp(self):
         global users
@@ -81,13 +81,24 @@ print(cur.fetchone()[0])
         driver.find_element_by_css_selector('#form-change #id_password1').clear()
         driver.find_element_by_css_selector('#form-change #id_password1').send_keys(info[0]["password"])
         time.sleep(3)
+        self.assertIn("Your password can't be too similar to your other personal information.",
+                      driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[1]').get_attribute('innerHTML'), msg=None)
+        time.sleep(3)
+        self.assertIn("Your password must contain at least 8 characters.",
+                      driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[2]').get_attribute('innerHTML'), msg=None)
+        time.sleep(3)
+        self.assertIn("Your password can't be a commonly used password.",
+                      driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[3]').get_attribute('innerHTML'), msg=None)
+        time.sleep(3)
+        self.assertIn("Your password can't be entirely numeric.", driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[4]').get_attribute('innerHTML'), msg=None)
+        time.sleep(3)
         driver.find_element_by_css_selector('#form-change #id_password2').clear()
         driver.find_element_by_css_selector('#form-change #id_password2').send_keys(info[0]["password"])
-        time.sleep(3)
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
 
         assert "Record successfully updated" not in driver.page_source
         time.sleep(3)
+
 
         # Screenshot
 
@@ -113,7 +124,6 @@ print(cur.fetchone()[0])
 
         # Screenshot
 
-        path = "/users/screenshot/add/"
         screenshot(self, path)
 
         # Search user
@@ -123,7 +133,7 @@ print(cur.fetchone()[0])
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
         time.sleep(5)
 
-        # edit the email
+        # Edit the email
 
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)

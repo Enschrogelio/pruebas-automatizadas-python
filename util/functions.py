@@ -6,18 +6,26 @@ import string
 import psycopg2
 from util.config import ModelConfig
 
-#login
+# login
+
 def login(self):
+
+
     driver = self.driver
-    #login
+
+    # login
+
     driver.get(ModelConfig.url_login)
     driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(ModelConfig.email)
     driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(ModelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
     sleep(2)
 
-#logout
-def logout(self):
+# logout
+
+def logout(self: object) -> object:
+
+
     sleep(5)
     driver=self.driver
     driver.get(ModelConfig.url_login)
@@ -25,15 +33,20 @@ def logout(self):
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
 
-#Screenshot
+# screenshot
+
 def screenshot(self, ruta):
+
+
     driver = self.driver
     now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
     driver.save_screenshot(ModelConfig.base_screenshot+ruta+" %s.png" % now)
 
-#Randoms
+# Random
+
 def randoms(long, tipo):
-    dato = ""
+
+
     if tipo == "letter":
         letters = [chr(random.randint(97, 122)) for r in range(long)]
         dato = ''.join(letters)
@@ -51,8 +64,10 @@ def randoms(long, tipo):
                     dato = ''.join(specials)
     return dato
 
-#DB functions
+# DB functions
 # noinspection PyUnresolvedReferences
+
+
 def db_functions(code):
     conn = None
     try:
@@ -67,7 +82,8 @@ def db_functions(code):
         if conn is not None:
             conn.close()
 
-#Read csv
+# Read csv
+
 def read_csv(root):
     csv_list = []
     print(root)

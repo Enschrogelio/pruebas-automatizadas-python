@@ -3,45 +3,45 @@ import time
 from selenium import webdriver
 import json
 from random import randint
-from cerebro.util.config import *
-from cerebro.util.functions import logout
-from cerebro.util.login import Login
+from util.config import *
+from util.functions import logout
+
 
 class EditUser(unittest.TestCase):
-    def setUp(self):
-        self.driver = modelConfig.driverWeb
 
-    def testEditUsersSuccess(self):
+    def setUp(self):
+        self.driver = ModelConfig.driver_web
+
+    def testEditUsersSuccess(self, random=None):
         users = '''
         [  
-         {"email" : "ricardo647@gmail.com", "password" : "1112233584546?:", "confirm_password" :  "1112233584546?:", "name" : "Ricardo Mora Ortíz"},  
-         {"email" : "irma9647@gmail.com", "password" : "I9454648_?¡:", "confirm_password" :  "I9454648_?¡:", "name" : "Irma González Mora"}               
+         {"email": "ricardo647@gmail.com", "password": "111246?:", "confirm_password":  "111246?:", "name": "Ricardo"},  
+         {"email": "irma9647@gmail.com", "password": "I945448_?¡:", "confirm_password":  "I945448_?¡:", "name": "Irma"}               
         ]'''
 
         info = json.loads(users)
-        rand=randint(0, len(info)-1)  #para mandar los registros del JSON
+        rand=randint(0, len(info)-1)  # Send the records
 
         driver = self.driver
-
-        Login.testlogin(self)
         time.sleep(3)
 
         driver.find_element_by_xpath('//*[@id="sections-access"]/div[1]/a').click()
         time.sleep(2)
 
-        # búsqueda de usuario
+        # User search
+
         driver.find_element_by_id('inputSrc').click()
         time.sleep(2)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys("richard321@outlook.com")
         time.sleep(5)
 
-        # editar usuario
+        # Edit user
 
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)
         driver.find_element_by_css_selector('#form-edit #id_status').click()
-        aleatorio=randint(0,2)
-        driver.find_element_by_css_selector('#form-edit #id_status > option[value="%d"]' %aleatorio).click()
+        random=randint(0,2)
+        driver.find_element_by_css_selector('#form-edit #id_status > option[value="%d"]' %random).click()
         print(driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'))
         time.sleep(2)
 
@@ -64,5 +64,6 @@ class EditUser(unittest.TestCase):
         logout(self)
         self.driver.close()
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     unittest.main()

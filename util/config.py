@@ -5,7 +5,9 @@ root_files = os.path.dirname(os.path.abspath(__file__))+'\\'
 root_driver = root_files+"drivers/"
 
 class ModelConfig:
-    #atributos
+
+    # attributes
+
     base_url = "http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com"
     url_login = base_url+"/admin/login/"
     email = "admin@admin.com"
@@ -15,10 +17,12 @@ class ModelConfig:
                  " host='cerebro-stage.ct2o8jgma4vs.us-west-2.rds.amazonaws.com' password='N23E4Jz8KLRuSvGb'" \
                  " connect_timeout=10 "
 
-    #screenshot
+    # screenshot
+
     base_screenshot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'\\'
 
-    #Drivers
+    # Drivers
+
     def drivers(x):
         global root_driver
         if x == "ch":
