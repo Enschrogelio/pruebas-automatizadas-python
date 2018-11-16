@@ -116,8 +116,8 @@ for creative in list_creatives:
             #     sleep(1)
             #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
             sleep(2)
-            Imagepath = types[position_file]["file"]
-            driver.find_element_by_css_selector('# form-add-creative # id_file').send_keys(Imagepath)
+            image_path = types[position_file]["file"]
+            driver.find_element_by_css_selector('# form-add-creative # id_file').send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-add-creative"]/div/div/div[3]/button').click()
             sleep(3)
