@@ -33,8 +33,8 @@ class AddClient(unittest.TestCase):
         info = json.loads(clients)
         code = """
 info = {0}
-for elemento in info:
-    cur.execute("DELETE FROM clients WHERE rfc = '%s'" % elemento['rfc'])
+for element in info:
+    cur.execute("DELETE FROM clients WHERE rfc = '%s'" % element['rfc'])
 """.format(info)
         db_functions(code)
 

@@ -3,7 +3,7 @@ import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 # DATA SET
-_type = "detail"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
+_type = "add"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
 clients = '''
         [{ "email" : "MATAMOROS@gmail.com","name" : "OMAR IZHAR ALVAREZ CASTILLO","password" : "ALCANTARA", 
         "cpm" : "1", "budget" : "15000.90", "company" : "AUTOTRANSPORTES MATAMOROS MAZATLAN DIVISION", 
