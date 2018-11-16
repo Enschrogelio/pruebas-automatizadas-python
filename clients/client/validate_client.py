@@ -33,7 +33,7 @@ strftime("%Y/%m/%d"), info[0]['password'], info[0]['company'], info[0]['rfc'], i
 cur.execute(sql, val)""".format(info)
         db_functions(code)
 
-    def function_type(self, __type):
+    def function_type(self, _type):
         global refresh
         driver = self.driver
         info = json.loads(clients)
@@ -44,7 +44,7 @@ cur.execute(sql, val)""".format(info)
             driver.find_element_by_xpath('//*[@id="btn-add"]').click()
             return form, modal
         else:
-            if __type == "edit":
+            if _type == "edit":
                 form = '#form-edit'
                 modal = '#modal-edit'
                 if refresh == 0:
