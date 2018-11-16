@@ -4,40 +4,43 @@ from random import randint
 from util.functions import *
 from util.config import ModelConfig
 
+# DATA SET
 clients = '''
-        [{ "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", "cpm" : "1",
-        "budget" : "15000.90", "company" : "AUTOTRANSPORTES RAPIDOS DOS HUASTECAS S A DE C V", "rfc" : "ASS001002KX0",
-        "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
+        [{ "email" : "HUASTECAS@gmail.com","name" : "MOISES JOSUE ALCANTARA CABADILLA","password" : "ALCANTARA", 
+        "cpm" : "1", "budget" : "15000.90", "company" : "AUTOTRANSPORTES RAPIDOS DOS HUASTECAS S A DE C V", 
+        "rfc" : "ASS001002KX0", "address" : "2 DE ABRIL NUM 1022 ORIENTE COL INDEPENDENCIA MONTERREY N L",
         "phone" : "3125256987"
         },
-        { "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", "cpm" : "18",
-        "budget" : "10000.52", "company" : "ASESORIA Y SERVICIOS ECOLOGICOS INTEGRALES S.A.", "rfc" : "ASE0009266M0",
-        "address" : "BRONCE #9326 CD INDUSTRIAL MITRAS GARCIA N.L. C.P. 66000",
+        { "email" : "ECOLOGICOS@gmail.com","name" : "PEDRO ALBERTO ARAMBURA CONTRERAS" ,"password" : "ARAMBURA", 
+        "cpm" : "18", "budget" : "10000.52", "company" : "ASESORIA Y SERVICIOS ECOLOGICOS INTEGRALES S.A.", 
+        "rfc" : "ASE0009266M0", "address" : "BRONCE #9326 CD INDUSTRIAL MITRAS GARCIA N.L. C.P. 66000",
         "phone" : "3128256987"
         },
         { "email" : "RUIZ@gmail.com","name" : "OSCAR IGNACIO ALVAREZ CHAGOYA","password" : "ALVAREZ", "cpm" : "99",
         "budget" : "0.08", "company" : "AUTO TRANSPORTES DE CARGA RUIZ HERMANOS SA DE CV", "rfc" : "ATC900103NR1",
-         "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
+        "address" : "CARRET. PESQUERIA KM .600 LADRILLERA, PESQUERIA N.L CP 66650",
         "phone" : "3121256985"
         }]'''
+
 
 class AddClient(unittest.TestCase):
 
     def setUp(self):
         global clients
         self.driver = ModelConfig.driver_web
-        #Preaparación de ambiente
+
+        # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
-for elemento in info:
-    cur.execute("DELETE FROM clients WHERE rfc = '%s'" % elemento['rfc'])
+for element in info:
+    cur.execute("DELETE FROM clients WHERE rfc = '%s'" % element['rfc'])
 """.format(info)
         db_functions(code)
 
     def test_add_client_success(self):
         global clients
-        mi_ruta = "clients/client/screenshot/test_add_client_success"
+        path = "clients/client/screenshot/test_add_client_success"
         info = json.loads(clients)
         rand = randint(0, len(info) - 1)
 
@@ -60,7 +63,7 @@ for elemento in info:
         driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys(info[rand]['rfc'])
         driver.find_element_by_xpath('//*[@id="id_address"]').send_keys(info[rand]['address'])
         driver.find_element_by_xpath('//*[@id="id_phone"]').send_keys(info[rand]['phone'])
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
         sleep(10)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
@@ -76,12 +79,13 @@ for elemento in info:
                          .text, msg=None)
         self.assertEqual('active', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
                          .text, msg=None)
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
         sleep(5)
 
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()

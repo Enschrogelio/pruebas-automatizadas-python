@@ -7,22 +7,21 @@ import psycopg2
 from util.config import ModelConfig
 
 
-# login
+# Login
 def login(self):
     driver = self.driver
-    # login
-    driver.get(ModelConfig.base_url + "/admin/login")
+    driver.get(ModelConfig.base_url+"/admin/login")
     driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(ModelConfig.email)
     driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(ModelConfig.password)
     driver.find_element_by_xpath('//*[@id="formLogin"]/button').click()
     sleep(2)
 
 
-# logout
+# Logout
 def logout(self):
     sleep(5)
-    driver = self.driver
-    driver.get(ModelConfig.base_url + "/admin/login")
+    driver=self.driver
+    driver.get(ModelConfig.base_url+"/admin/login")
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
     sleep(2)
@@ -32,7 +31,7 @@ def logout(self):
 def screenshot(self, path):
     driver = self.driver
     now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
-    driver.save_screenshot(ModelConfig.base_screenshot + path + " %s.png" % now)
+    driver.save_screenshot(ModelConfig.base_screenshot+path+" %s.png" % now)
 
 
 # Randoms
