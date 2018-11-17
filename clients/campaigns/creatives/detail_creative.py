@@ -80,16 +80,14 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
 
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        position=driver.find_element_by_xpath('//*[@id="user-dashboard"]/div[1]/div/div[4]/a[1]')\
-            .location_once_scrolled_into_view
+        position=driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]'
+                                              % creative).location_once_scrolled_into_view
         driver.execute_script("window.scrollTo(0, %d);" %(position["y"]+110))
         sleep(2)
-        driver.find_element_by_xpath('//*[@id="user-dashboard"]/div[1]/div/div[4]/a[1]').click()
+        driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
 
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        idCreativo = driver.find_element_by_css_selector('//a[@href="/admin/creative/detail/%d"]' % creative)\
-            .get_attribute("innerText").rstrip()
         sleep(1)
         preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText") \
             .rstrip()
@@ -102,14 +100,14 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(1)
         driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
         sleep(3)
-        self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/2/"
-                         "creative/update/%s" %idCreativo, driver.current_url,msg=None)
+        self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"
+                         "creative/update/%s" % (campaign, creative), driver.current_url,msg=None)
         driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[1]/button').click()
-        # position=driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' %idCreativo)\
+        # position=driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' %creative)\
         #     .location_once_scrolled_into_view
         # driver.execute_script("window.scrollTo(0, %d);" %(position["y"]+110))
         # sleep(2)
-        # driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' %idCreativo).click()
+        # driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' %creative).click()
 
     def tearDown(self):
         logout(self)
