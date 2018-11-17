@@ -81,30 +81,30 @@ for creative in list_creatives:
             sleep(2)
             driver.find_element_by_xpath('//*[@id="btn-add-"]').click()
             sleep(2)
-            driver.find_element_by_css_selector('# form-add-creative # id_name').clear()
-            driver.find_element_by_css_selector('# form-add-creative # id_name') \
+            driver.find_element_by_css_selector('#form-add-creative #id_name').clear()
+            driver.find_element_by_css_selector('#form-add-creative #id_name') \
                 .send_keys(list_creatives[position_file]["name"])
-            driver.find_element_by_css_selector('# form-add-creative # id_status').click()
+            driver.find_element_by_css_selector('#form-add-creative #id_status').click()
             sleep(1)
             # rand = random.randint(0,2)
-            driver.find_element_by_css_selector('# form-add-creative # id_status > option[value="%d"]'
+            driver.find_element_by_css_selector('#form-add-creative #id_status > option[value="%d"]'
                                                 % list_creatives[position_file]["status"]).click()
             sleep(1)
-            driver.find_element_by_css_selector('# form-add-creative # id_measure').clear()
-            driver.find_element_by_css_selector('# form-add-creative # id_measure') \
+            driver.find_element_by_css_selector('#form-add-creative #id_measure').clear()
+            driver.find_element_by_css_selector('#form-add-creative #id_measure') \
                 .send_keys(list_creatives[position_file]["measure"])
-            driver.find_element_by_css_selector('# form-add-creative # id_url').clear()
-            driver.find_element_by_css_selector('# form-add-creative # id_url') \
+            driver.find_element_by_css_selector('#form-add-creative #id_url').clear()
+            driver.find_element_by_css_selector('#form-add-creative #id_url') \
                 .send_keys(list_creatives[position_file]["url"])
-            driver.find_element_by_css_selector('# form-add-creative # id_type').click()
+            driver.find_element_by_css_selector('#form-add-creative #id_type').click()
             sleep(1)
-            driver.find_element_by_css_selector('# form-add-creative # id_type > option[value="%s"]'
+            driver.find_element_by_css_selector('#form-add-creative #id_type > option[value="%s"]'
                                                 % types[position_file]["type"]) \
                 .click()
             sleep(1)
-            driver.find_element_by_css_selector('# form-add-creative # id_type').click()
+            driver.find_element_by_css_selector('#form-add-creative #id_type').click()
             sleep(1)
-            # driver.find_element_by_css_selector('# form-add-creative # id_file').click()
+            # driver.find_element_by_css_selector('#form-add-creative #id_file').click()
             # sleep(5)
             driver.switch_to_window(driver.window_handles[0])
             sleep(2)
@@ -117,13 +117,13 @@ for creative in list_creatives:
             #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
             sleep(2)
             image_path = types[position_file]["file"]
-            driver.find_element_by_css_selector('# form-add-creative # id_file').send_keys(image_path)
+            driver.find_element_by_css_selector('#form-add-creative #id_file').send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-add-creative"]/div/div/div[3]/button').click()
             sleep(3)
             try:
                 while driver.find_element_by_css_selector \
-                            ('# form-add-creative div div.loader-input-file.center span'):
+                            ('#form-add-creative div div.loader-input-file.center span'):
                     print("Cargando %s ..." % types[position_file]["type"])
                     sleep(2)
             except Exception:
