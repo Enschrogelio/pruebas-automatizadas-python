@@ -18,7 +18,7 @@ campaign = 2
 creative: None
 
 
-class DetailCreativeSuccess(unittest.TestCase):
+class DeleteCreativeSuccess(unittest.TestCase):
 
     def setUp(self):
         global browser_name, creative
@@ -52,7 +52,6 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         login(self)
         self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
-        # driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[2]/td[6]/a[1]/i').click()
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
@@ -81,29 +80,24 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
 
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        position = driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]'
+        position = driver.find_element_by_xpath('//a[@data-id="%s" and @data-target="#modal-delete"]'
                                                 % creative).location_once_scrolled_into_view
         driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
+        confirm = driver.find_element_by_xpath('//a[@data-id="%s" and @data-target="#modal-delete"]' % creative)\
+            .get_property("dataset")['confirm']
+        driver.find_element_by_xpath('//a[@data-id="%s" and @data-target="#modal-delete"]' % creative).click()
+        sleep(2)
+        driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(confirm)
+        driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
+        sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
-
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        sleep(1)
-        preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText") \
-            .rstrip()
-        if preview == "Preview":
-            # driver.find_element_by_link_text("Preview").click()
-            driver.find_element_by_xpath('/html/body/div[1]/div/div[8]/p/a').click()
-            sleep(6)
-        else:
-            print("No hay archivo para descargar")
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
-        sleep(3)
-        self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"
-                         "creative/update/%s" % (campaign, creative), driver.current_url, msg=None)
-        driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[1]/button').click()
+        self.assertEqual("2", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
 
     def tearDown(self):
         logout(self)
