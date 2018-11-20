@@ -7,26 +7,34 @@ from util.config import *
 from util.functions import db_functions, logout, login
 from util.functions import screenshot
 
+
 class AddUserBd(unittest.TestCase):
+
     def setUp(self):
         self.driver = ModelConfig.driver_web
 
     def testAddUsersSuccess(self):
         users = '''
-        [{"email" : "fernanda222@gmail.com", "password" : "223344556677:", "confirm_password" : "223344556677:", "name" : "Fernanda Sánchez González"},
-         {"email" : "cesar444@gmail.com", "password" : "46546554:", "confirm_password" : "46546554", "name" : "César López Aguirre"},
-         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121?", "name" : "Anita Becerra de la O"}
+        [{"email" : "fernanda222@gmail.com", "password" : "2233445:", "confirm_password" : "2233445:",
+          "name" : "Fernanda Rodriguez Martinez"},
+         {"email" : "cesar444@gmail.com", "password" : "46546554?¡", "confirm_password" : "46546554?¡", 
+          "name" : "Cesar Perez Lopez"},
+         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121?", 
+          "name" : "Anita Rodriguez Perez"}
         ]'''
 
         info = json.loads(users)
-        rand=randint(0, len(info)-1)  #para mandar los registros del JSON
+
+        # Send the records
+
+        rand=randint(0, len(info)-1)
         code = """
-        
+           
 info = {0}
-#recorrer el JSON
+# Tour the json
 for user in info: 
     cur.execute("DELETE FROM users WHERE email = '%s'" % user['email']) 
-#imprime el valor retornado
+# print the returned value
 print(cur.rowcount)
 """.format(info)
         db_functions(code)
@@ -37,7 +45,7 @@ print(cur.rowcount)
         driver.find_element_by_xpath('//*[@id="sections-access"]/div[1]/a').click()
         time.sleep(2)
 
-        #agregar usuarios
+        # Add user
 
         driver.find_element_by_xpath('//*[@id="btn-add"]').click()
         time.sleep(2)
@@ -46,18 +54,20 @@ print(cur.rowcount)
         driver.find_element_by_xpath('//*[@id="id_password2"]').send_keys(info[rand]['confirm_password'])
         driver.find_element_by_xpath('//*[@id="id_name"]').send_keys(info[rand]['name'])
 
-        mi_ruta="/users/screenshot/"
-        screenshot(self, mi_ruta)
+        # Screenshot
+
+        path = "/users/screenshot/add/"
+        screenshot(self, path)
 
         driver.find_element_by_xpath('//*[@id="modal-add"]/div/div/div[3]/button').click()
         time.sleep(2)
 
-        #realizar el screenshot
-        screenshot(self, mi_ruta)
+        # Screenshot
 
+        screenshot(self, path)
         driver.refresh()
 
-        #leer mensajes del modal
+        # Read modal messages
 
         assert "Record successfully added" not in driver.page_source
         time.sleep(3)
@@ -66,5 +76,6 @@ print(cur.rowcount)
         logout(self)
         self.driver.close()
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     unittest.main()
