@@ -1,36 +1,40 @@
+import datetime
 import json
 import unittest
+import time
 
-from pruebas_automatizadas.util.functions import *
-from pruebas_automatizadas.util.config import *
-from pruebas_automatizadas.util.dataCampaign import *
-import psycopg2 as psycopg2
 
-campaign=[
-    {"name" : "Rogelio","budget":"2","url":"https://www.google.es/","objetive":"2"},
-    {"name" : "Rogelio 2","budget":"4","url":"https://www.facebook.com/","objetive":"4"}]
+from util.functions import *
+from util.dataCampaign import *
+from util.functions import login
 
-global campaign
+from util.config import ModelConfig
+from util.functions import screenshot, logout
+
+campaign='''
+    [{"name" : "RogelioElim","budget":"2.00", "url":"https://www.google.com","objetive":"2","industry":"Automotriz","category":"llantas","camcode":"ENSCH-75"},
+    {"name" : "Rogelio 2","budget":"4.0","url":"https://www.facebook.com/a","objetive":"4.0"}]'''
 
 
 class AddClient(unittest.TestCase):
     def setUp(self):
-        self.driver = modelConfig.driverWeb
-        info = json.loads(campaign)
+        global campaign
+        self.driver = ModelConfig.driver_web
         self.driver.maximize_window()
+        info = json.loads(campaign)
         code = """
-info={0}
-cur.execute("DELETE FROM campaigns WHERE id = '%'" info[1]['id'])
-sql = 'INSERT INTO campaigns (name, budget,url,objetive) VALUES (%s, %s, %s, %s)'
-val = (info[0]['name'],info[0]['budget'],info[0]['url',info[0]['objetive'])
-cur.execute(sql,val)
+info = {0}
+cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objetive = '%s'" %(info[0]['name'], info[0]['budget'], info[0]['objetive']))
+sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at, redirect_url, script_snippet, status, ga_api_key,ga_api_secret,dbm_client_secret,dbm_client_id, client_id) VALUES (%s,%s, %s, %s, %s, %s, %s, %s,%s,%s, %s, %s,%s,%s,%s,%s,%s)'
+val = (info[0]['url'], info[0]['camcode'],info[0]['name'], info[0]['budget'], info[0]['objetive'],info[0]['industry'], info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"),'','',1,'','','','',2)
+cur.execute(sql, val)
 """.format(info)
         db_functions(code)
 
+
     def testAddClient(self):
         driver = self.driver
-        info = json.loads(campaign)
-    #login
+        #login
         login(self)
         time.sleep(2)
         #Click en clientes
@@ -41,7 +45,7 @@ cur.execute(sql,val)
         time.sleep(1)
         #llenado de Form
         #name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(dataCampign.name)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys("dsasd")
         time.sleep(2)
         #Seleccionar Select contenedor ACTIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]').click()
@@ -61,25 +65,18 @@ cur.execute(sql,val)
         #Seleccionar CELULARES
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[4]/select/option[6]').click()
         #BUGET
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(dataCampign.budget)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(2)
         #URL
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys(dataCampign.url)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("https://www.g.com")
         #OBJETIVE
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(dataCampign.objetive)
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(100)
         #enter
         driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
+        mi_ruta="clients/campaigns/testCampaign/screenshot/"
+        screenshot(self,mi_ruta)
+        logout(self)
 
 
-
-
-    # def screenshot(self):
-    #     driver = self.driver
-    #     now = datetime.datetime.now()
-    #     hour = now.hour
-    #     min = now.min
-    #     second = now.second
-    #     today = datetime.date.today()
-    #     driver.save_screenshot(modelConfig.screen+"testCampaign/screenshot/empty%s-hora-%s-seg_%s.png" %(today,hour,second))
 
     def tearDown(self):
         self.driver.close()
