@@ -1,11 +1,14 @@
 import json
 import unittest
+
+from selenium.common.exceptions import NoSuchElementException
+
 from util.functions import *
 from util.config import *
 from util.functions import login
 
 campaign='''
-    [{"name" : "Rogelio","budget":"2.00", "url":"https://www.google.com","objetive":"2"},
+    [{"name" : "Coca-cola company","budget":"2.00", "url":"https://www.google.com","objetive":"2"},
     {"name" : "Rogelio 2","budget":"5.0","url":"https://www.facebook.com/","objetive":"4.0"}]'''
 
 
@@ -46,8 +49,9 @@ cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objet
             driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]').click()
             sleep(3)
             # Seleccionar Active
-            aleatorio = random.randint(0,2)
-            driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/select/option[%d]' % aleatorio).click()
+            aleatorio = random.randint(1 , 1)
+            #driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/select/option[%d]' % aleatorio).click()
+            driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/select/option[2]').click()
             sleep(2)
             # Seleccionar Select contenedor INDUSTRIA
             driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[3]').click()
@@ -69,14 +73,19 @@ cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objet
             # enter
             driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
             sleep(3)
-            # editar usuarios
-            
-
-            self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg = None)
-            self.assertEqual(info[0]['budget'], driver.find_element_by_xpath('//tr[1]/td[6]').text, msg = None)
-            self.assertEqual(info[0]['objetive'], driver.find_element_by_xpath('//tr[1]/td[7]').text, msg = None)
-            mi_ruta = "clients/campaigns/screenshot/"
-            screenshot(self, mi_ruta)
+            try:
+                while driver.find_element_by_xpath('//tr[1]/td[3]').get_attribute(info[0]['name']):
+                    self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg=None)
+                    self.assertEqual(info[0]['budget'], driver.find_element_by_xpath('//tr[1]/td[6]').text, msg=None)
+                    self.assertEqual(info[0]['objetive'], driver.find_element_by_xpath('//tr[1]/td[7]').text, msg=None)
+                    sleep(2)
+            except Exception:
+                driver.find_element_by_xpath('//*[@id="client-camp-links"]/a[2]').click()
+                sleep(2)
+                self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg=None)
+                self.assertEqual(info[0]['budget'], driver.find_element_by_xpath('//tr[1]/td[6]').text, msg=None)
+                self.assertEqual(info[0]['objetive'], driver.find_element_by_xpath('//tr[1]/td[7]').text, msg=None)
+                sleep(2)
 
     def tearDown(self):
             logout(self)

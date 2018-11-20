@@ -17,17 +17,16 @@ class DeleteCampaign(unittest.TestCase):
     def setUp(self):
         global campaign, valor
         self.driver = ModelConfig.driver_web
-        self.driver.maximize_window()
         info = json.loads(campaign)
         code = """
 info = {0}
-cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objetive = '%s'" 
-            % (info[0]['name'], info[0]['budget'], info[0]['objetive']))
+cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
+            % (info[1]['name'], info[1]['budget'], info[1]['objetive']))
 sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
-      'redirect_url, script_snippet, status, ga_api_key,ga_api_secret,dbm_client_secret,dbm_client_id, client_id) ' \
-      'VALUES (%s,%s, %s, %s, %s, %s, %s, %s,%s,%s, %s, %s,%s,%s,%s,%s,%s) returning name, budget, objetive'
-val = (info[0]['url'], info[0]['camcode'],info[0]['name'], info[0]['budget'], info[0]['objetive'],info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"),'','',1,'','','','',2)
+      'redirect_url, script_snippet, status, ga_api_key,ga_api_secret,dbm_client_secret, dbm_client_id, client_id) ' \
+      'VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s,%s, %s, %s, %s, %s, %s, %s, %s)'
+val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
+       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', '', '', 2)
 cur.execute(sql, val)
 """.format(info)
         valor = db_functions(code)[0]
