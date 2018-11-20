@@ -4,10 +4,13 @@ from util.functions import *
 
 class CampaignValiadation(unittest.TestCase):
 
-    def setUp(self):
-        self.driver = ModelConfig.driver_web
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = ModelConfig.driver_web
+        cls.driver.maximize_window()
+        cls.campaign_main(cls)
 
-    def test_1campaign(self):
+    def campaign_main(self):
         driver = self.driver
         # login
         login(self)
@@ -23,7 +26,7 @@ class CampaignValiadation(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="modal-add-campaign"]/div/div/div[3]/button').click()
         sleep(2)
 
-    def test_2assert_campaign(self):
+    def test_assert_campaign(self):
         driver = self.driver
         sleep(2)
         # validación name
@@ -73,7 +76,7 @@ class CampaignValiadation(unittest.TestCase):
         print(titleModalCampaign, "objetive")
         self.assertEqual(titleModalCampaign, 'Objetive')
 
-    def test_3max(self):
+    def test_max(self):
         driver = self.driver
         # name
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
@@ -93,7 +96,7 @@ class CampaignValiadation(unittest.TestCase):
         # self.screenshot()
         # driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
 
-    def test_4special(self):
+    def test_special(self):
         driver = self.driver
         # llenado de Form
         # name
@@ -114,7 +117,7 @@ class CampaignValiadation(unittest.TestCase):
         sleep(2)
         #  self.screenshot()
 
-    def test_5min(self):
+    def test_min(self):
         driver = self.driver
         # llenado de Form
         # name
@@ -135,9 +138,10 @@ class CampaignValiadation(unittest.TestCase):
         mi_ruta="clients/campaigns/testCampaign/screenshot/"
         screenshot(self, mi_ruta)
 
-    def tear1Down(self):
-        logout(self)
-        self.driver.close()
+    @classmethod
+    def tearDownClass(cls):
+        logout(cls)
+        cls.driver.close()
 
 
 if __name__ == "__main__":
