@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime
-from time import sleep
+from time import sleep, strftime
 import random
 import string
 import psycopg2
@@ -20,7 +20,7 @@ def login(self):
 # Logout
 def logout(self):
     sleep(5)
-    driver=self.driver
+    driver = self.driver
     driver.get(ModelConfig.base_url+"/admin/login")
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
