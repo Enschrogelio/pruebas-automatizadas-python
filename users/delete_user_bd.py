@@ -28,16 +28,21 @@ class DeletedUser(unittest.TestCase):
         rand=randint(0, len(info)-1) # to send the JSON logs
         code = """
         
-#declaraciones de variables        
+#declaraciones de variables
+        
 info = {0}
 rand = {1}
 
 #recorrer el JSON
+
 for user in info: 
     cur.execute("DELETE FROM users WHERE email = '%s'" % user['email'])  
+    
 #print the returned value
+
 print(cur.rowcount)
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active) VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'  
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)  
+VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'  
 val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true')
 cur.execute(sql, val)
 """.format(info, rand)
@@ -70,7 +75,7 @@ cur.execute(sql, val)
 
         # Screenshot
 
-        path="/users/screenshot/delete/"
+        path = "/users/screenshot/delete/"
         screenshot(self, path)
 
         driver.refresh()
