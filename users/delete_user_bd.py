@@ -1,9 +1,8 @@
 import unittest
 import time
-from selenium import webdriver
 import json
 from random import randint
-from util.config import *
+from util.config import ModelConfig
 from util.functions import db_functions, logout, login
 from util.functions import screenshot
 
@@ -94,6 +93,7 @@ cur.execute(sql, val)
         screenshot(self, path)
 
     def tearDown(self):
+        logout(self)
         self.driver.close()
 
 
