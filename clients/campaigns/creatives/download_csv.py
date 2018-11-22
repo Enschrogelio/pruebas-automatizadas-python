@@ -2,7 +2,6 @@ import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from util.config import ModelConfig
-import random
 from util.functions import login, logout, db_functions
 
 # Variables globales
@@ -15,10 +14,9 @@ browser_name = None
 client = 2
 campaign = 2
 creative: None
-rand = random.randint(0, len(list_creatives)-1)
 
 
-class DetailCreativeSuccess(unittest.TestCase):
+class DownloadCsvSuccess(unittest.TestCase):
 
     def setUp(self):
         global browser_name, creative
@@ -27,7 +25,7 @@ campaign = {1}
 list_creatives = {0}
 for creative in list_creatives:
     cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative["name"]))
-rand = {2}
+rand = random.randint(0, len(list_creatives)-1)
 cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id) VALUES "
             "('%s','%s','%s','%s',%d,current_timestamp,current_timestamp,%d) RETURNING id;" 
             % (list_creatives[rand]["name"], list_creatives[rand]["url"], list_creatives[rand]["measure"],
@@ -39,11 +37,10 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             "/customer/dashboard', script_snippet = '<script id=cer-tracking src=https://d260gejhgij5g1.cloudfront.net/"
             "js/libs/cer.min.js?ca=PRUEBA-2&ct=CESAR-17></script>' "
             "WHERE ID = %d RETURNING id;"
-            % (list_creatives[rand]["name"].upper().replace(" ", "_"), id, id))
-""".format(list_creatives, campaign, rand)
+            % (list_creatives[rand]["name"].upper(), id, id))
+""".format(list_creatives, campaign)
         creative = db_functions(code)[0][0]
         self.driver = ModelConfig.driver_web
-
         browser_name = self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
@@ -82,47 +79,14 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
 
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        position = driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]'
-                                                % creative).location_once_scrolled_into_view
+        position = driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[1]/a')\
+            .location_once_scrolled_into_view
         driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
-        driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
+        driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[1]/a').click()
         sleep(2)
 
-        self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        sleep(1)
-        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p').get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["name"].upper().replace(" ", "_")+"-"+str(creative),
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["name"],
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["measure"],
-                        driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["type"],
-                        driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["status"],
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
-        preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText").\
-            rstrip()
-        if preview == "Preview":
-            # driver.find_element_by_link_text("Preview").click()
-            driver.find_element_by_xpath('/html/body/div[1]/div/div[8]/p/a').click()
-            sleep(6)
-        else:
-            print("No hay archivo para descargar")
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
-        sleep(3)
-        self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"
-                         "creative/update/%s" % (campaign, creative), driver.current_url, msg=None)
-        driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[1]/button').click()
+
 
     def tearDown(self):
         logout(self)
