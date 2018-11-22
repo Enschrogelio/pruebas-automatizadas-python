@@ -1,9 +1,8 @@
 import unittest
 import time
-from selenium import webdriver
 import json
 from random import randint
-from util.config import *
+from util.config import ModelConfig
 from util.functions import db_functions, logout, login
 from util.functions import screenshot
 
@@ -59,7 +58,7 @@ print(cur.rowcount)
         path = "/users/screenshot/add/"
         screenshot(self, path)
 
-        driver.find_element_by_xpath('//*[@id="modal-add"]/div/div/div[3]/button').click()
+        driver.find_element_by_id('#parent_id').click()
         time.sleep(2)
 
         # Screenshot
@@ -69,7 +68,7 @@ print(cur.rowcount)
 
         # Read modal messages
 
-        assert "Record successfully added" not in driver.page_source
+        self.assertIn("Record successfully added", driver.find_element_by_css_selector('#form-group .has-success').get_attribute('innerHTML'), msg=None)
         time.sleep(3)
 
     def tearDown(self):
