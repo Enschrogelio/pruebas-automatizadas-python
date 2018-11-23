@@ -69,6 +69,16 @@ cur.execute(sql, val)
         driver.find_element_by_xpath("//div[@id='modal-edit-campaign']/div[@class='modal-dialog box' "
                                      "and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer "
                                      "col-md-12' and 3]/button[1]").click()
+        sleep(2)
+        # asserts
+        self.assertEqual(info[1]['name'], driver.find_element_by_xpath('//*[@id="campaigntable"]'
+                                                                       '/tbody/tr[1]/td[3]').text, msg=None)
+        self.assertEqual(float(info[1]['budget']), float(driver.find_element_by_xpath('//*[@id="campaigntable"]'
+                                                                                      '/tbody/tr[1]/td[6]').text),
+                         msg=None)
+        self.assertEqual(float(info[1]['objetive']), float(driver.find_element_by_xpath('//*[@id="campaigntable"]'
+                                                                                        '/tbody/tr[1]/td[7]').text),
+                         msg=None)
 
     def tearDown(self):
         logout(self)
