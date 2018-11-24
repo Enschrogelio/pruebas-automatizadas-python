@@ -1,4 +1,5 @@
 import csv
+import os
 from datetime import datetime
 from time import sleep
 import random
@@ -20,7 +21,7 @@ def login(self):
 # Logout
 def logout(self):
     sleep(5)
-    driver=self.driver
+    driver = self.driver
     driver.get(ModelConfig.base_url+"/admin/login")
     sleep(1)
     driver.find_element_by_xpath('//a[@href="/admin/logout/"]').click()
@@ -31,7 +32,11 @@ def logout(self):
 def screenshot(self, path):
     driver = self.driver
     now = datetime.now().strftime("%Y-%m-%d %H;%M;%S")
-    driver.save_screenshot(ModelConfig.base_screenshot+path+" %s.png" % now)
+    capture = ModelConfig.base_screenshot+path+" %s.png" % now
+    directory = os.path.dirname(capture)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    driver.save_screenshot(capture)
 
 
 # Randoms

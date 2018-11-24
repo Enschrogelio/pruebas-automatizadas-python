@@ -1,9 +1,8 @@
-import random
 import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from util.config import ModelConfig, root_files
-from util.functions import login, logout, db_functions, screenshot
+from util.functions import login, logout, db_functions, screenshot, randoms
 
 # Variables globales
 types = [
@@ -79,6 +78,7 @@ class ValidateCreative(unittest.TestCase):
                 sleep(2)
                 driver.find_element_by_css_selector('#btn-add-').click()
                 # ########################################################
+        sleep(1)
     
     @classmethod
     def setUpClass(cls):
@@ -131,31 +131,76 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         self.assertEqual("This field is empty.", driver.
                          find_element_by_css_selector("#form-%s-creative > div:nth-child(5) > span" % type_modal).
                          get_attribute("innerText"), msg=None)
-        self.assertEqual("THIS FIELD IS EMPTY", driver.
-                         find_element_by_css_selector("#form-%s-creative > div.drag-drop > label > span.help-block"
-                                                      % type_modal).get_attribute("innerText"), msg=None)
+        if type_modal == "add":
+            self.assertEqual("THIS FIELD IS EMPTY", driver.
+                             find_element_by_css_selector("#form-%s-creative > div.drag-drop > label > span.help-block"
+                                                          % type_modal).get_attribute("innerText"), msg=None)
+        path = "clients/campaigns/creatives/screenshot/test_url_format_"+type_modal+"_creative"
+        screenshot(self, path)
+
+    def test_max_min(self):
+        driver = self.driver
+        self.select_test()
+        sleep(5)
+        # ######################### Maximum #########################
+        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).send_keys(randoms(251, "letter"))
+        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).\
+            send_keys(randoms(251, "number"))
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).\
+            send_keys("http://"+randoms(244, "letter"))
+        sleep(1)
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).
+                                  get_attribute("value")), msg=None)
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).
+                                  get_attribute("value")), msg=None)
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).
+                                  get_attribute("value")), msg=None)
+        path = "clients/campaigns/creatives/screenshot/test_max_"+type_modal+"_creative"
+        screenshot(self, path)
+        # ###########################################################
+
+        # ######################### Minimum #########################
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("http:")
+        driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
+        self.assertEqual("Enter a valid URL.",
+                         len(driver.find_element_by_css_selector('#form-%s-creative .help-block' % type_modal).
+                             get_attribute("innerText")), msg=None)
+        path = "clients/campaigns/creatives/screenshot/test_min_"+type_modal+"_creative"
+        screenshot(self, path)
+        # ###########################################################
+
+    def test_url_format(self):
+        global type_modal
+        driver = self.driver
+        self.select_test()
+        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("www.algo.com")
+        driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
+        self.assertEqual("Enter a valid URL.",
+                         driver.find_element_by_css_selector('#form-%s-creative > div:nth-child(5) > span' % type_modal).
+                             get_attribute("innerText"), msg=None)
+        path = "clients/campaigns/creatives/screenshot/test_url_format_"+type_modal+"_creative"
+        screenshot(self, path)
 
     def test_file_creative_validation(self):
-        global types, client, campaign, creative, type_modal
+        global types, type_modal
         driver = self.driver
         self.select_test()
         sleep(2)
         driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
-        rand_creative = random.randint(0, len(list_creatives) - 1)
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal) \
-            .send_keys(list_creatives[rand_creative]["name"])
+        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).send_keys("name")
         driver.find_element_by_css_selector('#form-%s-creative #id_status' % type_modal).click()
         sleep(1)
-        rand = random.randint(0, 2)
-        driver.find_element_by_css_selector('#form-%s-creative #id_status > option[value="%d"]'
-                                            % (type_modal, rand)).click()
-        sleep(1)
         driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal) \
-            .send_keys(list_creatives[rand_creative]["measure"])
+        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).send_keys("10x5")
         driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal) \
-            .send_keys(list_creatives[rand_creative]["url"])
+        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("http://www.algo.com")
         sleep(2)
         for position_file in range(4):
             print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
@@ -198,7 +243,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 self.assertEqual("The file must be a: %s" % types[position_file]["type"],
                                  driver.find_element_by_xpath('//*[@id="form-%s-creative"]/div[6]/div[1]/span'
                                                               % type_modal).get_attribute("innerText"), msg=None)
-            path = "clients/campaigns/creatives/screenshot/file_validation"
+            path = "clients/campaigns/creatives/screenshot/file_validation_"+type_modal+"_creative"
             screenshot(self, path)
         sleep(2)
 
