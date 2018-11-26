@@ -44,7 +44,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             "/customer/dashboard', script_snippet = '<script id=cer-tracking src=https://d260gejhgij5g1.cloudfront.net/"
             "js/libs/cer.min.js?ca=PRUEBA-2&ct=CESAR-17></script>' "
             "WHERE ID = %d RETURNING id;"
-            % (list_creatives[rand]["name"].upper(), id, id))
+            % (list_creatives[rand]["name"].upper().replace(" ", "_"), id, id))
 """.format(list_creatives, campaign)
         creative = db_functions(code)[0][0]
         self.driver = ModelConfig.driver_web
@@ -154,6 +154,26 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
+        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(list_creatives[rand]["name"].upper().replace(" ", "_")+"-"+str(creative),
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(list_creatives[rand]["name"],
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(list_creatives[rand]["measure"],
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(list_creatives[rand]["type"],
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(list_creatives[rand]["status"],
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
+        sleep(1)
 
     def tearDown(self):
         logout(self)

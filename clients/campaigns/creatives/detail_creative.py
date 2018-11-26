@@ -91,7 +91,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
 
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
-        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p').get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p').
+                         get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p').
                         get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["name"].upper().replace(" ", "_")+"-"+str(creative),
