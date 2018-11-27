@@ -1,3 +1,4 @@
+import os
 import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
@@ -14,6 +15,7 @@ browser_name = None
 client = 2
 campaign = 2
 creative: None
+file_path = "C:\\Users\\CesarPR\\Downloads\\creatives.csv"
 
 
 class DownloadCsvSuccess(unittest.TestCase):
@@ -85,7 +87,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[1]/a').click()
         sleep(2)
-
+        self.assertTrue(os.path.exists("C:\\Users\\CesarPR\\Downloads\\creatives.csv"))
 
 
     def tearDown(self):

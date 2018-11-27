@@ -95,3 +95,9 @@ def read_csv(root):
                 list_csv[title[column]] = row[column]
             csv_list.append(list_csv)
     return csv_list
+
+
+# Delete file
+def delete_file(path):
+    if os.path.exists(path):
+        os.remove(path)
