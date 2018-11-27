@@ -28,8 +28,9 @@ list_creatives = {0}
 for creative in list_creatives:
     cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative["name"]))
 rand = {2}
-cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id) VALUES "
-            "('%s','%s','%s','%s',%d,current_timestamp,current_timestamp,%d) RETURNING id;" 
+cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
+            "creative_code, file_url, redirect_url, script_snippet) VALUES "
+            "('%s', '%s', '%s', '%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;" 
             % (list_creatives[rand]["name"], list_creatives[rand]["url"], list_creatives[rand]["measure"],
                list_creatives[rand]["type"], list_creatives[rand]["status"], campaign))
 id = cur.fetchone()[0]

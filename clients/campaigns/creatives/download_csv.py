@@ -3,7 +3,7 @@ import unittest
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from util.config import ModelConfig
-from util.functions import login, logout, db_functions
+from util.functions import login, logout, db_functions, delete_file
 
 # Variables globales
 list_creatives = [
@@ -13,7 +13,7 @@ list_creatives = [
 ]
 browser_name = None
 client = 2
-campaign = 2
+campaign = 3
 creative: None
 file_path = "C:\\Users\\CesarPR\\Downloads\\creatives.csv"
 
@@ -21,15 +21,17 @@ file_path = "C:\\Users\\CesarPR\\Downloads\\creatives.csv"
 class DownloadCsvSuccess(unittest.TestCase):
 
     def setUp(self):
-        global browser_name, creative
+        global browser_name, creative, file_path
+        delete_file(file_path)
         code = """
 campaign = {1}
 list_creatives = {0}
 for creative in list_creatives:
     cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative["name"]))
 rand = random.randint(0, len(list_creatives)-1)
-cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id) VALUES "
-            "('%s','%s','%s','%s',%d,current_timestamp,current_timestamp,%d) RETURNING id;" 
+cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
+            "creative_code, file_url, redirect_url, script_snippet) VALUES "
+            "('%s', '%s', '%s', '%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;" 
             % (list_creatives[rand]["name"], list_creatives[rand]["url"], list_creatives[rand]["measure"],
                list_creatives[rand]["type"], list_creatives[rand]["status"], campaign))
 id = cur.fetchone()[0]
@@ -86,8 +88,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
         sleep(2)
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[1]/a').click()
-        sleep(2)
-        self.assertTrue(os.path.exists("C:\\Users\\CesarPR\\Downloads\\creatives.csv"))
+        sleep(10)
+        self.assertTrue(os.path.exists("C:\\Users\\CesarPR\\Downloads\\creatives.csv"), msg=None)
 
 
     def tearDown(self):

@@ -22,9 +22,10 @@ creative_name = {2}
 cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative_name))
 for creative in csv_list:
     if creative[name] == creative_name:
-        cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id)" \
-            "VALUES ('%s', '%s', '%s', '%s', 1, current_timestamp, current_timestamp, %d) " \
-            "RETURNING id;" % (creative["name"],creative["url"],creative["measure"],creative["type"],campaign))
+        cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
+            "creative_code, file_url, redirect_url, script_snippet) VALUES "
+            "('%s', '%s', '%s', '%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;"
+            % (creative["name"],creative["url"],creative["measure"],creative["type"],campaign))
 """.format(csv_list,campaign,creative_name)
         db_functions(code)
         self.driver = ModelConfig.driver_web
