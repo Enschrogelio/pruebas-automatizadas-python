@@ -41,9 +41,9 @@ for user in info:
 #print the returned value
 
 print(cur.rowcount)
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)  
-VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'  
-val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true')
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)' \   
+      'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'    
+val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true') 
 cur.execute(sql, val)
 """.format(info, rand)
         db_functions(code)
@@ -87,11 +87,6 @@ cur.execute(sql, val)
         time.sleep(2)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
         time.sleep(5)
-
-        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[2]/i').click()
-        time.sleep(5)
-        driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[1]/button').click()
-        time.sleep(4)
 
         # Screenshot
 

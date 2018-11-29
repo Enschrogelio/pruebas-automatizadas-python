@@ -1,12 +1,11 @@
 import unittest
 import time
-from selenium import webdriver
 import json
 from random import randint
 from util.config import *
 from util.functions import db_functions, logout, login
 from util.functions import screenshot
-from selenium.webdriver.support.ui import Select
+
 
 users = '''
         [  
@@ -72,7 +71,7 @@ print(cur.fetchone()[0])
 
         # Add assert
 
-        self.assertIn("Raw passwords are not stored, so there is no way to see this user's password, " \
+        self.assertIn("Raw passwords are not stored, so there is no way to see this user's password, " 
                       "but you can change the password using this",
                       driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'), msg=None)
         time.sleep(3)
@@ -86,8 +85,10 @@ print(cur.fetchone()[0])
         time.sleep(3)
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
 
-        assert "Record successfully updated" not in driver.page_source
-        time.sleep(3)
+#        self.assertEquals("Record successfully updated",
+#        driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'), msg=None)
+
+        # not in driver.page_source
 
         # Screenshot
 
