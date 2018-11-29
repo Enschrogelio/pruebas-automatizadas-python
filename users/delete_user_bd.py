@@ -41,9 +41,9 @@ for user in info:
 #print the returned value
 
 print(cur.rowcount)
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)' \   
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \   
       'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'    
-val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true') 
+val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true', 'false') 
 cur.execute(sql, val)
 """.format(info, rand)
         db_functions(code)

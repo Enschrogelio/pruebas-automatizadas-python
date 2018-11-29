@@ -30,9 +30,9 @@ class EditModal(unittest.TestCase):
                 
 info = {0}
 cur.execute("DELETE FROM users WHERE email = '%s'" % info[0]['email'])
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)' \
-      ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'
-val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true')
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
+      ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s,) returning email'
+val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
 cur.execute(sql, val)
 # print the returned value
 print(cur.fetchone()[0])
@@ -73,9 +73,9 @@ print(cur.fetchone()[0])
 
         # self.assertIn("Raw passwords are not stored, so there is no way to see this user's password,"
         #               "but you can change the password using this",
-        #               driver.find_element_by_xpath('//*[@id="form-edit"]/span/').get_attribute('innerHTML'),
-        #               msg=None)
+        #               driver.find_element_by_xpath('//*[@id="form-edit"]/span/').get_attribute('innerHTML'), msg=None)
         # time.sleep(10)
+
         driver.find_element_by_css_selector('#form-edit > span > a').click()
         time.sleep(3)
         driver.find_element_by_css_selector('#form-change #id_password1').clear()

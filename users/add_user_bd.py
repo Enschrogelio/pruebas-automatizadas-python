@@ -68,28 +68,18 @@ print(cur.rowcount)
         screenshot(self, path)
         driver.refresh()
 
-        # Read modal messages
-
-        # self.equals("Record successfully added",
-        #               driver.find_element_by_css_selector('#form-group').get_attribute('innerHTML'),
-        #               msg=None)
-        # time.sleep(5)
-
-        # time.sleep(3)
-        # self.assertIn("Your password can't be too similar to your other personal information.",
-        # driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[1]').get_attribute('innerHTML'), msg=None)
-
         # Search user
 
         driver.find_element_by_id('inputSrc').click()
         time.sleep(2)
-        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
         time.sleep(5)
 
         # Compare
 
         self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
-                        .get_attribute('innerHTML'),info[rand]['email'], msg=None)
+                         .get_attribute('innerHTML'),info[rand]['email'], msg=None)
+        time.sleep(5)
         self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
                          .get_attribute('innerHTML'),info[rand]['name'], msg=None)
         time.sleep(5)
