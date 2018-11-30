@@ -14,13 +14,13 @@ class DeletedUser(unittest.TestCase):
 
     def testDeletedUsersSuccess(self):
         users = '''
-        [{"email": "carlos967@gmail.com", "password": "95654131", "confirm_password":  "95654131", 
-          "name": "Carlos"},  
-         {"email": "ricardo647@gmail.com", "password": "11122330", "confirm_password":  "11122330", 
-          "name": "Ricardo"},  
-         {"email": "irma9647@gmail.com", "password": "I9454648_?¡", "confirm_password":  "I9454648_?¡", 
-           "name": "Irma"}               
-        ]'''
+        [{"email" : "fernanda222@gmail.com", "password" : "2233445:", "confirm_password" : "2233445:",
+          "name" : "Fernanda Rodriguez Martinez"},
+         {"email" : "cesar444@gmail.com", "password" : "46546554?¡", "confirm_password" : "46546554?¡",
+          "name" : "Cesar Perez Lopez"},
+         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121?",
+          "name" : "Anita Rodriguez Perez"}
+         ]'''
 
         info = json.loads(users)
         driver = self.driver
@@ -64,7 +64,7 @@ cur.execute(sql, val)
 
         # Remove user
 
-        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[2]/i').click()
+        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[2]').click()
         time.sleep(5)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         time.sleep(4)
@@ -94,12 +94,11 @@ cur.execute(sql, val)
 
         # Compare
 
-        # self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
-        #                  .get_attribute('innerHTML'),info[rand]['email'], msg=None)
-        # time.sleep(5)
-        # self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
-        #                  .get_attribute('innerHTML'),info[rand]['name'], msg=None)
-        # time.sleep(5)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
+                         .get_attribute('innerHTML'),info[0]['email'], msg=None)
+        time.sleep(5)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
+                         .get_attribute('innerHTML'),info[0]['name'], msg=None)
 
     def tearDown(self):
         logout(self)
