@@ -92,6 +92,15 @@ cur.execute(sql, val)
 
         screenshot(self, path)
 
+        # Compare
+
+        # self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
+        #                  .get_attribute('innerHTML'),info[rand]['email'], msg=None)
+        # time.sleep(5)
+        # self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
+        #                  .get_attribute('innerHTML'),info[rand]['name'], msg=None)
+        # time.sleep(5)
+
     def tearDown(self):
         logout(self)
         self.driver.close()

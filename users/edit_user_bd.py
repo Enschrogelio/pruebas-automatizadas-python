@@ -133,6 +133,38 @@ print(cur.fetchone()[0])
         path = "/users/screenshot/add/"
         screenshot(self, path)
 
+        # Search user
+
+        driver.find_element_by_id('inputSrc').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
+        time.sleep(5)
+
+        # Compare
+
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
+                         .get_attribute('innerHTML'),info[0]['email'], msg=None)
+        time.sleep(5)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
+                         .get_attribute('innerHTML'),info[0]['name'], msg=None)
+        time.sleep(5)
+
+        if aleatory == 0:
+            status = 'inactive'
+        else:
+            if aleatory == 1:
+                status = 'active'
+            else:
+                if aleatory == 2:
+                    status = 'delete'
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[3]')
+                         .get_attribute('innerHTML'),status, msg=None)
+        time.sleep(5)
+        logout(self)
+        driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(info[0]['email'])
+        driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(info[0]['password'])
+        driver.find_element_by_xpath('//*[@id="formLogin"]/button ').click()
+
     def tearDown(self):
         logout(self)
         self.driver.close()
