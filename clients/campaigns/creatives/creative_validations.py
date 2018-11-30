@@ -14,7 +14,8 @@ types = [
 list_creatives = [
     {"name": "Compra ahorra", "status": 1, "measure": "10x10", "url": "http://www.algo.com", "type": "IMAGE"},
     {"name": "Compra gasta", "status": 0, "measure": "5x15", "url": "http://www.compraalgo.com", "type": "HTML5"},
-    {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
+    {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"},
+    {"name": "Promo pollo", "status": 0, "measure": "30x15", "url": "http://www.cerebro.com", "type": "VIDEO"}
 ]
 browser_name: None = None
 client = 2
