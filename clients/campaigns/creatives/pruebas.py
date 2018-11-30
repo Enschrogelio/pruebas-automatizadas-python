@@ -41,5 +41,6 @@ with open('C:/Pruebas android/cerebro/util/creatives/creatives1OK .csv', newline
     print(csv_list[0])
 """
 import os
-print(os.path.exists("C:\\Users\\CesarPR\\Downloads\\creatives.csv"))
 
+home = file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\creatives.csv").replace("\\", "\\\\")
+print(home)

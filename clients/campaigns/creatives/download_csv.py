@@ -15,7 +15,7 @@ browser_name = None
 client = 2
 campaign = 3
 creative: None
-file_path = "C:\\Users\\CesarPR\\Downloads\\creatives.csv"
+file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\creatives.csv").replace("\\","\\\\")
 
 
 class DownloadCsvSuccess(unittest.TestCase):

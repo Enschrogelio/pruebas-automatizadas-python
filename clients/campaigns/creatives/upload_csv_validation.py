@@ -5,8 +5,8 @@ from util.functions import db_functions, read_csv, login, logout
 
 browser_name = None
 #  Specify ID client and ID campaign to run the test
-client = 3
-campaign = 10
+client = 2
+campaign = 3
 creative_name = "editado3"
 
 

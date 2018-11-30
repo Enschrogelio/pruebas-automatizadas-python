@@ -19,7 +19,7 @@ list_creatives = [
 ]
 browser_name = None
 client = 2
-campaign = 2
+campaign = 3
 
 class AddCreativeSuccessful(unittest.TestCase):
 

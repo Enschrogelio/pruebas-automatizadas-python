@@ -17,10 +17,10 @@ list_creatives = [
     {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
 ]
 browser_name: None = None
-client: int = 2
-campaign: int = 2
-creative: None = None
-type_modal: str = "add"
+client = 2
+campaign = 3
+creative = None
+type_modal = "add"
 
 
 class ValidateCreative(unittest.TestCase):
@@ -108,7 +108,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         browser_name = cls.driver.capabilities['browserName']
         if browser_name == "chrome":
             cls.driver.maximize_window()
-        # noinspection PyCallByClass
+        # noinspection PyTypeChecker,PyCallByClass
         cls.go_to_creative(cls)
 
     def setUp(self):
@@ -184,8 +184,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("www.algo.com")
         driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
         self.assertEqual("Enter a valid URL.",
-                         driver.find_element_by_css_selector('#form-%s-creative > div:nth-child(5) > span' % type_modal).
-                             get_attribute("innerText"), msg=None)
+                         driver.find_element_by_css_selector('#form-%s-creative > div:nth-child(5) > span' % type_modal)
+                         .get_attribute("innerText"), msg=None)
         path = "clients/campaigns/creatives/screenshot/test_url_format_"+type_modal+"_creative"
         screenshot(self, path)
 
