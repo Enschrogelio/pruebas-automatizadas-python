@@ -4,7 +4,7 @@ from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from util.config import ModelConfig
 import random
-from util.functions import login, logout, db_functions
+from util.functions import login, logout, db_functions, delete_file
 
 # Variables globales
 list_creatives = [
@@ -18,12 +18,27 @@ client = 2
 campaign = 3
 creative: None
 rand = random.randint(0, len(list_creatives)-1)
+file: None
+if list_creatives[rand]["type"] == "IMAGE":
+    file = "png.png"
+else:
+    if list_creatives[rand]["type"] == "GIF":
+        file = "gif.gif"
+    else:
+        if list_creatives[rand]["type"] == "HTML5":
+            file = "gif.gif"
+        else:
+            if list_creatives[rand]["type"] == "VIDEO":
+                file = "video.mp4"
+file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\%s" % file).replace("\\", "\\\\")
 
 
 class DetailCreativeSuccess(unittest.TestCase):
 
     def setUp(self):
         global browser_name, creative
+
+        delete_file(file_path)
         code = """
 campaign = {1}
 list_creatives = {0}
@@ -94,44 +109,32 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
 
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
-        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(str(creative), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[1]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
+        self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["name"].upper().replace(" ", "_")+"-"+str(creative),
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["name"],
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["measure"],
-                        driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["type"],
-                        driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').
-                        get_attribute("innerText").rstrip(), msg=None)
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(list_creatives[rand]["status"],
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').
-                         get_attribute("innerText").rstrip(), msg=None)
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText").\
             rstrip()
         if preview == "Preview":
             # driver.find_element_by_link_text("Preview").click()
             driver.find_element_by_xpath('/html/body/div[1]/div/div[8]/p/a').click()
-            file: None
-            if list_creatives[rand]["type"] == "IMAGE":
-                file = "png.png"
-            else:
-                if list_creatives[rand]["type"] == "GIF":
-                    file = "gif.gif"
-                else:
-                    if list_creatives[rand]["type"] == "HTML5":
-                        file = "gif.gif"
-                    else:
-                        if list_creatives[rand]["type"] == "VIDEO":
-                            file = "video.mp4"
-            file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\%s" % file).replace("\\", "\\\\")
             sleep(6)
+            self.assertTrue(os.path.exists(file_path), msg=None)
         else:
             print("No hay archivo para descargar")
         sleep(1)

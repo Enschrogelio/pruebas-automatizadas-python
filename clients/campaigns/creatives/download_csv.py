@@ -89,7 +89,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[1]/a').click()
         sleep(10)
-        self.assertTrue(os.path.exists("C:\\Users\\CesarPR\\Downloads\\creatives.csv"), msg=None)
+        self.assertTrue(os.path.exists(file_path), msg=None)
 
 
     def tearDown(self):
