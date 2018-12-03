@@ -14,13 +14,13 @@ class DeletedUser(unittest.TestCase):
 
     def testDeletedUsersSuccess(self):
         users = '''
-        [{"email": "carlos967@gmail.com", "password": "95654131", "confirm_password":  "95654131", 
-          "name": "Carlos"},  
-         {"email": "ricardo647@gmail.com", "password": "11122330", "confirm_password":  "11122330", 
-          "name": "Ricardo"},  
-         {"email": "irma9647@gmail.com", "password": "I9454648_?¡", "confirm_password":  "I9454648_?¡", 
-           "name": "Irma"}               
-        ]'''
+        [{"email" : "fernanda222@gmail.com", "password" : "2233445:", "confirm_password" : "2233445:",
+          "name" : "Fernanda Rodriguez Martinez"},
+         {"email" : "cesar444@gmail.com", "password" : "46546554?¡", "confirm_password" : "46546554?¡",
+          "name" : "Cesar Perez Lopez"},
+         {"email" : "anita78@gmail.com", "password" : "97744552121?", "confirm_password" : "97744552121?",
+          "name" : "Anita Rodriguez Perez"}
+         ]'''
 
         info = json.loads(users)
         driver = self.driver
@@ -28,20 +28,26 @@ class DeletedUser(unittest.TestCase):
         rand=randint(0, len(info)-1) # to send the JSON logs
         code = """
         
-#declaraciones de variables        
+#declaraciones de variables
+        
 info = {0}
 rand = {1}
 
 #recorrer el JSON
+
 for user in info: 
     cur.execute("DELETE FROM users WHERE email = '%s'" % user['email'])  
+    
 #print the returned value
+
 print(cur.rowcount)
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active) VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'  
-val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true')
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
+      'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'    
+val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true', 'false') 
 cur.execute(sql, val)
 """.format(info, rand)
         db_functions(code)
+
 
         login(self)
         time.sleep(3)
@@ -55,12 +61,12 @@ cur.execute(sql, val)
         driver.find_element_by_id('inputSrc').click()
         time.sleep(2)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
-        time.sleep(5)
+        time.sleep(3)
+        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[4]/a[2]/i').click()
+        time.sleep(2)
 
         # Remove user
 
-        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[2]/i').click()
-        time.sleep(5)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         time.sleep(4)
         driver.find_element_by_css_selector('#form-confirm #input-email').send_keys(info[rand]['email'])
@@ -70,7 +76,7 @@ cur.execute(sql, val)
 
         # Screenshot
 
-        path="/users/screenshot/delete/"
+        path = "/users/screenshot/delete/"
         screenshot(self, path)
 
         driver.refresh()
@@ -83,14 +89,17 @@ cur.execute(sql, val)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
         time.sleep(5)
 
-        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[2]/i').click()
-        time.sleep(5)
-        driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[1]/button').click()
-        time.sleep(4)
-
         # Screenshot
 
         screenshot(self, path)
+
+        # Compare
+
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
+                         .get_attribute('innerHTML'),info[0]['email'], msg=None)
+        time.sleep(5)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
+                         .get_attribute('innerHTML'),info[0]['name'], msg=None)
 
     def tearDown(self):
         logout(self)

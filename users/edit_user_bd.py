@@ -1,12 +1,11 @@
 import unittest
 import time
-from selenium import webdriver
 import json
 from random import randint
 from util.config import *
 from util.functions import db_functions, logout, login
 from util.functions import screenshot
-from selenium.webdriver.support.ui import Select
+
 
 users = '''
         [  
@@ -31,9 +30,9 @@ class EditUserBd(unittest.TestCase):
                 
 info = {0}
 cur.execute("DELETE FROM users WHERE email = '%s'" % info[0]['email'])
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active)' \
-      ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'
-val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true')
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
+      ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'
+val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
 cur.execute(sql, val)
 # print the returned value
 print(cur.fetchone()[0])
@@ -72,7 +71,7 @@ print(cur.fetchone()[0])
 
         # Add assert
 
-        self.assertIn("Raw passwords are not stored, so there is no way to see this user's password, " \
+        self.assertIn("Raw passwords are not stored, so there is no way to see this user's password, " 
                       "but you can change the password using this",
                       driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'), msg=None)
         time.sleep(3)
@@ -85,9 +84,6 @@ print(cur.fetchone()[0])
         driver.find_element_by_css_selector('#form-change #id_password2').send_keys(info[0]["password"])
         time.sleep(3)
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
-
-        assert "Record successfully updated" not in driver.page_source
-        time.sleep(3)
 
         # Screenshot
 
@@ -136,6 +132,38 @@ print(cur.fetchone()[0])
 
         path = "/users/screenshot/add/"
         screenshot(self, path)
+
+        # Search user
+
+        driver.find_element_by_id('inputSrc').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[0]['email'])
+        time.sleep(5)
+
+        # Compare
+
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
+                         .get_attribute('innerHTML'),info[0]['email'], msg=None)
+        time.sleep(5)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
+                         .get_attribute('innerHTML'),info[0]['name'], msg=None)
+        time.sleep(5)
+
+        if aleatory == 0:
+            status = 'inactive'
+        else:
+            if aleatory == 1:
+                status = 'active'
+            else:
+                if aleatory == 2:
+                    status = 'delete'
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[3]')
+                         .get_attribute('innerHTML'),status, msg=None)
+        time.sleep(5)
+        logout(self)
+        driver.find_element_by_xpath('//*[@id="id_username"]').send_keys(info[0]['email'])
+        driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(info[0]['password'])
+        driver.find_element_by_xpath('//*[@id="formLogin"]/button ').click()
 
     def tearDown(self):
         logout(self)
