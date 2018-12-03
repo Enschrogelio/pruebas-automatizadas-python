@@ -91,7 +91,6 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(10)
         self.assertTrue(os.path.exists(file_path), msg=None)
 
-
     def tearDown(self):
         logout(self)
         self.driver.close()
