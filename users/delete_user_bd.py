@@ -41,12 +41,13 @@ for user in info:
 #print the returned value
 
 print(cur.rowcount)
-sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \   
-      'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s) returning email'    
+sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
+      'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'    
 val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'true', 'false') 
 cur.execute(sql, val)
 """.format(info, rand)
         db_functions(code)
+
 
         login(self)
         time.sleep(3)
@@ -60,12 +61,12 @@ cur.execute(sql, val)
         driver.find_element_by_id('inputSrc').click()
         time.sleep(2)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
-        time.sleep(5)
+        time.sleep(3)
+        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[4]/a[2]/i').click()
+        time.sleep(2)
 
         # Remove user
 
-        driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[2]').click()
-        time.sleep(5)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         time.sleep(4)
         driver.find_element_by_css_selector('#form-confirm #input-email').send_keys(info[rand]['email'])
