@@ -21,6 +21,7 @@ browser_name = None
 client = 2
 campaign = 3
 
+
 class AddCreativeSuccessful(unittest.TestCase):
 
     def setUp(self):
@@ -41,13 +42,12 @@ for creative in list_creatives:
         global types, client, campaign, creative
         driver = self.driver
         login(self)
-        self.assertIn("%s/admin/clients/" %ModelConfig.base_url, driver.current_url, msg=None)
+        self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        self.assertIn("%s/admin/client/detail/" %ModelConfig.base_url, driver.current_url, msg=None)
-
+        self.assertIn("%s/admin/client/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(2)
         band = 0
         while band == 0:
@@ -65,7 +65,7 @@ for creative in list_creatives:
                 if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                     sleep(2)
-                driver.find_element_by_css_selector("# campaigntable_paginate > ul > li.next > a").click()
+                driver.find_element_by_css_selector("#campaigntable_paginate > ul > li.next > a").click()
                 sleep(2)
                 band = 0
 
