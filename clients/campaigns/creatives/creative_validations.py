@@ -6,10 +6,10 @@ from util.functions import login, logout, db_functions, screenshot, randoms
 
 # Variables globales
 types = [
-    {"type": "IMAGE", "file": root_files + "creatives/png.png"},
-    {"type": "GIF", "file": root_files + "creatives/gif.gif"},
-    {"type": "VIDEO", "file": root_files + "creatives/video.mp4"},
-    {"type": "HTML5", "file": root_files + "creatives/html5.html"},
+    {"type": "IMAGE", "file": root_files + "creatives\png.png"},
+    {"type": "GIF", "file": root_files + "creatives\gif.gif"},
+    {"type": "VIDEO", "file": root_files + r"creatives\video.mp4"},
+    {"type": "HTML5", "file": root_files + "creatives\html5.html"},
 ]
 list_creatives = [
     {"name": "Compra ahorra", "status": 1, "measure": "10x10", "url": "http://www.algo.com", "type": "IMAGE"},
@@ -61,7 +61,7 @@ class ValidateCreative(unittest.TestCase):
     def select_test(self):
         global modal
         driver = self.driver
-        if modal:
+        if not modal:
             if type_modal == "edit":
                 # ########################## EDIT #########################
                 position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'

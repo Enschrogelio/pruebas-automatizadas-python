@@ -21,15 +21,12 @@ rand = random.randint(0, len(list_creatives)-1)
 file: None
 if list_creatives[rand]["type"] == "IMAGE":
     file = "png.png"
-else:
-    if list_creatives[rand]["type"] == "GIF":
-        file = "gif.gif"
-    else:
-        if list_creatives[rand]["type"] == "HTML5":
-            file = "gif.gif"
-        else:
-            if list_creatives[rand]["type"] == "VIDEO":
-                file = "video.mp4"
+elif list_creatives[rand]["type"] == "GIF":
+    file = "gif.gif"
+elif list_creatives[rand]["type"] == "HTML5":
+    file = "gif.gif"
+elif list_creatives[rand]["type"] == "VIDEO":
+    file = "video.mp4"
 file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\%s" % file).replace("\\", "\\\\")
 
 
@@ -71,7 +68,6 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         login(self)
         self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
-        # driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[2]/td[6]/a[1]/i').click()
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
