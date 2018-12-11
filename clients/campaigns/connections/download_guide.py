@@ -19,7 +19,8 @@ client_id = "361084056659-tjo3kas6ftsijf99ejsejnk93cuecdo0.apps.googleuserconten
 client_secret = "F7BcoQXmw9JX3nA4hGaSxzJl"
 path_screenshot = 'clients/campaigns/connections/screenshot/'
 
-class ConnectionGoogelAnalytics(unittest.TestCase):
+
+class ConnectionDoubleClickManager(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
@@ -40,17 +41,17 @@ strftime("%Y/%m/%d"), client[0]['password'], client[0]['company'], client[0]['rf
 client[0]['address'])
 cur.execute(sql_clients, val_clients)
 sql_campaign = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, ' \
-    'updated_at, redirect_url, script_snippet, status, ga_api_key, ga_api_secret,dbm_client_secret, dbm_client_id, ' \
+    'updated_at, redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, ' \
     'client_id) ' \
-    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s,%s, %s, %s, %s, %s, %s, %s, %s)'
+    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 val_campaign = (campaign[0]['url'], campaign[0]['camcode'], campaign[0]['name'], campaign[0]['budget'], 
 campaign[0]['objetive'], campaign[0]['industry'], campaign[0]['category'], strftime("%Y/%m/%d"), 
-strftime("%Y/%m/%d"), '', '', 1, '', '', '', '', cur.fetchone()[0])
+strftime("%Y/%m/%d"), '', '', 1, '', '', cur.fetchone()[0])
 cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         db_functions(code)
 
-    def test_google_analytics(self):
-        path = path_screenshot + "test_google_analytics"
+    def test_double_click_manager(self):
+        path = path_screenshot + "test_double_click_manager"
         sleep(3)
         driver = self.driver
         self.assertIn(ModelConfig.base_url+"/admin/clients/", driver.current_url, msg=None)
@@ -87,24 +88,22 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         self.assertIn(ModelConfig.base_url+"/admin/campaign/detail/", driver.current_url, msg=None)
         self.assertEqual(campaign[0]['name'], driver.find_element_by_xpath('//*[@id="client-info-header"]/h2')
                          .text, msg=None)
-        self.assertEqual("Google Analytics", driver.find_element_by_xpath('//*[@id="ga_link"]')
+        self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        driver.find_element_by_xpath('//*[@id="ga_link"]/a').click()
-        self.assertEqual("To improve your campaign, connect with Google Analytics. Check the connection guide",
-                         driver.find_element_by_xpath('//*[@id="ga_tab"]/span').text, msg=None)
-        self.assertEqual("API key",
-                         driver.find_element_by_xpath('//*[@id="form-ga"]/div/div[1]/div/label').text, msg=None)
-        self.assertEqual("API secret key",
-                         driver.find_element_by_xpath('//*[@id="form-ga"]/div/div[2]/div/label').text, msg=None)
+        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+                         driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
+        self.assertEqual("Client ID",
+                         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
+        self.assertEqual("Client Secret",
+                         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/label').text, msg=None)
         self.assertEqual("CONNECT",
-                         driver.find_element_by_css_selector('#form-ga > div > div:nth-child(3) > button')
+                         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[3]/div/button')
                          .text.upper(), msg=None)
-        driver.find_element_by_name('client_id').send_keys(client_id)
-        driver.find_element_by_name('client_secret').send_keys(client_secret)
-        driver.find_element_by_css_selector('#form-ga > div > div:nth-child(3) > button').click()
-        # self.assertEqual("Successful connection",
-        #                  driver.find_element_by_css_selector('//*[@id="ga_tab"]/span[2]').text msg=None)
+        self.assertEqual("Check the connection guide",
+                         driver.find_element_by_xpath('/html/body/div[4]/div/div/span/a').text, msg=None)
+        driver.find_element_by_xpath('/html/body/div[4]/div/div/span/a').click()
         screenshot(self, path)
+
 
     def tearDown(self):
         logout(self)
