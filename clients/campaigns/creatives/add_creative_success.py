@@ -111,7 +111,7 @@ for creative in list_creatives:
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                 position=driver.find_element_by_xpath('/html/body/div[12]/div/div/div[3]/button') \
                     .location_once_scrolled_into_view
-                driver.execute_script("window.scrollTo(0, %d);" %(position["y"]))
+                driver.execute_script("window.scrollTo(0, %d);" % (position["y"]))
             # for i in range(0,10):
             #     sleep(1)
             #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
@@ -131,7 +131,6 @@ for creative in list_creatives:
 
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(2)
-
 
     def tearDown(self):
         logout(self)
