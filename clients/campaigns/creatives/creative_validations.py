@@ -215,12 +215,14 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
         for position_file in range(4):
             print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
-            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal)).click()
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal))\
+                .click()
             sleep(1)
             driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type > option[value="%s"]'
                                                 % (type_modal, type_modal, types[position_file]["type"])).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal)).click()
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal))\
+                .click()
             sleep(1)
             sleep(2)
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
@@ -234,7 +236,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 image_path = types[position_file + 1]["file"]
             if position_file == 0:
                 image_path = types[3]["file"]
-            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-file' % (type_modal, type_modal)).send_keys(image_path)
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-file' % (type_modal, type_modal))\
+                .send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
             sleep(3)
