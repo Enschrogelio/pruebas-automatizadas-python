@@ -65,7 +65,7 @@ for creative in csv_list:
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[3]/button').click()
         sleep(1)
-        image_path = root_files+"creatives/Success.csv"
+        image_path = root_files+"creatives/creativesSuccess.csv"
         driver.find_element_by_xpath('//*[@id="id_file"]').send_keys(image_path)
         sleep(2)
         driver.find_element_by_xpath('//*[@id="modal-csv"]/div/div/div[3]/button').click()
