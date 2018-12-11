@@ -24,6 +24,9 @@ class ConnectionDoubleClickManager(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
+        browser_name = self.driver.capabilities['browserName']
+        if browser_name == "chrome":
+            self.driver.maximize_window()
         # login
         login(self)
 
@@ -33,7 +36,7 @@ client = {0}
 campaign = {1}
 cur.execute("DELETE FROM clients WHERE email = '%s'" % client[0]['email'])
 cur.execute("DELETE FROM campaigns WHERE name = '%s'" % campaign[0]['name'])
-sql_clients = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
+sql_clients = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
 'password, company_name, rfc, phone, address) ' \
 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)  RETURNING id' 
 val_clients = (client[0]['name'], client[0]['cpm'], client[0]['budget'], 1, client[0]['email'],strftime("%Y/%m/%d"), \

@@ -1,7 +1,8 @@
 import json
+import os
 import unittest
 
-from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
+from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot, delete_file
 
 # DATA SET
 clients = '''
@@ -18,22 +19,28 @@ campaign = json.loads(campaign)
 client_id = "361084056659-tjo3kas6ftsijf99ejsejnk93cuecdo0.apps.googleusercontent.com"
 client_secret = "F7BcoQXmw9JX3nA4hGaSxzJl"
 path_screenshot = 'clients/campaigns/connections/screenshot/'
+file = 'API_Google_connection_guide.pdf'
+file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\%s" % file).replace("\\", "\\\\")
 
 
-class ConnectionDoubleClickManager(unittest.TestCase):
+class DownloadGuide(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
+        browser_name = self.driver.capabilities['browserName']
+        if browser_name == "chrome":
+            self.driver.maximize_window()
         # login
         login(self)
 
+        delete_file(file_path)
         # ENVIROMENT SETTING
         code = """
 client = {0}
 campaign = {1}
 cur.execute("DELETE FROM clients WHERE email = '%s'" % client[0]['email'])
 cur.execute("DELETE FROM campaigns WHERE name = '%s'" % campaign[0]['name'])
-sql_clients = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
+sql_clients = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
 'password, company_name, rfc, phone, address) ' \
 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)  RETURNING id' 
 val_clients = (client[0]['name'], client[0]['cpm'], client[0]['budget'], 1, client[0]['email'],strftime("%Y/%m/%d"), \
@@ -103,7 +110,8 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span/a').text, msg=None)
         driver.find_element_by_xpath('/html/body/div[4]/div/div/span/a').click()
         screenshot(self, path)
-
+        sleep(10)
+        self.assertTrue(os.path.exists(file_path), msg=None)
 
     def tearDown(self):
         logout(self)
