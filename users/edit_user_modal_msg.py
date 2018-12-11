@@ -30,6 +30,7 @@ class EditModal(unittest.TestCase):
                 
 info = {0}
 cur.execute("DELETE FROM users WHERE email = '%s'" % info[0]['email'])
+cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % user['email'])
 sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
       ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s,) returning email'
 val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
@@ -64,9 +65,9 @@ print(cur.fetchone()[0])
 
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)
-        driver.find_element_by_css_selector('#form-edit #id_status').click()
+        driver.find_element_by_css_selector('#form-edit #edit-form-status').click()
         aleatory = randint(0, 2)
-        driver.find_element_by_css_selector('#form-edit #id_status > option[value="%d"]' % aleatory).click()
+        driver.find_element_by_css_selector('#form-edit #edit-form-status> option[value="%d"]' % aleatory).click()
         print(driver.find_element_by_xpath('//*[@id="form-edit"]/span').get_attribute('innerHTML'))
 
         # Add assert
@@ -78,8 +79,8 @@ print(cur.fetchone()[0])
 
         driver.find_element_by_css_selector('#form-edit > span > a').click()
         time.sleep(3)
-        driver.find_element_by_css_selector('#form-change #id_password1').clear()
-        driver.find_element_by_css_selector('#form-change #id_password1').send_keys(info[0]["password"])
+        driver.find_element_by_css_selector('#form-change #change-pwd-password1').clear()
+        driver.find_element_by_css_selector('#form-change #change-pwd-password1').send_keys(info[0]["password"])
         time.sleep(3)
         self.assertIn("Your password can't be too similar to your other personal information.",
                       driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[1]')
@@ -97,16 +98,10 @@ print(cur.fetchone()[0])
                       driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/ul/li[4]')
                       .get_attribute('innerHTML'), msg=None)
         time.sleep(3)
-        driver.find_element_by_css_selector('#form-change #id_password2').clear()
-        driver.find_element_by_css_selector('#form-change #id_password2').send_keys(info[0]["password"])
+        driver.find_element_by_css_selector('#form-change #change-pwd-password2').clear()
+        driver.find_element_by_css_selector('#form-change #change-pwd-password2').send_keys(info[0]["password"])
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
-
-        # # Read modal messages
-        #
-        # self.assertIn("Record successfully updated",
-        #               driver.find_element_by_css_selector('#modal-dialog box .modal-box').get_attribute('innerHTML'),
-        #               msg=None)
-        # time.sleep(3)
+        time.sleep(2)
 
         # Screenshot
 
@@ -125,8 +120,8 @@ print(cur.fetchone()[0])
 
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)
-        driver.find_element_by_css_selector('#form-edit #id_name').clear()
-        driver.find_element_by_css_selector('#form-edit #id_name').send_keys(info[0]["name"])
+        driver.find_element_by_css_selector('#form-edit #edit-form-name').clear()
+        driver.find_element_by_css_selector('#form-edit #edit-form-name').send_keys(info[0]["name"])
         driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
         time.sleep(2)
 
@@ -145,8 +140,8 @@ print(cur.fetchone()[0])
 
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr/td[4]/a[1]/i').click()
         time.sleep(5)
-        driver.find_element_by_css_selector('#form-edit #id_email').clear()
-        driver.find_element_by_css_selector('#form-edit #id_email').send_keys(info[0]["email"])
+        driver.find_element_by_css_selector('#form-edit #edit-form-email').clear()
+        driver.find_element_by_css_selector('#form-edit #edit-form-email').send_keys(info[0]["email"])
         driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
         time.sleep(2)
 

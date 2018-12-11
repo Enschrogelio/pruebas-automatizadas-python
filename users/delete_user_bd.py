@@ -36,10 +36,9 @@ rand = {1}
 #recorrer el JSON
 
 for user in info: 
-    cur.execute("DELETE FROM users WHERE email = '%s'" % user['email'])  
-    
+    cur.execute("DELETE FROM users WHERE email = '%s'" % user['email'])
+    cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % user['email'])      
 #print the returned value
-
 print(cur.rowcount)
 sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
       'VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'    
@@ -47,7 +46,6 @@ val = (info[rand]['name'], info[rand]['password'], '1', info[rand]['email'], 'tr
 cur.execute(sql, val)
 """.format(info, rand)
         db_functions(code)
-
 
         login(self)
         time.sleep(3)
@@ -60,9 +58,10 @@ cur.execute(sql, val)
 
         driver.find_element_by_id('inputSrc').click()
         time.sleep(2)
-        driver.find_element_by_xpath('//*[@id="search"]').send_keys(info[rand]['email'])
+        driver.find_element_by_xpath('//*[@id="search"] ').send_keys(info[rand]['email'])
         time.sleep(3)
         driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[4]/a[2]/i').click()
+
         time.sleep(2)
 
         # Remove user

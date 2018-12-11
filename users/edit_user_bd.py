@@ -30,10 +30,12 @@ class EditUserBd(unittest.TestCase):
                 
 info = {0}
 cur.execute("DELETE FROM users WHERE email = '%s'" % info[0]['email'])
+cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % user['email'])
 sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
       ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'
 val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
 cur.execute(sql, val)
+
 # print the returned value
 print(cur.fetchone()[0])
 """.format(info)
