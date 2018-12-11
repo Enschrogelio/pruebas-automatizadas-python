@@ -7,16 +7,16 @@ from util.functions import login, logout, db_functions
 
 # Variables globales
 types = [
-    {"type": "IMAGE", "file": root_files+"creatives/png.png"},
-    {"type": "GIF", "file": root_files+"creatives/gif.gif"},
-    {"type": "VIDEO", "file": root_files+"creatives/video.mp4"},
-    {"type": "HTML5", "file": root_files+"creatives/html5.html"},
-    ]
+    {"type": "IMAGE", "file": root_files+"creatives\png.png"},
+    {"type": "GIF", "file": root_files+"creatives\gif.gif"},
+    {"type": "VIDEO", "file": root_files+r"creatives\video.mp4"},
+    {"type": "HTML5", "file": root_files+"creatives\html5.html"}
+]
 list_creatives = [
     {"name": "Compra ahorra", "status": 1, "measure": "10x10", "url": "http://www.algo.com", "type": "IMAGE"},
     {"name": "Compra gasta", "status": 0, "measure": "5x15", "url": "http://www.compraalgo.com", "type": "HTML5"},
     {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
-    ]
+]
 browser_name = None
 client = 2
 campaign = 3
