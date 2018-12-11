@@ -119,9 +119,9 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver = self.driver
         self.select_test()
         sleep(2)
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).clear()
         driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
         sleep(2)
         self.assertEqual("This field is empty", driver.
@@ -145,28 +145,33 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         self.select_test()
         sleep(5)
         # ######################### Maximum #########################
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).send_keys(randoms(251, "letter"))
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).\
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal))\
+            .send_keys(randoms(251, "letter"))
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).\
             send_keys(randoms(251, "number"))
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).\
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).\
             send_keys("http://"+randoms(244, "letter"))
         sleep(1)
-        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name'
+                                                                      % (type_modal, type_modal)).
                                   get_attribute("value")), msg=None)
-        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure'
+                                                                      % (type_modal, type_modal)).
                                   get_attribute("value")), msg=None)
-        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).
+        self.assertEqual(250, len(driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url'
+                                                                      % (type_modal, type_modal)).
                                   get_attribute("value")), msg=None)
         path = "clients/campaigns/creatives/screenshot/test_max_"+type_modal+"_creative"
         screenshot(self, path)
         # ###########################################################
 
         # ######################### Minimum #########################
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("http:")
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal))\
+            .send_keys("http:")
         driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
         self.assertEqual("Enter a valid URL.",
                          len(driver.find_element_by_css_selector('#form-%s-creative .help-block' % type_modal).
@@ -179,10 +184,11 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         global type_modal
         driver = self.driver
         self.select_test()
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("www.algo.com")
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).\
+            send_keys("www.algo.com")
         driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
         self.assertEqual("Enter a valid URL.",
                          driver.find_element_by_css_selector('#form-%s-creative > div:nth-child(5) > span' % type_modal)
@@ -195,23 +201,26 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver = self.driver
         self.select_test()
         sleep(2)
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_name' % type_modal).send_keys("name")
-        driver.find_element_by_css_selector('#form-%s-creative #id_status' % type_modal).click()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-name' % (type_modal, type_modal)).\
+            send_keys("name")
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-status' % (type_modal, type_modal)).click()
         sleep(1)
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_measure' % type_modal).send_keys("10x5")
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).clear()
-        driver.find_element_by_css_selector('#form-%s-creative #id_url' % type_modal).send_keys("http://www.algo.com")
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-measure' % (type_modal, type_modal)).\
+            send_keys("10x5")
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).clear()
+        driver.find_element_by_css_selector('#form-%s-creative #%s-creative-url' % (type_modal, type_modal)).\
+            send_keys("http://www.algo.com")
         sleep(2)
         for position_file in range(4):
             print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
-            driver.find_element_by_css_selector('#form-%s-creative #id_type' % type_modal).click()
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal)).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-%s-creative #id_type > option[value="%s"]'
-                                                % (type_modal, types[position_file]["type"])).click()
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type > option[value="%s"]'
+                                                % (type_modal, type_modal, types[position_file]["type"])).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-%s-creative #id_type' % type_modal).click()
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-type' % (type_modal, type_modal)).click()
             sleep(1)
             sleep(2)
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
@@ -225,7 +234,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 image_path = types[position_file + 1]["file"]
             if position_file == 0:
                 image_path = types[3]["file"]
-            driver.find_element_by_css_selector('#form-%s-creative #id_file' % type_modal).send_keys(image_path)
+            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-file' % (type_modal, type_modal)).send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
             sleep(3)

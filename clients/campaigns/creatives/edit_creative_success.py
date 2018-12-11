@@ -102,27 +102,27 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             self.assertIn("%s/admin/campaign/detail/%d/creative/update/%d"
                           % (ModelConfig.base_url, campaign, creative), driver.current_url, msg=None)
             sleep(2)
-            driver.find_element_by_css_selector('#form-edit-creative #id_name').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_name')\
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-name').clear()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-name')\
                 .send_keys(list_creatives[rand_creative]["name"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_status').click()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-status').click()
             sleep(1)
             rand = random.randint(0,2)
-            driver.find_element_by_css_selector('#form-edit-creative #id_status > option[value="%d"]'
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-status > option[value="%d"]'
                                                 % rand).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_measure').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_measure')\
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-measure').clear()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-measure')\
                 .send_keys(list_creatives[rand_creative]["measure"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_url').clear()
-            driver.find_element_by_css_selector('#form-edit-creative #id_url')\
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-url').clear()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-url')\
                 .send_keys(list_creatives[rand_creative]["url"])
-            driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-type').click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_type > option[value="%s"]'
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-type > option[value="%s"]'
                                                 % types[position_file]["type"]).click()
             sleep(1)
-            driver.find_element_by_css_selector('#form-edit-creative #id_type').click()
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-type').click()
             sleep(1)
             driver.find_element_by_xpath('/html/body/div[13]/div/div/div[2]/form/div[6]/div[2]/p/a').click()
             sleep(5)
@@ -137,7 +137,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             #     driver.find_element_by_css_selector('html').send_keys(Keys.ARROW_DOWN)
             sleep(2)
             image_path = types[position_file]["file"]
-            driver.find_element_by_css_selector('#form-edit-creative #id_file').send_keys(image_path)
+            driver.find_element_by_css_selector('#form-edit-creative #edit-creative-file').send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[3]/button').click()
             sleep(3)
