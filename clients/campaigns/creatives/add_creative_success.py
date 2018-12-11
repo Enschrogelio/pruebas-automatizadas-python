@@ -31,7 +31,7 @@ campaign = {1}
 list_creatives = {0}
 for creative in list_creatives:
     cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative["name"]))
-""".format(list_creatives,campaign)
+""".format(list_creatives, campaign)
         creative = db_functions(code)
         self.driver = ModelConfig.driver_web
         browser_name = self.driver.capabilities['browserName']
