@@ -125,9 +125,15 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         self.assertEqual(list_creatives[rand]["type"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(int(list_creatives[rand]["status"]),
-                         int(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
-                         .get_attribute("innerText").rstrip()), msg=None)
+        status: None
+        if list_creatives[rand]["status"] == 0:
+            status = "inactive"
+        elif list_creatives[rand]["status"] == 1:
+            status = "active"
+        elif list_creatives[rand]["status"] == 2:
+            status = "deleted"
+        self.assertEqual(status, driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+                         .get_attribute("innerText").rstrip(), msg=None)
         preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText").\
             rstrip()
         if preview == "Preview":

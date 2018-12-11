@@ -27,22 +27,19 @@ class ModelConfig:
         if x == "ch":
             driver = webdriver.Chrome(base_driver+"chromedriver.exe")
             return driver
+        elif x == "fi":
+            driver = webdriver.Firefox(executable_path=base_driver+"geckodriver.exe")
+            return driver
+        elif x == "ie":
+            driver = webdriver.Ie(base_driver+"IEDriverServer.exe")
+            return driver
+        elif x == "ed":
+            driver = webdriver.Edge(executable_path=base_driver+"MicrosoftWebDriver.exe")
+            return driver
         else:
-            if x == "fi":
-                driver = webdriver.Firefox(executable_path=base_driver+"geckodriver.exe")
-                return driver
-            else:
-                if x == "ie":
-                    driver = webdriver.Ie(base_driver+"IEDriverServer.exe")
-                    return driver
-                else:
-                    if x == "ed":
-                        driver = webdriver.Edge(executable_path=base_driver+"MicrosoftWebDriver.exe")
-                        return driver
-                    else:
-                        return None
+            return None
 
-    driver_web = drivers("ch")
+    driver_web = drivers("fi")
 
 
 

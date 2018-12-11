@@ -22,11 +22,12 @@ client = 2
 campaign = 3
 creative = None
 type_modal = "add"
+modal = False
 
 
 class ValidateCreative(unittest.TestCase):
 
-    driver: None = None
+    driver: None
 
     def go_to_creative(self):
         global types, client, campaign, creative
@@ -58,27 +59,29 @@ class ValidateCreative(unittest.TestCase):
         sleep(1)
 
     def select_test(self):
+        global modal
         driver = self.driver
-        if type_modal == "edit":
-            # ########################## EDIT #########################
-            position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
-                                                    % (campaign, creative)).location_once_scrolled_into_view
-            driver.execute_script("window.scrollTo(0, %d);" % (position["y"] + 110))
-            sleep(2)
-            driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
-                                         % (campaign, creative)).click()
-            sleep(2)
-            self.assertIn("%s/admin/campaign/detail/%d/creative/update/%s"
-                          % (ModelConfig.base_url, campaign, creative), driver.current_url, msg=None)
-            # ########################################################
-        else:
-            if type_modal == "add":
+        if modal:
+            if type_modal == "edit":
+                # ########################## EDIT #########################
+                position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
+                                                        % (campaign, creative)).location_once_scrolled_into_view
+                driver.execute_script("window.scrollTo(0, %d);" % (position["y"] + 110))
+                sleep(2)
+                driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/creative/update/%s"]'
+                                             % (campaign, creative)).click()
+                sleep(2)
+                self.assertIn("%s/admin/campaign/detail/%d/creative/update/%s"
+                              % (ModelConfig.base_url, campaign, creative), driver.current_url, msg=None)
+                # ########################################################
+            elif type_modal == "add":
                 # ########################## ADD #########################
                 position = driver.find_element_by_css_selector('#btn-add-').location_once_scrolled_into_view
                 driver.execute_script("window.scrollTo(0, %d);" % (position["y"] + 110))
                 sleep(2)
                 driver.find_element_by_css_selector('#btn-add-').click()
                 # ########################################################
+            modal = True
         sleep(1)
     
     @classmethod
