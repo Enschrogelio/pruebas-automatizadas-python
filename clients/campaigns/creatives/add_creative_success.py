@@ -25,7 +25,7 @@ campaign = 3
 class AddCreativeSuccessful(unittest.TestCase):
 
     def setUp(self):
-        global browser_name,creative
+        global browser_name, creative
         code = """
 campaign = {1}
 list_creatives = {0}
@@ -34,7 +34,7 @@ for creative in list_creatives:
 """.format(list_creatives,campaign)
         creative = db_functions(code)
         self.driver = ModelConfig.driver_web
-        browser_name=self.driver.capabilities['browserName']
+        browser_name = self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
 
@@ -59,7 +59,7 @@ for creative in list_creatives:
                     if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
                         position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
                             .location_once_scrolled_into_view
-                        driver.execute_script("window.scrollTo(0, %d);" %(position["y"]+110))
+                        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
                         sleep(2)
             except NoSuchElementException:
                 if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
@@ -68,9 +68,7 @@ for creative in list_creatives:
                 driver.find_element_by_css_selector("#campaigntable_paginate > ul > li.next > a").click()
                 sleep(2)
                 band = 0
-
         driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).click()
-
         sleep(2)
 
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
@@ -99,8 +97,7 @@ for creative in list_creatives:
             driver.find_element_by_css_selector('#form-add-creative #add-creative-type').click()
             sleep(1)
             driver.find_element_by_css_selector('#form-add-creative #add-creative-type > option[value="%s"]'
-                                                % types[position_file]["type"]) \
-                .click()
+                                                % types[position_file]["type"]).click()
             sleep(1)
             driver.find_element_by_css_selector('#form-add-creative #add-creative-type').click()
             sleep(1)
@@ -109,7 +106,7 @@ for creative in list_creatives:
             driver.switch_to_window(driver.window_handles[0])
             sleep(2)
             if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
-                position=driver.find_element_by_xpath('/html/body/div[12]/div/div/div[3]/button') \
+                position = driver.find_element_by_xpath('/html/body/div[12]/div/div/div[3]/button') \
                     .location_once_scrolled_into_view
                 driver.execute_script("window.scrollTo(0, %d);" % (position["y"]))
             # for i in range(0,10):
@@ -122,11 +119,10 @@ for creative in list_creatives:
             driver.find_element_by_xpath('//*[@id="modal-add-creative"]/div/div/div[3]/button').click()
             sleep(3)
             try:
-                while driver.find_element_by_css_selector \
-                            ('#form-add-creative div div.loader-input-file.center span'):
+                while driver.find_element_by_css_selector('#form-add-creative div div.loader-input-file.center span'):
                     print("Cargando %s ..." % types[position_file]["type"])
                     sleep(2)
-            except Exception:
+            except NoSuchElementException:
                 print("Archivo %s cargado" % types[position_file]["type"])
 
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
