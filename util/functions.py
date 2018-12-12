@@ -1,7 +1,7 @@
 import csv
 import os
 from datetime import datetime
-from time import sleep
+from time import sleep, strftime
 import random
 import string
 import psycopg2

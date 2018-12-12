@@ -21,7 +21,7 @@ browser_name: None = None
 client = 2
 campaign = 3
 creative = None
-type_modal = "add"
+type_modal = "edit"
 modal = False
 
 
@@ -177,10 +177,12 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             .send_keys("http:")
         driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
         self.assertEqual("Enter a valid URL.",
-                         len(driver.find_element_by_css_selector('#form-%s-creative .help-block' % type_modal).
-                             get_attribute("innerText")), msg=None)
+                         driver.find_element_by_css_selector('#form-%s-creative > div.form-group.has-error > '
+                                                             'span.help-block' % type_modal).get_attribute("innerText"),
+                         msg=None)
         path = "clients/campaigns/creatives/screenshot/test_min_"+type_modal+"_creative"
         screenshot(self, path)
+
         # ###########################################################
 
     def test_url_format(self):
