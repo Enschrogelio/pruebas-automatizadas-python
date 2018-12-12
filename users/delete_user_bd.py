@@ -95,10 +95,10 @@ cur.execute(sql, val)
         # Compare
 
         self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[1]')
-                         .get_attribute('innerHTML'),info[0]['email'], msg=None)
+                         .get_attribute('innerHTML'),info[rand]['email'], msg=None)
         time.sleep(5)
         self.assertEqual(driver.find_element_by_xpath('//*[@id="usertable"]/tbody/tr[1]/td[2]')
-                         .get_attribute('innerHTML'),info[0]['name'], msg=None)
+                         .get_attribute('innerHTML'),info[rand]['name'], msg=None)
 
     def tearDown(self):
         logout(self)

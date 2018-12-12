@@ -102,7 +102,8 @@ print(cur.fetchone()[0])
         driver.find_element_by_css_selector('#form-change #change-pwd-password2').send_keys(info[0]["password"])
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
         time.sleep(2)
-
+        driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
+        time.sleep(2)
         # Screenshot
 
         path = "/users/screenshot/edit/"
