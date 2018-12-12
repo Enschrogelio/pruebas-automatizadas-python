@@ -16,7 +16,7 @@ class ConsultClient(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
-
+        self.driver.maximize_window()
         # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """

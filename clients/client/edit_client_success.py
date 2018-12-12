@@ -22,13 +22,13 @@ class EditClient(unittest.TestCase):
     def setUp(self):
         global clients
         self.driver = ModelConfig.driver_web
-
+        self.driver.maximize_window()
         # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
-cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[1]['rfc'])
-sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
+cur.execute("DELETE FROM clients WHERE email = '%s'" % info[1]['email'])
+sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
 'password, company_name, rfc, phone, address) ' \
 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
 val = (info[0]['name'], info[0]['cpm'], info[0]['budget'], 1, info[0]['email'], strftime("%Y/%m/%d"), \
@@ -54,26 +54,26 @@ cur.execute(sql, val)""".format(info)
         sleep(8)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[2]').click()
         sleep(5)
-        driver.find_element_by_css_selector('#form-edit #id_email').clear()
-        driver.find_element_by_css_selector('#form-edit #id_email').send_keys(info[1]['email'])
-        driver.find_element_by_css_selector('#form-edit #id_person_contact').clear()
-        driver.find_element_by_css_selector('#form-edit #id_person_contact').send_keys(info[1]['name'])
-        select = Select(driver.find_element_by_css_selector("#form-edit #id_status"))
+        driver.find_element_by_css_selector('#edit-form-email').clear()
+        driver.find_element_by_css_selector('#edit-form-email').send_keys(info[1]['email'])
+        driver.find_element_by_css_selector('#edit-form-person_contact').clear()
+        driver.find_element_by_css_selector('#edit-form-person_contact').send_keys(info[1]['name'])
+        select = Select(driver.find_element_by_css_selector("#edit-form-status"))
         select.select_by_index(1)
-        driver.find_element_by_css_selector('#form-edit #id_password').clear()
-        driver.find_element_by_css_selector('#form-edit #id_password').send_keys(info[1]['password'])
-        driver.find_element_by_css_selector('#form-edit #id_cpm').clear()
-        driver.find_element_by_css_selector('#form-edit #id_cpm').send_keys(info[1]['cpm'])
-        driver.find_element_by_css_selector('#form-edit #id_budget').clear()
-        driver.find_element_by_css_selector('#form-edit #id_budget').send_keys(info[1]['budget'])
-        driver.find_element_by_css_selector('#form-edit #id_company_name').clear()
-        driver.find_element_by_css_selector('#form-edit #id_company_name').send_keys(info[1]['company'])
-        driver.find_element_by_css_selector('#form-edit #id_rfc').clear()
-        driver.find_element_by_css_selector('#form-edit #id_rfc').send_keys(info[1]['rfc'])
-        driver.find_element_by_css_selector('#form-edit #id_address').clear()
-        driver.find_element_by_css_selector('#form-edit #id_address').send_keys(info[1]['address'])
-        driver.find_element_by_css_selector('#form-edit #id_phone').clear()
-        driver.find_element_by_css_selector('#form-edit #id_phone').send_keys(info[1]['phone'])
+        driver.find_element_by_css_selector('#edit-form-password').clear()
+        driver.find_element_by_css_selector('#edit-form-password').send_keys(info[1]['password'])
+        driver.find_element_by_css_selector('#edit-form-cpm').clear()
+        driver.find_element_by_css_selector('#edit-form-cpm').send_keys(info[1]['cpm'])
+        driver.find_element_by_css_selector('#edit-form-budget').clear()
+        driver.find_element_by_css_selector('#edit-form-budget').send_keys(info[1]['budget'])
+        driver.find_element_by_css_selector('#edit-form-company_name').clear()
+        driver.find_element_by_css_selector('#edit-form-company_name').send_keys(info[1]['company'])
+        driver.find_element_by_css_selector('#edit-form-rfc').clear()
+        driver.find_element_by_css_selector('#edit-form-rfc').send_keys(info[1]['rfc'])
+        driver.find_element_by_css_selector('#edit-form-address').clear()
+        driver.find_element_by_css_selector('#edit-form-address').send_keys(info[1]['address'])
+        driver.find_element_by_css_selector('#edit-form-phone').clear()
+        driver.find_element_by_css_selector('#edit-form-phone').send_keys(info[1]['phone'])
         screenshot(self, path)
         sleep(3)
         driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()

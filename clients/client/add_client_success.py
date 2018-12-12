@@ -28,7 +28,7 @@ class AddClient(unittest.TestCase):
     def setUp(self):
         global clients
         self.driver = ModelConfig.driver_web
-
+        self.driver.maximize_window()
         # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
@@ -53,16 +53,16 @@ for element in info:
         sleep(3)
         driver.find_element_by_xpath('//*[@id="btn-add"]').click()
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="id_email"]').send_keys(info[rand]['email'])
-        driver.find_element_by_xpath('//*[@id="id_person_contact"]').send_keys(info[rand]['name'])
-        driver.find_element_by_xpath('//*[@id="id_status"]').click()
-        driver.find_element_by_xpath('//*[@id="id_password"]').send_keys(info[rand]['password'])
-        driver.find_element_by_xpath('//*[@id="id_cpm"]').send_keys(info[rand]['cpm'])
-        driver.find_element_by_xpath('//*[@id="id_budget"]').send_keys(info[rand]['budget'])
-        driver.find_element_by_xpath('//*[@id="id_company_name"]').send_keys(info[rand]['company'])
-        driver.find_element_by_xpath('//*[@id="id_rfc"]').send_keys(info[rand]['rfc'])
-        driver.find_element_by_xpath('//*[@id="id_address"]').send_keys(info[rand]['address'])
-        driver.find_element_by_xpath('//*[@id="id_phone"]').send_keys(info[rand]['phone'])
+        driver.find_element_by_xpath('//*[@id="add-form-email"]').send_keys(info[rand]['email'])
+        driver.find_element_by_xpath('//*[@id="add-form-person_contact"]').send_keys(info[rand]['name'])
+        driver.find_element_by_xpath('//*[@id="add-form-status"]').click()
+        driver.find_element_by_xpath('//*[@id="add-form-password"]').send_keys(info[rand]['password'])
+        driver.find_element_by_xpath('//*[@id="add-form-cpm"]').send_keys(info[rand]['cpm'])
+        driver.find_element_by_xpath('//*[@id="add-form-budget"]').send_keys(info[rand]['budget'])
+        driver.find_element_by_xpath('//*[@id="add-form-company_name"]').send_keys(info[rand]['company'])
+        driver.find_element_by_xpath('//*[@id="add-form-rfc"]').send_keys(info[rand]['rfc'])
+        driver.find_element_by_xpath('//*[@id="add-form-address"]').send_keys(info[rand]['address'])
+        driver.find_element_by_xpath('//*[@id="add-form-phone"]').send_keys(info[rand]['phone'])
         screenshot(self, path)
         driver.find_element_by_xpath("//*[@id='modal-add']/div[1]/div[1]/div[3]/button[1 and @type='submit']").click()
         sleep(10)

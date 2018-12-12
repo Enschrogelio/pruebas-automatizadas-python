@@ -20,13 +20,13 @@ class DeleteClient(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
-
+        self.driver.maximize_window()
         # ENVIROMENT SETTING
         info = json.loads(clients)
         code = """
 info = {0}
 cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
-sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
+sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
    'password, company_name, rfc, phone, address) ' \
    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
 val = (info[0]['name'], info[0]['cpm'], info[0]['budget'], 1, info[0]['email'], strftime("%Y/%m/%d"), \
