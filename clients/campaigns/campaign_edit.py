@@ -27,6 +27,7 @@ sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, c
 val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
        info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', '', '', 2)
 cur.execute(sql, val)
+
 """.format(info)
         db_functions(code)
 

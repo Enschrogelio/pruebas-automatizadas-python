@@ -94,17 +94,17 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         sleep(2)
         # name
         driver.find_element_by_css_selector('#form-edit-campaign #id_name').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').send_keys(randoms(100, "letter"))
+        driver.find_element_by_css_selector('#form-edit-campaign #id_name').send_keys(randoms(250, "letter"))
         # budget
         driver.find_element_by_css_selector('#form-edit-campaign #id_budget').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(100, "number"))
+        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(250, "number"))
         # url
         driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
         driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://"+
-                                                                                     randoms(100, "letter")+".com")
+                                                                                     randoms(250, "letter")+".com")
         # objeive
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(100, "number"))
+        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(250, "number"))
         # click Save
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         sleep(2)

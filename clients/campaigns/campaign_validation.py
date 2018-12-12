@@ -19,7 +19,7 @@ class CampaignValiadation(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
         sleep(1)
         # Click en view
-        driver.find_element_by_xpath('//*[@id="client-camp-header"]/div/button',).click()
+        driver.find_element_by_xpath('//*[@id="client-camp-header"]/div/button').click()
         sleep(1)
         # self.screenshot()
         # save
@@ -80,18 +80,18 @@ class CampaignValiadation(unittest.TestCase):
         driver = self.driver
         # name
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys((randoms(5, "letter")))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys((randoms(256, "letter")))
         sleep(1)
         # BUGET
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(5, "number"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(256, "number"))
         # URL
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("https://WWW."+
-                                                                                        randoms(5, "number")+".com")
+                                                                                        randoms(256, "number")+".com")
         # OBJETIVE
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(5, "number"))
+        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(256, "number"))
         # enter
         # self.screenshot()
         # driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
