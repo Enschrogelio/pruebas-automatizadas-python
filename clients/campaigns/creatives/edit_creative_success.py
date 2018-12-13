@@ -20,6 +20,7 @@ list_creatives = [
 browser_name = None
 client = 2
 campaign = 3
+rand = random.randint(0, len(list_creatives)-1)
 creative: None
 
 
@@ -32,7 +33,7 @@ campaign = {1}
 list_creatives = {0}
 for creative in list_creatives:
     cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative["name"]))
-rand = random.randint(0, len(list_creatives)-1)
+rand = {2}
 cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
             "creative_code, file_url, redirect_url, script_snippet) VALUES "
             "('%s', '%s', '%s', '%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;" 
@@ -46,7 +47,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             "js/libs/cer.min.js?ca=PRUEBA-2&ct=CESAR-17></script>' "
             "WHERE ID = %d RETURNING id;"
             % (list_creatives[rand]["name"].upper().replace(" ", "_"), id, id))
-""".format(list_creatives, campaign)
+""".format(list_creatives, campaign, rand)
         creative = db_functions(code)[0][0]
         self.driver = ModelConfig.driver_web
         browser_name = self.driver.capabilities['browserName']
@@ -89,7 +90,6 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
 
         self.assertIn("%s/admin/campaign/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        rand_creative: None
         for position_file in range(4):
             rand_creative = random.randint(0, len(list_creatives)-1)
             print("\n<<<------ %s ------>>>\n" % types[position_file]["type"])
@@ -108,9 +108,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 .send_keys(list_creatives[rand_creative]["name"])
             driver.find_element_by_css_selector('#form-edit-creative #edit-creative-status').click()
             sleep(1)
-            rand = random.randint(0,2)
             driver.find_element_by_css_selector('#form-edit-creative #edit-creative-status > option[value="%d"]'
-                                                % rand).click()
+                                                % list_creatives[rand_creative]["status"]).click()
             sleep(1)
             driver.find_element_by_css_selector('#form-edit-creative #edit-creative-measure').clear()
             driver.find_element_by_css_selector('#form-edit-creative #edit-creative-measure')\
@@ -160,19 +159,19 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                          get_attribute("innerText").rstrip(), msg=None)
         self.assertEqual(str(campaign), driver.find_element_by_xpath('//*[@id="client-info"]/div/div[2]/p').
                          get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand_creative]["name"].upper().replace(" ", "_")+"-"+str(creative),
+        self.assertEqual(list_creatives[rand]["name"].upper().replace(" ", "_")+"-"+str(creative),
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').
                          get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand_creative]["name"],
+        self.assertEqual(list_creatives[rand]["name"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').
                          get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand_creative]["measure"],
+        self.assertEqual(list_creatives[rand]["measure"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').
                          get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand_creative]["type"],
+        self.assertEqual(list_creatives[rand]["type"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').
                          get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand_creative]["status"],
+        self.assertEqual(list_creatives[rand]["status"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').
                          get_attribute("innerText").rstrip(), msg=None)
         sleep(1)

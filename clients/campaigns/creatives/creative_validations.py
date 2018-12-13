@@ -241,7 +241,12 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                 image_path = types[position_file + 1]["file"]
             if position_file == 0:
                 image_path = types[3]["file"]
-            driver.find_element_by_css_selector('#form-%s-creative #%s-creative-file' % (type_modal, type_modal))\
+            name: None
+            if type_modal == "add":
+                name = "add-creative-"
+            elif type_modal == "edit":
+                name = "id_"
+            driver.find_element_by_css_selector('#form-%s-creative #%sfile' % (type_modal, name))\
                 .send_keys(image_path)
             sleep(2)
             driver.find_element_by_xpath('//*[@id="modal-%s-creative"]/div/div/div[3]/button' % type_modal).click()
