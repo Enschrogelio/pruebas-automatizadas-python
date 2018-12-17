@@ -12,8 +12,8 @@ list_creatives = [
     {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 creative: None
 file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\creatives.csv").replace("\\", "\\\\")
 

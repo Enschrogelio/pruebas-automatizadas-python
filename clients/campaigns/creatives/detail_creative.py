@@ -14,8 +14,8 @@ list_creatives = [
     {"name": "Promo pollo", "status": 0, "measure": "30x15", "url": "http://www.cerebro.com", "type": "VIDEO"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 creative: None
 rand = random.randint(0, len(list_creatives)-1)
 file: None
@@ -139,7 +139,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             self.assertTrue(os.path.exists(file_path), msg=None)
         else:
             print("No hay archivo para descargar")
-        sleep(1)
+        sleep(2)
         driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
         sleep(3)
         self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"

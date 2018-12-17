@@ -18,8 +18,8 @@ list_creatives = [
     {"name": "Prueba Video", "status": 0, "measure": "30x15", "url": "http://www.cerebro.com", "type": "VIDEO"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 
 
 class AddCreativeSuccessful(unittest.TestCase):
