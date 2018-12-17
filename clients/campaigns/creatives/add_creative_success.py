@@ -124,6 +124,7 @@ for creative in list_creatives:
                     sleep(2)
             except NoSuchElementException:
                 print("Archivo %s cargado" % types[position_file]["type"])
+            sleep(2)
 
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(2)

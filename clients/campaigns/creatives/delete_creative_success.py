@@ -97,7 +97,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        self.assertEqual("2", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+        self.assertEqual("Deleted", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
 
     def tearDown(self):

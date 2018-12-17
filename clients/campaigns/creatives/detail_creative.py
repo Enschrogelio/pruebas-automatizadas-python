@@ -123,11 +123,11 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
                          .get_attribute("innerText").rstrip(), msg=None)
         status: None
         if list_creatives[rand]["status"] == 0:
-            status = "inactive"
+            status = "Inactive"
         elif list_creatives[rand]["status"] == 1:
-            status = "active"
+            status = "Active"
         elif list_creatives[rand]["status"] == 2:
-            status = "deleted"
+            status = "Deleted"
         self.assertEqual(status, driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
         preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText").\
