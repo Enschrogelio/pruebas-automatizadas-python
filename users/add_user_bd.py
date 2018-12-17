@@ -33,6 +33,7 @@ info = {0}
 # Tour the json
 for user in info: 
     cur.execute("DELETE FROM users WHERE email = '%s'" % user['email']) 
+    cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % user['email'])
 # print the returned value
 print(cur.rowcount)
 """.format(info)
@@ -48,10 +49,10 @@ print(cur.rowcount)
 
         driver.find_element_by_xpath('//*[@id="btn-add"]').click()
         time.sleep(2)
-        driver.find_element_by_xpath('//*[@id="id_email"]').send_keys(info[rand]['email'])
-        driver.find_element_by_xpath('//*[@id="id_password1"]').send_keys(info[rand]['password'])
-        driver.find_element_by_xpath('//*[@id="id_password2"]').send_keys(info[rand]['confirm_password'])
-        driver.find_element_by_xpath('//*[@id="id_name"]').send_keys(info[rand]['name'])
+        driver.find_element_by_xpath('//*[@id="add-form-email"]').send_keys(info[rand]['email'])
+        driver.find_element_by_xpath('//*[@id="add-form-password1"]').send_keys(info[rand]['password'])
+        driver.find_element_by_xpath('//*[@id="add-form-password2"]').send_keys(info[rand]['confirm_password'])
+        driver.find_element_by_xpath('//*[@id="add-form-name"]').send_keys(info[rand]['name'])
 
         # Screenshot
 
