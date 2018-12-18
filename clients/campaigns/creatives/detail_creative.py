@@ -1,7 +1,11 @@
 import os
 import unittest
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+
 from util.config import ModelConfig
 import random
 from util.functions import login, logout, db_functions, delete_file
@@ -139,10 +143,11 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             self.assertTrue(os.path.exists(file_path), msg=None)
         else:
             print("No hay archivo para descargar")
-        sleep(3)
-        print("aquí")
-        driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
-        sleep(3)
+        sleep(1)
+
+        driver.execute_script("arguments[0].click();", driver.find_element_by_id("btn-edit"))
+        # driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
+        sleep(2)
         self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"
                          "creative/update/%s" % (campaign, creative), driver.current_url, msg=None)
         driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[1]/button').click()
