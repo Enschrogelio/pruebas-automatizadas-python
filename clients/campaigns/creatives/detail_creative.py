@@ -139,7 +139,8 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
             self.assertTrue(os.path.exists(file_path), msg=None)
         else:
             print("No hay archivo para descargar")
-        sleep(2)
+        sleep(3)
+        print("aquí")
         driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
         sleep(3)
         self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"

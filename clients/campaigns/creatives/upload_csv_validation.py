@@ -1,8 +1,6 @@
 import unittest
 from time import sleep
-
 from selenium.common.exceptions import NoSuchElementException
-
 from util.config import ModelConfig, root_files
 from util.functions import db_functions, read_csv, login, logout
 
@@ -16,19 +14,19 @@ creative_name = "editado3"
 class UploadCsvValidation(unittest.TestCase):
 
     def setUp(self):
-        global browser_name, campaign
-        csv_list = read_csv(root_files+'creatives/creativesValidation .csv')
+        global browser_name, campaign, creative_name
+        csv_list = read_csv(root_files+'creatives\creativesValidation .csv')
         code = """
 csv_list = {0}
 campaign = {1}
-creative_name = {2}
+creative_name = "editado3"
 cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign, creative_name))
 for creative in csv_list:
-    if creative[name] == creative_name:
+    if creative["name"] == creative_name:
         cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
-            "creative_code, file_url, redirect_url, script_snippet) VALUES "
-            "('%s', '%s', '%s', '%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;"
-            % (creative["name"],creative["url"],creative["measure"],creative["type"],campaign))
+                    "creative_code, file_url, redirect_url, script_snippet) VALUES ('%s', '%s', '%s',"
+                    "'%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;"
+                    % (creative["name"], creative["url"], creative["measure"], creative["type"], campaign))
 """.format(csv_list, campaign, creative_name)
         db_functions(code)
         self.driver = ModelConfig.driver_web
@@ -73,7 +71,7 @@ for creative in csv_list:
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[3]/button').click()
         sleep(1)
 
-        image_path = root_files+"creatives/creativesValidation .csv"
+        image_path = root_files+"creatives\creativesValidation .csv"
         driver.find_element_by_xpath('//*[@id="id_file"]').send_keys(image_path)
         sleep(2)
         driver.find_element_by_xpath('//*[@id="modal-csv"]/div/div/div[3]/button').click()
@@ -83,8 +81,9 @@ for creative in csv_list:
                          "URL: Enter a valid URL.\n"
                          "TYPE: Value 'OTRACOSA' is not a valid choice.\n"
                          "In row #3: URL: This field cannot be blank.\n"
+                         "TYPE: This field cannot be blank.\n"
                          "In row #4: NAME: This field cannot be blank.\n"
-                         "In row #5: URL: Enter a valid URL.",
+                         "In row #5: URL: Enter a valid URL.\n",
                          driver.find_element_by_xpath('//*[@id="form-csv"]/div/div[1]/span').get_attribute('innerText'),
                          msg=None)
         sleep(3)
