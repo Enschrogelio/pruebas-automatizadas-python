@@ -1,7 +1,8 @@
 import unittest
 import json
 from random import randint
-from util.functions import *
+from util.functions import db_functions, login, logout, screenshot
+from time import sleep
 from util.config import ModelConfig
 
 # DATA SET
@@ -34,7 +35,14 @@ class AddClient(unittest.TestCase):
         code = """
 info = {0}
 for element in info:
-    cur.execute("DELETE FROM clients WHERE rfc = '%s'" % element['rfc'])
+    cur.execute("SELECT id FROM clients WHERE email = '%s'" % element['email'])
+    try:
+        id = cur.fetchone()[0]
+        if id is not None:
+            cur.execute("DELETE FROM campaigns WHERE client_id = '%d';" % id)
+            cur.execute("DELETE FROM clients WHERE id = '%d';" % id)
+    except Exception as errorFetch:
+        errorFetch
 """.format(info)
         db_functions(code)
 
@@ -75,9 +83,7 @@ for element in info:
                          .text, msg=None)
         self.assertEqual(info[rand]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
                          .text, msg=None)
-        self.assertEqual(info[rand]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
-                         .text, msg=None)
-        self.assertEqual('active', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
+        self.assertEqual('active', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
         screenshot(self, path)
         sleep(5)

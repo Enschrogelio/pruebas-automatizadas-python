@@ -25,7 +25,14 @@ class DeleteClient(unittest.TestCase):
         info = json.loads(clients)
         code = """
 info = {0}
-cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % info[0]['email'])
+try:
+    id = cur.fetchone()[0]
+    if id is not None:
+        cur.execute("DELETE FROM campaigns WHERE client_id = '%d';" % id)
+        cur.execute("DELETE FROM clients WHERE id = '%d';" % id)
+except Exception as errorFetch:
+    errorFetch
 sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
    'password, company_name, rfc, phone, address) ' \
    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
@@ -55,13 +62,11 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[0]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
                          .text, msg=None)
-        self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
-                         .text, msg=None)
-        self.assertEqual("active", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
+        self.assertEqual("active", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
         sleep(3)
         screenshot(self, path)
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[3]').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[3]').click()
         sleep(3)
         self.assertEqual("Deleting record", driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[2]/h2')
                          .text, msg=None)
@@ -89,19 +94,9 @@ cur.execute(sql, val)""".format(info)
         driver.find_element_by_xpath('//*[@id="input-email"]').clear()
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(info[0]['email'])
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
-        sleep(5)
-        # driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
-        # driver.find_element_by_id('search').send_keys(info[0]['rfc'])
-        # sleep(3)
-        self.assertEqual(info[0]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
-                         .text, msg=None)
-        self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
-                         .text, msg=None)
-        self.assertEqual(info[0]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
-                         .text, msg=None)
-        self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
-                         .text, msg=None)
-        self.assertEqual("deleted", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
+        sleep(3)
+
+        self.assertEqual("No record found", driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td')
                          .text, msg=None)
 
         screenshot(self, path)

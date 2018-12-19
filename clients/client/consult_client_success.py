@@ -21,8 +21,15 @@ class ConsultClient(unittest.TestCase):
         info = json.loads(clients)
         code = """
 info = {0}
-cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
-sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "createdAt", updated_at, ' \
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % info[0]['email'])
+try:
+    id = cur.fetchone()[0]
+    if id is not None:
+        cur.execute("DELETE FROM campaigns WHERE client_id = '%d';" % id)
+        cur.execute("DELETE FROM clients WHERE id = '%d';" % id)
+except Exception as errorFetch:
+    errorFetch
+sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
    'password, company_name, rfc, phone, address) ' \
    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
 val = (info[0]['name'], info[0]['cpm'], info[0]['budget'], 1, info[0]['email'], strftime("%Y/%m/%d"), \
@@ -64,7 +71,7 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[0]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
                          .text, msg=None)
-        self.assertEqual(info[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
+        self.assertEqual('active', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
         screenshot(self, path)
         sleep(3)

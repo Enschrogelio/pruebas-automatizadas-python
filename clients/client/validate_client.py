@@ -3,7 +3,7 @@ import json
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 # DATA SET
-_type = "detail"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
+_type = "add"   # "edit" "detail" "add"  CAMBIAR EL TIPO DE PANTALLA EN LA QUE SE REALIZARA EL TEST
 clients = '''
         [{ "email" : "MATAMOROS@gmail.com","name" : "OMAR IZHAR ALVAREZ CASTILLO","password" : "ALCANTARA", 
         "cpm" : "1", "budget" : "15000.90", "company" : "AUTOTRANSPORTES MATAMOROS MAZATLAN DIVISION", 
@@ -25,7 +25,14 @@ class ValidateClient(unittest.TestCase):
         info = json.loads(clients)
         code = """
 info = {0}
-cur.execute("DELETE FROM clients WHERE rfc = '%s'" % info[0]['rfc'])
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % info[0]['email'])
+try:
+    id = cur.fetchone()[0]
+    if id is not None:
+        cur.execute("DELETE FROM campaigns WHERE client_id = '%d';" % id)
+        cur.execute("DELETE FROM clients WHERE id = '%d';" % id)
+except Exception as errorFetch:
+    errorFetch
 sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
 'password, company_name, rfc, phone, address) ' \
 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
@@ -54,7 +61,7 @@ cur.execute(sql, val)""".format(info)
                     driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
                     driver.find_element_by_id('search').send_keys(info[0]['rfc'])
                     sleep(5)
-                    driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[2]').click()
+                    driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[2]').click()
                     refresh = 1
                     return form, form2, modal
                 else:
@@ -69,7 +76,7 @@ cur.execute(sql, val)""".format(info)
                         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
                         driver.find_element_by_id('search').send_keys(info[0]['rfc'])
                         sleep(5)
-                        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]').click()
+                        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
                         sleep(3)
                         self.assertEqual(info[0]['company'],
                                          driver.find_element_by_xpath('//*[@id="client-info-header"]/a[2]')
@@ -105,7 +112,7 @@ cur.execute(sql, val)""".format(info)
         self.assertEqual('Client with this Email already exists.',
                          driver.find_element_by_css_selector('%s > div.form-group.has-error > span' % form2)
                          .text, msg=None)
-        path = "clients/client/screenshot/test_client_exist'%s"+form
+        path = "clients/client/screenshot/test_client_exist_%s" % form
         screenshot(self, path)
         sleep(3)
 
@@ -152,16 +159,19 @@ cur.execute(sql, val)""".format(info)
         sleep(1)
         self.assertEqual('Enter a valid budget. Maximum allowed decimals: 2',
                          driver.find_element_by_css_selector('%s > div:nth-child(7) > span' % form2).text, msg=None)
-        path = "clients/client/screenshot/test_data_type"+form
+        path = "clients/client/screenshot/test_data_type_%s" % form
         screenshot(self, path)
         sleep(3)
 
     def test_format_email(self):
         driver = self.driver
         form, form2, modal = self.function_type(_type)
-        path = "clients/client/screenshot/test_format_email"+form
+        path = "clients/client/screenshot/test_format_email_%s" % form
         sleep(5)
         driver.find_element_by_css_selector('%semail' % form).clear()
+        driver.find_element_by_css_selector('%scpm' % form).clear()
+        driver.find_element_by_css_selector('%sbudget' % form).clear()
+        driver.find_element_by_css_selector('%sphone' % form).clear()
         driver.find_element_by_css_selector('%semail' % form).send_keys("sonia.amezcua")
         driver.find_element_by_css_selector('%s> div > div > div.modal-footer.col-md-12 > button' % modal).click()
         sleep(1)
@@ -189,7 +199,7 @@ cur.execute(sql, val)""".format(info)
     def test_max_min(self):
         driver = self.driver
         form, form2, modal = self.function_type(_type)
-        path = "clients/client/screenshot/test_max_min"+form
+        path = "clients/client/screenshot/test_max_min_%s" % form
         sleep(5)
         driver.find_element_by_css_selector('%sbudget' % form).clear()
         driver.find_element_by_css_selector('%sbudget' % form).send_keys("-0.01")
@@ -211,7 +221,7 @@ cur.execute(sql, val)""".format(info)
     def test_format_rfc(self):
         driver = self.driver
         form, form2, modal = self.function_type(_type)
-        path = "clients/client/screenshot/test_format_rfc"+form
+        path = "clients/client/screenshot/test_format_rfc_%s" % form
         sleep(8)
         # driver.find_element_by_css_selector('%srfc' % form).clear()
         # driver.find_element_by_css_selector('%srfc' % form).send_keys("AEAS850120H3A2")

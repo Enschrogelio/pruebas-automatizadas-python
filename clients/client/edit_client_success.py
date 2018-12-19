@@ -27,7 +27,14 @@ class EditClient(unittest.TestCase):
         info = json.loads(clients)
         code = """
 info = {0}
-cur.execute("DELETE FROM clients WHERE email = '%s'" % info[1]['email'])
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % info[1]['email'])
+try:
+    id = cur.fetchone()[0]
+    if id is not None:
+        cur.execute("DELETE FROM campaigns WHERE client_id = '%d';" % id)
+        cur.execute("DELETE FROM clients WHERE id = '%d';" % id)
+except Exception as errorFetch:
+    errorFetch
 sql = 'INSERT INTO clients (person_contact, cpm, budget, status, email, "created_at", updated_at, ' \
 'password, company_name, rfc, phone, address) ' \
 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s)' 
@@ -52,7 +59,7 @@ cur.execute(sql, val)""".format(info)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(info[0]['rfc'])
         sleep(8)
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[2]').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[2]').click()
         sleep(5)
         driver.find_element_by_css_selector('#edit-form-email').clear()
         driver.find_element_by_css_selector('#edit-form-email').send_keys(info[1]['email'])
@@ -88,9 +95,7 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         self.assertEqual(info[1]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
                          .text, msg=None)
-        self.assertEqual(info[1]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
-                         .text, msg=None)
-        self.assertEqual('inactive', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]')
+        self.assertEqual('inactive', driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
                          .text, msg=None)
         screenshot(self, path)
         sleep(3)
