@@ -1,32 +1,35 @@
 import unittest
 from time import sleep
-from util.config import modelConfig, root_files
+from selenium.common.exceptions import NoSuchElementException
+from util.config import ModelConfig, root_files
 from util.functions import db_functions, read_csv, login, logout
 
 browser_name = None
 # Specify ID client and ID campaign to run the test
-client = 3
-campaign = 10
+client = 4
+campaign = 39
 creative_name = "editado3"
 
-class upload_csv_validation(unittest.TestCase):
+
+class UploadCsvValidation(unittest.TestCase):
 
     def setUp(self):
-        global browser_name,campaign
-        csv_list = read_csv(root_files+'creatives/creatives1OK .csv')
+        global browser_name, campaign, creative_name
+        csv_list = read_csv(root_files+'creatives\creativesValidation .csv')
         code = """
 csv_list = {0}
 campaign = {1}
-creative_name = {2}
-cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign,creative_name))
+creative_name = "editado3"
+cur.execute("DELETE FROM creatives WHERE campaign_id = %d AND name = '%s';" % (campaign, creative_name))
 for creative in csv_list:
-    if creative[name] == creative_name:
-        cur.execute("INSERT INTO creatives (name,url,measure,type,status,created_at,updated_at,campaign_id)" \
-            "VALUES ('%s', '%s', '%s', '%s', 1, current_timestamp, current_timestamp, %d) " \
-            "RETURNING id;" % (creative["name"],creative["url"],creative["measure"],creative["type"],campaign))
-""".format(csv_list,campaign,creative_name)
+    if creative["name"] == creative_name:
+        cur.execute("INSERT INTO creatives (name, url, measure, type, status, created_at, updated_at, campaign_id,"
+                    "creative_code, file_url, redirect_url, script_snippet) VALUES ('%s', '%s', '%s',"
+                    "'%s', %d, current_timestamp, current_timestamp, %d, '', '', '', '') RETURNING id;"
+                    % (creative["name"], creative["url"], creative["measure"], creative["type"], campaign))
+""".format(csv_list, campaign, creative_name)
         db_functions(code)
-        self.driver = modelConfig.driver_web
+        self.driver = ModelConfig.driver_web
         browser_name = self.driver.capabilities['browserName']
         if browser_name == "chrome":
             self.driver.maximize_window()
@@ -37,24 +40,39 @@ for creative in csv_list:
         login(self)
         sleep(2)
 
-        assert "%s/admin/clients/" % modelConfig.base_url in driver.current_url
+        assert "%s/admin/clients/" % ModelConfig.base_url in driver.current_url
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
-        assert "%s/admin/client/detail/" % modelConfig.base_url in driver.current_url
-        posicion = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).\
-            location_once_scrolled_into_view
-        driver.execute_script("window.scrollTo(0, %d);" % (posicion["y"]+110))
-        sleep(2)
+        assert "%s/admin/client/detail/" % ModelConfig.base_url in driver.current_url
+        band = 0
+        while band == 0:
+            try:
+                if driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign):
+                    band = 1
+                    if browser_name == "internet explorer":
+                        print(browser_name)
+                    if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
+                        position = driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign) \
+                            .location_once_scrolled_into_view
+                        driver.execute_script("window.scrollTo(0, %d);" % (position["y"]+110))
+                        sleep(2)
+            except NoSuchElementException:
+                if browser_name == "chrome" or browser_name == "firefox" or browser_name == "edge":
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    sleep(2)
+                driver.find_element_by_css_selector("#campaigntable_paginate > ul > li.next > a").click()
+                sleep(2)
+                band = 0
         driver.find_element_by_xpath('//a[@href="/admin/campaign/detail/%d/"]' % campaign).click()
         sleep(2)
 
-        assert "%s/admin/campaign/detail/" % modelConfig.base_url in driver.current_url
+        assert "%s/admin/campaign/detail/" % ModelConfig.base_url in driver.current_url
         driver.find_element_by_xpath('//*[@id="dashboard-user"]/div/div[3]/button').click()
         sleep(1)
 
-        imagepath = root_files+"creatives/creatives1OK .csv"
-        driver.find_element_by_xpath('//*[@id="id_file"]').send_keys(imagepath)
+        image_path = root_files+"creatives\creativesValidation .csv"
+        driver.find_element_by_xpath('//*[@id="id_file"]').send_keys(image_path)
         sleep(2)
         driver.find_element_by_xpath('//*[@id="modal-csv"]/div/div/div[3]/button').click()
         sleep(2)
@@ -63,8 +81,9 @@ for creative in csv_list:
                          "URL: Enter a valid URL.\n"
                          "TYPE: Value 'OTRACOSA' is not a valid choice.\n"
                          "In row #3: URL: This field cannot be blank.\n"
+                         "TYPE: This field cannot be blank.\n"
                          "In row #4: NAME: This field cannot be blank.\n"
-                         "In row #5: URL: Enter a valid URL.",
+                         "In row #5: URL: Enter a valid URL.\n",
                          driver.find_element_by_xpath('//*[@id="form-csv"]/div/div[1]/span').get_attribute('innerText'),
                          msg=None)
         sleep(3)
@@ -75,10 +94,10 @@ for creative in csv_list:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(4)
 
-
     def tearDown(self):
         logout(self)
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()
