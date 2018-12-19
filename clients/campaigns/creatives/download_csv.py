@@ -12,8 +12,8 @@ list_creatives = [
     {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 creative: None
 file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\creatives.csv").replace("\\", "\\\\")
 
@@ -49,7 +49,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         if browser_name == "chrome":
             self.driver.maximize_window()
 
-    def test_detail_creative_success(self):
+    def test_download_creatives(self):
         driver = self.driver
         login(self)
         self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)

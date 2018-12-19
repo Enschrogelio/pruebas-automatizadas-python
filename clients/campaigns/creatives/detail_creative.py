@@ -1,7 +1,11 @@
 import os
 import unittest
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+
 from util.config import ModelConfig
 import random
 from util.functions import login, logout, db_functions, delete_file
@@ -14,22 +18,19 @@ list_creatives = [
     {"name": "Promo pollo", "status": 0, "measure": "30x15", "url": "http://www.cerebro.com", "type": "VIDEO"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 creative: None
 rand = random.randint(0, len(list_creatives)-1)
 file: None
 if list_creatives[rand]["type"] == "IMAGE":
     file = "png.png"
-else:
-    if list_creatives[rand]["type"] == "GIF":
-        file = "gif.gif"
-    else:
-        if list_creatives[rand]["type"] == "HTML5":
-            file = "gif.gif"
-        else:
-            if list_creatives[rand]["type"] == "VIDEO":
-                file = "video.mp4"
+elif list_creatives[rand]["type"] == "GIF":
+    file = "gif.gif"
+elif list_creatives[rand]["type"] == "HTML5":
+    file = "gif.gif"
+elif list_creatives[rand]["type"] == "VIDEO":
+    file = "video.mp4"
 file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\%s" % file).replace("\\", "\\\\")
 
 
@@ -71,7 +72,6 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         login(self)
         self.assertIn("%s/admin/clients/" % ModelConfig.base_url, driver.current_url, msg=None)
         sleep(1)
-        # driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[2]/td[6]/a[1]/i').click()
         driver.find_element_by_css_selector('a[href*="/admin/client/detail/%d/"]' % client).click()
         sleep(1)
 
@@ -125,8 +125,14 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         self.assertEqual(list_creatives[rand]["type"],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
-        self.assertEqual(list_creatives[rand]["status"],
-                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+        status: None
+        if list_creatives[rand]["status"] == 0:
+            status = "Inactive"
+        elif list_creatives[rand]["status"] == 1:
+            status = "Active"
+        elif list_creatives[rand]["status"] == 2:
+            status = "Deleted"
+        self.assertEqual(status, driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
         preview = driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').get_attribute("innerText").\
             rstrip()
@@ -138,8 +144,10 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         else:
             print("No hay archivo para descargar")
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
-        sleep(3)
+
+        driver.execute_script("arguments[0].click();", driver.find_element_by_id("btn-edit"))
+        # driver.find_element_by_xpath('//*[@id="btn-edit"]').click()
+        sleep(2)
         self.assertEqual("http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com/admin/campaign/detail/%d/"
                          "creative/update/%s" % (campaign, creative), driver.current_url, msg=None)
         driver.find_element_by_xpath('//*[@id="modal-edit-creative"]/div/div/div[1]/button').click()

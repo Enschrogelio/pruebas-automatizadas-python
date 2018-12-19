@@ -45,18 +45,15 @@ def randoms(long, _type):
     if _type == "letter":
         letters = [chr(random.randint(97, 122)) for r in range(long)]
         value = ''.join(letters)
-    else:
-        if _type == "number":
-            numbers = [str(random.randint(0, 9)) for r in range(long)]
-            value = ''.join(numbers)
-        else:
-            if _type == "alpha":
-                alpha = [random.choice(string.ascii_letters + string.digits) for r in range(long)]
-                value = ''.join(alpha)
-            else:
-                if _type == "special":
-                    specials = [random.choice(string.punctuation) for r in range(long)]
-                    value = ''.join(specials)
+    elif _type == "number":
+        numbers = [str(random.randint(0, 9)) for r in range(long)]
+        value = ''.join(numbers)
+    elif _type == "alpha":
+        alpha = [random.choice(string.ascii_letters + string.digits) for r in range(long)]
+        value = ''.join(alpha)
+    elif _type == "special":
+        specials = [random.choice(string.punctuation) for r in range(long)]
+        value = ''.join(specials)
     return value
 
 

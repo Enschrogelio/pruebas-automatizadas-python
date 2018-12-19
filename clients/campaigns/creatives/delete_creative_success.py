@@ -13,8 +13,8 @@ list_creatives = [
     {"name": "Promo 1", "status": 1, "measure": "3x18", "url": "http://www.promoalgo.com", "type": "GIF"}
 ]
 browser_name = None
-client = 2
-campaign = 3
+client = 4
+campaign = 39
 creative: None
 
 
@@ -97,7 +97,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
         sleep(2)
         self.assertIn("%s/admin/creative/detail/" % ModelConfig.base_url, driver.current_url, msg=None)
-        self.assertEqual("2", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
+        self.assertEqual("Deleted", driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p')
                          .get_attribute("innerText").rstrip(), msg=None)
 
     def tearDown(self):
