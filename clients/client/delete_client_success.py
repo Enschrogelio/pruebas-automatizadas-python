@@ -72,27 +72,27 @@ cur.execute(sql, val)""".format(info)
                          .text, msg=None)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         sleep(3)
-        self.assertEqual("Are you sure to delete this record:",
+        self.assertEqual("Are you sure to delete this record?",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[1]/h1').text, msg=None)
-        self.assertEqual("Deleting this record, will eraser the campaigns and creative relating with it",
+        self.assertEqual("Deleting this client, will eraser the campaigns and creatives relating with it.",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[1]/p').text, msg=None)
         self.assertEqual("Enter the confirmation:",
                          driver.find_element_by_xpath('//*[@id="modal-confirm"]/div/div/div[2]/p').text, msg=None)
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         sleep(3)
-        self.assertEqual("This field doesnt match with the record.",
+        self.assertEqual("This field doesn't match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').text.rstrip(' '), msg=None)
         screenshot(self, path)
-        driver.find_element_by_xpath('//*[@id="input-email"]').clear()
-        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys("BATALLON@GMAIL")
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').clear()
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').send_keys("BATALLON@GMAIL")
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         sleep(3)
-        self.assertEqual("This field doesnt match with the record.",
+        self.assertEqual("This field doesn't match with the record.",
                          driver.find_element_by_xpath('//*[@id="form-confirm"]/div/span').get_attribute('innerHTML')
                          .rstrip(' '), msg=None)
         screenshot(self, path)
-        driver.find_element_by_xpath('//*[@id="input-email"]').clear()
-        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(info[0]['email'])
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').clear()
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').send_keys(info[0]['email'])
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         sleep(3)
 
