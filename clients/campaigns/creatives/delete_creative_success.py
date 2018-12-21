@@ -91,7 +91,7 @@ cur.execute("UPDATE creatives SET creative_code = '%s-%d', "
         sleep(2)
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         sleep(1)
-        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys(confirm)
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').send_keys(confirm)
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         sleep(2)
         driver.find_element_by_xpath('//a[@href="/admin/creative/detail/%s"]' % creative).click()
