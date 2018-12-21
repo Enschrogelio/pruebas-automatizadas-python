@@ -1,6 +1,5 @@
 import time
 import unittest
-
 from util.config import ModelConfig
 from util.functions import login, logout
 
@@ -10,7 +9,7 @@ class AddCampaign(unittest.TestCase):
     def setUp(self):
         self.driver = ModelConfig.driver_web
 
-    def testdashboard_remove_succelful(self):
+    def test_dashboard_remove_successful(self):
         driver = self.driver
         login(self)
         # view
@@ -29,8 +28,8 @@ class AddCampaign(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         time.sleep(3)
 
-        def tearDown(self):
-            logout(self)
+    def tearDown(self):
+        logout(self)
         self.driver.close()
 
 

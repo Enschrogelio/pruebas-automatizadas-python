@@ -113,7 +113,7 @@ class AddCampaign(unittest.TestCase):
         # save
         driver.find_element_by_xpath('//*[@id="modal-add-dashboard-user"]/div/div/div[3]/button').click()
 
-    def testEdit_special(self):
+    def test_edit_special(self):
         driver = self.driver
         # email
         driver.find_element_by_xpath('//*[@id="add-dash-user-email"]').clear()

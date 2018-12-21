@@ -1,9 +1,12 @@
 import json
 import unittest
-from util.functions import *
-from util.config import *
+from time import sleep
+from util.functions import db_functions, login, logout
+from util.config import ModelConfig
 
-dashboard_succes = '''
+# Variables
+client = "arcapruebas2@gmail.com"
+dashboard_success = '''
     [
         {"name" : "andres", "email":"pacheco_mendez1@gmail.com", "password" : "mendez123456"}    
     ]
@@ -17,26 +20,29 @@ class AddCampaign(unittest.TestCase):
 
     def testuserempty(self):
         driver = self.driver
-        info = json.loads(dashboard_succes)
+        info = json.loads(dashboard_success)
         code = """
 info = {0}
-cur.execute("DELETE FROM public.dashboard_users WHERE user_id=(select dashboard_users.user_id from dashboard_users join "
-            "users on dashboard_users.user_id = users.id where name='%s' and email='%s') ;"  
-            %(info[0]['name'], info[0]['email']))
-print(cur.rowcount)
-cur.execute("DELETE FROM public.admin_historicaluser WHERE history_user_id=(select users.id from "
-            "admin_historicaluser join users on admin_historicaluser.history_user_id = users.id where users.name='%s'"
-            " and users.email='%s');"  
-            %(info[0]['name'], info[0]['email']))
-print(cur.rowcount)
-cur.execute("DELETE FROM users WHERE name='%s' and email='%s';" %(info[0]['name'], info[0]['email']))            
-print(cur.rowcount)
+cur.execute("SELECT du.user_id FROM dashboard_users AS du JOIN users ON du.user_id = users.id where name = '%s' "  
+            "and email = '%s'" % (info[0]['name'], info[0]['email']))
+try:
+    id = cur.fetchone()[0]
+    cur.execute("DELETE FROM users u USING dashboard_users du JOIN users u ON u.id = user_id JOIN 
+                "admin_historicaluser hu ON history_user_id=u.id WHERE duser_id = u.id AND u.id = history_user_id AND "
+                "u.id = %s" % id)
+    # cur.execute("DELETE FROM admin_historicaluser WHERE history_user_id = %s" % id)
+    # cur.execute("DELETE FROM users WHERE id = %s" % id)
+except Exception as errorException:
+    errorException
 """.format(info)
         db_functions(code)
         login(self)
-
+        driver.find_element_by_xpath('//*[@id="inputSrc"]').click()
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(client)
+        sleep(1)
         # view
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[4]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(3)
         # button_dashboard
         driver.find_element_by_xpath('//*[@id="btn-add-"]').click()
