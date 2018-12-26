@@ -61,6 +61,26 @@ cur.execute("INSERT INTO dashboard_users (client_id, user_id) VALUES (%s, %s)" %
         cls.driver = ModelConfig.driver_web
         cls.dashboard_main(cls)
 
+    def test_empty_field(self):
+        driver = self.driver
+        sleep(2)
+        driver.find_element_by_xpath('//*[@id="edit-dash-user-email"]').clear()
+        driver.find_element_by_xpath('//*[@id="edit-dash-user-name"]').clear()
+        driver.find_element_by_xpath('//*[@id="modal-edit-dashboard-user"]/div/div/div[3]/button').click()
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-dashboard-user"]/div[1]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-dashboard-user"]/div[3]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+        driver.find_element_by_xpath('//*[@id="form-edit-dashboard-user"]/span/a').click()
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
+        sleep(1)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-change"]/div[1]/span').get_attribute('innerHTML'),
+                         "This field is empty", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-change"]/div[2]/span').get_attribute('innerHTML'),
+                         "This field is empty", msg=None)
+        driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[1]/button').click()
+
     def test_edit_min(self):
         driver = self.driver
         sleep(2)
@@ -100,21 +120,12 @@ cur.execute("INSERT INTO dashboard_users (client_id, user_id) VALUES (%s, %s)" %
         sleep(1)
         self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-dashboard-user"]/div[1]/span')
                          .get_attribute('innerHTML'), "Enter a valid mail", msg=None)
-
         driver.find_element_by_xpath('//*[@id="edit-dash-user-name"]').clear()
-        driver.find_element_by_xpath('//*[@id="edit-dash-user-name"]').send_keys(randoms(100, "alpha"))
+        driver.find_element_by_xpath('//*[@id="edit-dash-user-name"]').send_keys(randoms(260, "alpha"))
+        self.assertEqual(len(driver.find_element_by_xpath('//*[@id="edit-dash-user-name"]').get_attribute("value")),
+                         255, msg=None)
         # save
         driver.find_element_by_xpath('//*[@id="modal-edit-dashboard-user"]/div/div/div[3]/button').click()
-
-    def test_edit_special(self):
-        driver = self.driver
-        # email
-        driver.find_element_by_xpath('//*[@id="edit-dash-user-email"]').clear()
-        driver.find_element_by_xpath('//*[@id="edit-dash-user-email"]').send_keys(randoms(100, "special"))
-        driver.find_element_by_xpath('//*[@id="modal-edit-dashboard-user"]/div/div/div[3]/button').click()
-        sleep(1)
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-dashboard-user"]/div[1]/span')
-                         .get_attribute('innerHTML'), "Enter a valid mail", msg=None)
 
     @classmethod
     def tearDownClass(cls):
