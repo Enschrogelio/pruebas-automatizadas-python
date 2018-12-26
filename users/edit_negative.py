@@ -119,6 +119,91 @@ class EditNegative(unittest.TestCase):
         self.assertEqual("Please enter a valid email address.",driver.find_element_by_xpath("//*[@id='form-edit']/div[1]/span").get_attribute('innerText' ), msg=None)
         driver.refresh()
 
+    def test_password_short(self):
+        driver = self.driver
+        time.sleep(2)
+        driver.find_element_by_link_text('form').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').send_keys("short")
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').send_keys("short")
+        time.sleep(2)
+        driver.find_element_by_xpath("//div[@id='modal-change-pwd']/div[@class='modal-dialog box' and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer col-md-12 ' and 3]/button[1]").click()
+        time.sleep(2)
+        self.assertEqual("This password is too short. It must contain at least 8 characters.", driver.find_element_by_xpath('//span[@class="help-block"]').get_attribute('innerText'), msg=None)
+        driver.refresh()
+
+    def test_password_common(self):
+        driver = self.driver
+        time.sleep(2)
+        driver.find_element_by_link_text('form').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').send_keys("12345678")
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').send_keys("12345678")
+        time.sleep(2)
+        driver.find_element_by_xpath("//div[@id='modal-change-pwd']/div[@class='modal-dialog box' and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer col-md-12 ' and 3]/button[1]").click()
+        time.sleep(2)
+        self.assertEqual("This password is too common.", driver.find_element_by_xpath('//span[@class="help-block"]').get_attribute('innerText'), msg=None)
+        driver.refresh()
+
+    def test_password_numbers(self):
+        driver = self.driver
+        time.sleep(2)
+        driver.find_element_by_link_text('form').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').send_keys("10937361")
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').send_keys("10937361")
+        time.sleep(2)
+        driver.find_element_by_xpath("//div[@id='modal-change-pwd']/div[@class='modal-dialog box' and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer col-md-12 ' and 3]/button[1]").click()
+        time.sleep(2)
+        self.assertEqual("This password is entirely numeric.", driver.find_element_by_xpath('//span[@class="help-block"]').get_attribute('innerText'), msg=None)
+        driver.refresh()
+
+    def test_password_no_match(self):
+        driver = self.driver
+        time.sleep(2)
+        driver.find_element_by_link_text('form').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').send_keys("testnomatch")
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').send_keys("testnomat")
+        time.sleep(2)
+        driver.find_element_by_xpath("//div[@id='modal-change-pwd']/div[@class='modal-dialog box' and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer col-md-12 ' and 3]/button[1]").click()
+        time.sleep(2)
+        self.assertEqual("The two password fields didn't match.", driver.find_element_by_xpath('//span[@class="help-block"]').get_attribute('innerText'), msg=None)
+        driver.refresh()
+
+    def test_password_empty(self):
+        driver = self.driver
+        time.sleep(2)
+        driver.find_element_by_link_text('form').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password1"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath('//input[@id="change-pwd-password2"]').clear()
+        time.sleep(2)
+        driver.find_element_by_xpath("//div[@id='modal-change-pwd']/div[@class='modal-dialog box' and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer col-md-12 ' and 3]/button[1]").click()
+        time.sleep(2)
+        self.assertEqual("This field is empty", driver.find_element_by_xpath('//span[@class="help-block"]').get_attribute('innerText'), msg=None)
+        driver.refresh()
 
 
     @classmethod
