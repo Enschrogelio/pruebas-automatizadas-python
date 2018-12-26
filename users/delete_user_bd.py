@@ -68,7 +68,7 @@ cur.execute(sql, val)
 
         driver.find_element_by_xpath('//*[@id="modal-delete"]/div/div/div[3]/div[2]/button').click()
         time.sleep(4)
-        driver.find_element_by_css_selector('#form-confirm #input-email').send_keys(info[rand]['email'])
+        driver.find_element_by_css_selector('#form-confirm #input-confirmation').send_keys(info[rand]['email'])
         time.sleep(4)
         driver.find_element_by_xpath('//*[@id="btn-submit"]').click()
         time.sleep(4)

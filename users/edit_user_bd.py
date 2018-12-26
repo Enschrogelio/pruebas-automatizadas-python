@@ -30,7 +30,7 @@ class EditUserBd(unittest.TestCase):
                 
 info = {0}
 cur.execute("DELETE FROM users WHERE email = '%s'" % info[0]['email'])
-cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % user['email'])
+cur.execute("DELETE FROM admin_historicaluser WHERE email = '%s'" % info[0]['email'])
 sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at, is_active, is_client)' \
       ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'
 val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
@@ -86,7 +86,7 @@ print(cur.fetchone()[0])
         driver.find_element_by_css_selector('#form-change #change-pwd-password2').send_keys(info[0]["password"])
         time.sleep(3)
         driver.find_element_by_xpath('//*[@id="modal-change-pwd"]/div/div/div[3]/button').click()
-        time.sleep(2)
+        time.sleep(10)
         driver.find_element_by_xpath('//*[@id="modal-edit"]/div/div/div[3]/button').click()
         time.sleep(2)
 
@@ -154,6 +154,7 @@ print(cur.fetchone()[0])
                          .get_attribute('innerHTML'),info[0]['name'], msg=None)
         time.sleep(5)
 
+        status: None
         if aleatory == 0:
             status = 'inactive'
         else:
