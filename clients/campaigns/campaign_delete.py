@@ -13,14 +13,14 @@ campaign = '''
     ]
 '''
 valor = ""
-
+client = "arcapruebas2@gmail.com"
+info = json.loads(campaign)
 
 class DeleteCampaign(unittest.TestCase):
 
     def setUp(self):
         global campaign, valor
         self.driver = ModelConfig.driver_web
-        info = json.loads(campaign)
         code = """
 info = {0}
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
@@ -37,12 +37,15 @@ cur.execute(sql, val)
 
     def test_add_client(self):
         global campaign, valor
-        info = json.loads(campaign)
         driver = self.driver
         # login
         login(self)
         sleep(2)
         # Click en clientes
+        driver.find_element_by_xpath('//*[@id="inputSrc"]').click()
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(client)
+        sleep(2)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(2)
         self.assertEqual(info[0]['name'], driver

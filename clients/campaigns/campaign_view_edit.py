@@ -1,9 +1,10 @@
 import json
 import unittest
-from util.functions import *
-from util.config import *
-from util.functions import login
+from time import sleep
+from util.config import ModelConfig
+from util.functions import login, db_functions, screenshot, logout
 
+client = "arcapruebas2@gmail.com"
 campaign = '''
     [{"name" : "RogelioElim", "budget":"2.00", "url":"https://www.google.com", "objetive":"2", "industry":"Automotriz",
       "category":"llantas", "camcode":"ENSCH-75"},
@@ -38,7 +39,11 @@ cur.execute(sql, val)
         login(self)
         sleep(2)
         # Click en clientes
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="inputSrc"]').click()
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(client)
+        sleep(2)
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]/i').click()
         sleep(2)
         # view campaign
         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[10]/a[1]/i').click()
@@ -71,14 +76,12 @@ cur.execute(sql, val)
                                      "col-md-12' and 3]/button[1]").click()
         sleep(2)
         # asserts
-        self.assertEqual(info[1]['name'], driver.find_element_by_xpath('//*[@id="campaigntable"]'
-                                                                       '/tbody/tr[1]/td[3]').text, msg=None)
-        self.assertEqual(float(info[1]['budget']), float(driver.find_element_by_xpath('//*[@id="campaigntable"]'
-                                                                                      '/tbody/tr[1]/td[6]').text),
-                         msg=None)
-        self.assertEqual(float(info[1]['objetive']), float(driver.find_element_by_xpath('//*[@id="campaigntable"]'
-                                                                                        '/tbody/tr[1]/td[7]').text),
-                         msg=None)
+        self.assertEqual( driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[3]').text,
+                          info[1]['name'], msg=None)
+        self.assertEqual(float(driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[6]').text),
+                         float(info[1]['budget']), msg=None)
+        self.assertEqual(float(driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[7]').text),
+                         float(info[1]['objetive']), msg=None)
 
     def tearDown(self):
         logout(self)
