@@ -16,6 +16,7 @@ valor = ""
 client = "arcapruebas2@gmail.com"
 info = json.loads(campaign)
 
+
 class DeleteCampaign(unittest.TestCase):
 
     def setUp(self):
@@ -26,10 +27,10 @@ info = {0}
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
             % (info[1]['name'], info[1]['budget'], info[1]['objetive']))
 sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
-      'redirect_url, script_snippet, status, ga_api_key, ga_api_secret, dbm_client_secret, dbm_client_id, client_id) ' \
-      'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+      'redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, client_id) ' \
+      'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', '', '', 2)
+       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', 2)
 cur.execute(sql, val)
 """.format(info)
         valor = db_functions(code)[0]
@@ -48,11 +49,9 @@ cur.execute(sql, val)
         sleep(2)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(2)
-        self.assertEqual(info[0]['name'], driver
-                         .find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[@title="%s"]'
-                                                % valor[0]).get_attribute("innerText").replace("\t", ""), msg=None)
-        self.assertEqual("%s" % valor[1],
-                         driver.find_element_by_xpath('//tr[1]/td[6]')
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[@title="%s"]' % valor[0])
+                         .get_attribute("innerText").replace("\t", ""), info[0]['name'], msg=None)
+        self.assertEqual("%s" % valor[1], driver.find_element_by_xpath('//tr[1]/td[6]')
                          .get_attribute("innerText").replace("\t", ""), msg=None)
         self.assertEqual("%s" % valor[2], driver.find_element_by_xpath('//tr[1]/td[7]')
                          .get_attribute("innerText").replace("\t", ""), msg=None)
