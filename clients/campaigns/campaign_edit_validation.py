@@ -1,8 +1,8 @@
 import json
 import unittest
-from util.functions import *
-from util.config import *
-from util.functions import login
+from time import sleep
+from util.config import ModelConfig
+from util.functions import login, db_functions, screenshot, randoms, logout
 
 campaign = '''
     [{"name" : "RogelioElim", "budget":"2.00", "url":"https://www.google.com", "objetive":"2", "industry":"Automotriz",
@@ -12,6 +12,7 @@ campaign = '''
 
 class EditCampaign(unittest.TestCase):
 
+    # noinspection PyCallByClass,PyTypeChecker
     @classmethod
     def setUpClass(cls):
         cls.driver = ModelConfig.driver_web
@@ -41,8 +42,8 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         # Click en edit
         driver.find_element_by_xpath("//tr[1]/td[10]/a[2]/i[@class='glyphicon glyphicon-pencil' and 1]").click()
         sleep(1)
-        mi_ruta="clients/campaigns/screenshot/"
-        screenshot(self, mi_ruta)
+        path = "clients/campaigns/screenshot/"
+        screenshot(self, path)
 
     def test_campaing_empty(self):
         driver = self.driver
@@ -58,17 +59,17 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         # click Save
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         # asserts name
-        self.assertEqual("This field is empty", driver.find_element_by_xpath('//*[@id="form-edit-campaign"]'
-                                                                             '/div[1]/span').text, msg = None)
+        self.assertEqual("This field is empty",
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[1]/span').text, msg=None)
         # asserts Budget
-        self.assertEqual("This field is empty.", driver.find_element_by_xpath('//*[@id="form-edit-campaign"]'
-                                                                              '/div[5]/span').text, msg = None)
+        self.assertEqual("This field is empty.",
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
         # asserts url
-        self.assertEqual("This field is empty", driver.find_element_by_xpath('//*[@id="form-edit-campaign"]'
-                                                                             '/div[6]/span').text, msg = None)
+        self.assertEqual("This field is empty",
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span').text, msg=None)
         # asserts objetive
-        self.assertEqual("This field is empty", driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/'
-                                                                             'div[7]/span').text, msg = None)
+        self.assertEqual("This field is empty",
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
 
     def test_min(self):
         driver = self.driver
@@ -81,8 +82,8 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(1, "number"))
         # url
         driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://"
-                                                                                     +randoms(1, "letter")+".com")
+        driver.find_element_by_css_selector('#form-edit-campaign #id_url')\
+            .send_keys("https://%s" % randoms(1, "letter")+".com")
         # objeive
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(1, "number"))
@@ -100,8 +101,8 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(250, "number"))
         # url
         driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://"+
-                                                                                     randoms(250, "letter")+".com")
+        driver.find_element_by_css_selector('#form-edit-campaign #id_url')\
+            .send_keys("https://%s" % randoms(250, "letter")+".com")
         # objeive
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(250, "number"))
@@ -110,10 +111,10 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         sleep(2)
         # asserts Budget
         self.assertEqual("Enter a valid budget. Maximum allowed decimals: 2",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg = None)
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
         # asserts objetive
         self.assertEqual("Please input a value between 0-2147483647.",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg = None)
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
 
     def test_special(self):
         driver = self.driver
@@ -126,9 +127,9 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(100, "special"))
         # url
         driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://"+
+        driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://%s" %
                                                                                      randoms(10, "special")+".com")
-        # objeive
+        # objetive
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
         driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(100, "special"))
         # click Save
@@ -137,11 +138,12 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         # asserts Budget
         self.assertEqual("Enter a valid budget. "
                          "Maximum allowed decimals: 2",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg = None)
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
         # asserts objetive
         self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg = None)
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
 
+    # noinspection PyUnresolvedReferences
     @classmethod
     def tearDownClass(cls):
         logout(cls)

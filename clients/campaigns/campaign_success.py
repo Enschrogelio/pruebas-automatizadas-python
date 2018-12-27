@@ -1,11 +1,9 @@
 import json
 import unittest
-
-from selenium.common.exceptions import NoSuchElementException
-
-from util.functions import *
-from util.config import *
-from util.functions import login
+from random import randint
+from time import sleep
+from util.config import ModelConfig
+from util.functions import login, db_functions, logout
 
 campaign='''
     [{"name" : "Coca-cola company","budget":"2.00", "url":"https://www.google.com","objetive":"2"},
@@ -36,7 +34,7 @@ cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objet
         login(self)
         sleep(2)
         # Click en clientes
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(1)
         # Click en view
         driver.find_element_by_xpath('//*[@id="client-camp-header"]/div/button').click()
@@ -49,9 +47,8 @@ cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objet
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]').click()
         sleep(3)
         # Seleccionar Active
-        aleatorio = random.randint(1 , 3)
+        aleatorio = randint(1 , 3)
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/select/option[%d]' % aleatorio).click()
-        #driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/select/option[2]').click()
         sleep(2)
         # Seleccionar Select contenedor INDUSTRIA
         driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[3]').click()
@@ -79,7 +76,8 @@ cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = '%s' AND objet
                 self.assertEqual(info[0]['budget'], driver.find_element_by_xpath('//tr[1]/td[6]').text, msg=None)
                 self.assertEqual(info[0]['objetive'], driver.find_element_by_xpath('//tr[1]/td[7]').text, msg=None)
                 sleep(2)
-        except Exception:
+        except Exception as error:
+            print(error)
             driver.find_element_by_xpath('//*[@id="client-camp-links"]/a[2]').click()
             sleep(2)
             self.assertEqual(info[0]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg=None)

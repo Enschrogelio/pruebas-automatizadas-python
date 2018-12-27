@@ -1,13 +1,16 @@
 import json
 import unittest
-from util.functions import *
-from util.config import *
-from util.functions import login
+from time import sleep
+from util.config import ModelConfig
+from util.functions import login, db_functions, screenshot, logout
 
 campaign = '''
-    [{"name" : "RogelioView", "budget":"2.00", "url":"https://www.google.com", "objetive":"2", "industry":"Automotriz",
-      "category":"llantas", "camcode":"ENSCH-75"},
-    {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}]'''
+    [
+        {"name" : "RogelioView", "budget":"2.00", "url":"https://www.google.com", "objetive":"2", 
+         "industry":"Automotriz", "category":"llantas", "camcode":"ENSCH-75"},
+        {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}
+    ]
+'''
 
 
 class EditCampaign(unittest.TestCase):
@@ -42,34 +45,25 @@ cur.execute(sql, val)
             driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
             sleep(1)
             # Click en view
-            driver.find_element_by_xpath("//tr[1]/td[10]/a[2]/i[@class='glyphicon glyphicon-pencil' and 1]").click()
+            driver.find_element_by_xpath("//tr[1]/td[10]/a[2]/i[1]").click()
             sleep(1)
-            mi_ruta="clients/campaigns/screenshot/"
-            screenshot(self, mi_ruta)
+            path = "clients/campaigns/screenshot/"
+            screenshot(self, path)
             # name
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 1]/input"
-                                         "[@id='id_name' and @class='form-control' and 1]").clear()
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 1]/input"
-                                         "[@id='id_name' and @class='form-control' and 1]").send_keys((info[1]["name"]))
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[1]/input").clear()
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[1]/input").send_keys((info[1]["name"]))
             # budget
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 5]"
-                                         "/input[@id='id_budget' and @class='form-control' and 1]").clear()
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 5]/input[@id="
-                                         "'id_budget' and @class='form-control' and 1]").send_keys((info[1]["budget"]))
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[5]/input").clear()
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[5]/input").send_keys((info[1]["budget"]))
             #  url
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 6]"
-                                         "/input[@id='id_url' and @class='form-control' and 1]").clear()
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 6]/input[@id="
-                                         "'id_url' and @class='form-control' and 1]").send_keys((info[1]["url"]))
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[6]/input").clear()
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[6]/input").send_keys((info[1]["url"]))
             # Objetive
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 7]/input[@id="
-                                         "'id_objetive' and @class='form-control' and 1]").clear()
-            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[@class='form-group' and 7]/input[@id='id"
-                                         "_objetive' and @class='form-control' and 1]").send_keys((info[1]["objetive"]))
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[7]/input").clear()
+            driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[7]/input")\
+                .send_keys((info[1]["objetive"]))
             # Save
-            driver.find_element_by_xpath("//div[@id='modal-edit-campaign']/div[@class='modal-dialog box' "
-                                         "and 1]/div[@class='modal-box' and 1]/div[@class='modal-footer "
-                                         "col-md-12' and 3]/button[1]").click()
+            driver.find_element_by_xpath("//div[@id='modal-edit-campaign']/div[1]/div[3]/button[1]").click()
             sleep(2)
             # asserts
             self.assertEqual(info[1]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg=None)

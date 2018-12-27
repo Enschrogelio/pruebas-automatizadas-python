@@ -1,14 +1,17 @@
 import json
+from time import sleep
 import unittest
-from util.functions import *
-from util.functions import login
+from util.functions import login, db_functions
 from util.config import ModelConfig
 from util.functions import screenshot, logout
 
 campaign = '''
-    [{"name" : "Rogelio 2", "budget":"4.00", "url":"https://www.google.com", "objetive":"4", "industry":"Automotriz",
-    "category":"llantas", "camcode":"ENSCH-75"},
-    {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}]'''
+    [
+        {"name" : "Rogelio 2", "budget":"4.00", "url":"https://www.google.com", "objetive":"4", "industry":"Automotriz",
+         "category":"llantas", "camcode":"ENSCH-75"},
+        {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}
+    ]
+'''
 valor = ""
 
 
@@ -40,29 +43,28 @@ cur.execute(sql, val)
         login(self)
         sleep(2)
         # Click en clientes
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(2)
         self.assertEqual(info[0]['name'], driver
                          .find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[@title="%s"]'
-                                                % valor[0]).get_attribute("innerText").replace("\t",""), msg=None)
+                                                % valor[0]).get_attribute("innerText").replace("\t", ""), msg=None)
         self.assertEqual("%s" % valor[1],
                          driver.find_element_by_xpath('//tr[1]/td[6]')
-                         .get_attribute("innerText").replace("\t",""), msg=None)
+                         .get_attribute("innerText").replace("\t", ""), msg=None)
         self.assertEqual("%s" % valor[2], driver.find_element_by_xpath('//tr[1]/td[7]')
-                         .get_attribute("innerText").replace("\t",""), msg=None)
+                         .get_attribute("innerText").replace("\t", ""), msg=None)
         sleep(3)
-        driver.find_element_by_xpath("//tr[1]/td[10]/a[@class='to-delete' and 3]"
-                                     "/i[@class='glyphicon glyphicon-trash' and 1]").click()
-        mi_ruta = "clients/campaigns/screenshot/"
+        driver.find_element_by_xpath("//tr[1]/td[10]/a[3]/i[1]").click()
+        path = "clients/campaigns/screenshot/"
         sleep(2)
         # message "Deleting record"
         driver.find_element_by_xpath("//button[@class='btn-green text-uppercase col-sm-12']").click()
-        # message confirmaion
+        # message confirmation
         sleep(2)
         driver.find_element_by_xpath('//*[@id="input-email"]').send_keys((info[0]['name']))
         sleep(2)
         driver.find_element_by_xpath("//button[@id='btn-submit']").click()
-        screenshot(self, mi_ruta)
+        screenshot(self, path)
 
     def tearDown(self):
         logout(self)
