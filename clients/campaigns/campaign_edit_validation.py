@@ -6,9 +6,10 @@ from util.functions import login, db_functions, screenshot, randoms, logout
 
 client = "arcapruebas2@gmail.com"
 campaign = '''
-    [{"name" : "RogelioElim", "budget":"2.00", "url":"https://www.google.com", "objetive":"2", "industry":"Automotriz",
-      "category":"llantas", "camcode":"ENSCH-75"},
-    {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}]'''
+    [
+        {"name": "RogelioElim", "budget": "2.00", "url": "https://www.google.com", "objetive": "2", 
+         "industry": "Automotriz", "category": "llantas", "camcode": "ENSCH-75"}
+    ]'''
 info = json.loads(campaign)
 
 
@@ -26,7 +27,7 @@ class EditCampaign(unittest.TestCase):
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]/i').click()
         sleep(1)
         # Click en edit
-        driver.find_element_by_xpath("//tr[1]/td[10]/a[2]/i[@class='glyphicon glyphicon-pencil' and 1]").click()
+        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[8]/a[2]').click()
         sleep(1)
         path = "clients/campaigns/screenshot/"
         screenshot(self, path)
@@ -38,59 +39,56 @@ class EditCampaign(unittest.TestCase):
         cls.driver.maximize_window()
         code = """
 info = {0}
+client = "{1}"
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % client)
+id_client = cur.fetchone()[0]
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
-            % (info[1]['name'], info[1]['budget'], info[1]['objetive']))
-sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
-      'redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, client_id) ' \
-      'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', 2)
-""".format(info)
+            % (info[0]['name'], info[0]['budget'], info[0]['objetive']))
+sql = "INSERT INTO campaigns (cam_code, name, industry, category, budget, url, redirect_url, script_snippet, objetive, " \
+      "status, dbm_client_secret, dbm_client_id, created_at, updated_at, client_id, utm_campaign, utm_source, ga_id, " \
+      "token_access_google_dbm) VALUES (%s, %s, %s, %s, %s, %s, '', '', %s, 1, '', '', %s, %s, %s, '', '', '', '')"
+val = (info[0]['camcode'], info[0]['name'], info[0]['industry'], info[0]['category'], info[0]['budget'], info[0]['url'],
+       info[0]['objetive'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), id_client)
+cur.execute(sql, val)
+""".format(info, client)
         db_functions(code)
         cls.campaign_main(cls)
 
-    def test_campaing_empty(self):
+    def test_campaign_empty(self):
         driver = self.driver
         sleep(2)
-        # name
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').clear()
-        # budget
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').clear()
-        # url
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        # objeive
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
-        # click Save
+        # clean fields
+        driver.find_element_by_css_selector('#mod-camp-name').clear()
+        driver.find_element_by_css_selector('#mod-camp-budget').clear()
+        driver.find_element_by_css_selector('#mod-camp-url').clear()
+        driver.find_element_by_css_selector('#mod-camp-objetive').clear()
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
-        # asserts name
+        # asserts
         self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[1]/span').text, msg=None)
-        # asserts Budget
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[2]/span').text, msg=None)
         self.assertEqual("This field is empty.",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
-        # asserts url
-        self.assertEqual("This field is empty",
                          driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span').text, msg=None)
-        # asserts objetive
         self.assertEqual("This field is empty",
                          driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
+        self.assertEqual("This field is empty",
+                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[8]/span').text, msg=None)
 
     def test_min(self):
         driver = self.driver
         sleep(2)
         # name
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').send_keys(randoms(1, "letter"))
+        driver.find_element_by_css_selector('#mod-camp-name').clear()
+        driver.find_element_by_css_selector('#mod-camp-name').send_keys(randoms(1, "letter"))
         # budget
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(1, "number"))
+        driver.find_element_by_css_selector('#mod-camp-budget').clear()
+        driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(1, "number"))
         # url
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url')\
+        driver.find_element_by_css_selector('#mod-camp-url').clear()
+        driver.find_element_by_css_selector('#mod-camp-url')\
             .send_keys("https://%s" % randoms(1, "letter")+".com")
         # objeive
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(1, "number"))
+        driver.find_element_by_css_selector('#mod-camp-objetive').clear()
+        driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(1, "number"))
         # click Save
         # driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
 
@@ -98,18 +96,18 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         driver = self.driver
         sleep(2)
         # name
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').send_keys(randoms(250, "letter"))
+        driver.find_element_by_css_selector('#mod-camp-name').clear()
+        driver.find_element_by_css_selector('#mod-camp-name').send_keys(randoms(250, "letter"))
         # budget
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(250, "number"))
+        driver.find_element_by_css_selector('#mod-camp-budget').clear()
+        driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(250, "number"))
         # url
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url')\
+        driver.find_element_by_css_selector('#mod-camp-url').clear()
+        driver.find_element_by_css_selector('#mod-camp-url')\
             .send_keys("https://%s" % randoms(250, "letter")+".com")
         # objeive
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(250, "number"))
+        driver.find_element_by_css_selector('#mod-camp-objetive').clear()
+        driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(250, "number"))
         # click Save
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         sleep(2)
@@ -124,18 +122,18 @@ val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], i
         driver = self.driver
         sleep(4)
         # name
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_name').send_keys(randoms(100, "special"))
+        driver.find_element_by_css_selector('#mod-camp-name').clear()
+        driver.find_element_by_css_selector('#mod-camp-name').send_keys(randoms(100, "special"))
         # budget
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_budget').send_keys(randoms(100, "special"))
+        driver.find_element_by_css_selector('#mod-camp-budget').clear()
+        driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(100, "special"))
         # url
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_url').send_keys("https://%s" %
+        driver.find_element_by_css_selector('#mod-camp-url').clear()
+        driver.find_element_by_css_selector('#mod-camp-url').send_keys("https://%s" %
                                                                                      randoms(10, "special")+".com")
         # objetive
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').clear()
-        driver.find_element_by_css_selector('#form-edit-campaign #id_objetive').send_keys(randoms(100, "special"))
+        driver.find_element_by_css_selector('#mod-camp-objetive').clear()
+        driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(100, "special"))
         # click Save
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         sleep(2)

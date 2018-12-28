@@ -8,11 +8,10 @@ from util.functions import screenshot, logout
 campaign = '''
     [
         {"name" : "Rogelio 2", "budget":"4.00", "url":"https://www.google.com", "objetive":"4", "industry":"Automotriz",
-         "category":"llantas", "camcode":"ENSCH-75"},
-        {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objetive":"4.0"}
+         "category":"llantas", "camcode":"ENSCH-75"}
     ]
 '''
-valor = ""
+value = ""
 client = "arcapruebas2@gmail.com"
 info = json.loads(campaign)
 
@@ -20,24 +19,28 @@ info = json.loads(campaign)
 class DeleteCampaign(unittest.TestCase):
 
     def setUp(self):
-        global campaign, valor
+        global campaign, value
         self.driver = ModelConfig.driver_web
+        self.driver.maximize_window()
         code = """
 info = {0}
+client = "{1}"
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % client)
+id_client = cur.fetchone()[0]
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
-            % (info[1]['name'], info[1]['budget'], info[1]['objetive']))
-sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
-      'redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, client_id) ' \
-      'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', 2)
+            % (info[0]['name'], info[0]['budget'], info[0]['objetive']))
+sql = "INSERT INTO campaigns (cam_code, name, industry, category, budget, url, redirect_url, script_snippet, " \
+      "objetive, status, dbm_client_secret, dbm_client_id, created_at, updated_at, client_id, utm_campaign, " \
+      "utm_source, ga_id, token_access_google_dbm) VALUES (%s, %s, %s, %s, %s, %s, '', '', %s, 1, '', '', %s, %s, " \
+      "%s, '', '', '', '') RETURNING name, industry, objetive"
+val = (info[0]['camcode'], info[0]['name'], info[0]['industry'], info[0]['category'], info[0]['budget'], info[0]['url'],
+       info[0]['objetive'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), id_client)
 cur.execute(sql, val)
-""".format(info)
-        valor = db_functions(code)[0]
-        # print(valor)
+""".format(info, client)
+        value = db_functions(code)[0]
 
     def test_add_client(self):
-        global campaign, valor
+        global campaign, value
         driver = self.driver
         # login
         login(self)
@@ -49,21 +52,21 @@ cur.execute(sql, val)
         sleep(2)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]').click()
         sleep(2)
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[@title="%s"]' % valor[0])
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[@title="%s"]' % value[0])
                          .get_attribute("innerText").replace("\t", ""), info[0]['name'], msg=None)
-        self.assertEqual("%s" % valor[1], driver.find_element_by_xpath('//tr[1]/td[6]')
+        self.assertEqual("%s" % value[1], driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[4]')
                          .get_attribute("innerText").replace("\t", ""), msg=None)
-        self.assertEqual("%s" % valor[2], driver.find_element_by_xpath('//tr[1]/td[7]')
+        self.assertEqual("%s" % value[2], driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[6]')
                          .get_attribute("innerText").replace("\t", ""), msg=None)
         sleep(3)
-        driver.find_element_by_xpath("//tr[1]/td[10]/a[3]/i[1]").click()
+        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[8]/a[3]').click()
         path = "clients/campaigns/screenshot/"
         sleep(2)
         # message "Deleting record"
         driver.find_element_by_xpath("//button[@class='btn-green text-uppercase col-sm-12']").click()
         # message confirmation
         sleep(2)
-        driver.find_element_by_xpath('//*[@id="input-email"]').send_keys((info[0]['name']))
+        driver.find_element_by_xpath('//*[@id="input-confirmation"]').send_keys((info[0]['name']))
         sleep(2)
         driver.find_element_by_xpath("//button[@id='btn-submit']").click()
         screenshot(self, path)
