@@ -26,8 +26,8 @@ class AddCampaign(unittest.TestCase):
 info = {0}
 client = "{1}"
 for d_user in info:
-    cur.execute("SELECT du.user_id FROM dashboard_users AS du JOIN users ON du.user_id = users.id where name = '%s' "  
-                "and email = '%s'" % (d_user['name'], d_user['email']))
+    cur.execute("SELECT du.user_id FROM dashboard_users AS du JOIN users ON du.user_id = users.id WHERE "  
+                "email = '%s'" % (d_user['email']))
     try:
         id = cur.fetchone()[0]
         cur.execute("DELETE FROM dashboard_users WHERE user_id=%s" % id)

@@ -1,8 +1,9 @@
 import json
+import os
 import unittest
 from time import sleep
 from util.config import ModelConfig
-from util.functions import login, db_functions, screenshot, logout
+from util.functions import login, db_functions, screenshot, logout, delete_file
 
 client = "arcapruebas2@gmail.com"
 campaign = '''
@@ -13,26 +14,30 @@ campaign = '''
     ]
 '''
 info = json.loads(campaign)
+file_path = ((os.getenv('USERPROFILE') or os.getenv('HOME'))+"\Downloads\config_ga_cerebrosm.pdf").replace("\\", "\\\\")
 
 
 class EditCampaign(unittest.TestCase):
 
     def setUp(self):
         global campaign
+        delete_file(file_path)
         self.driver = ModelConfig.driver_web
         self.driver.maximize_window()
         code = """
 info = {0}
+client = "{1]"
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % client)
+id_client = cur.fetchone()[0]
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
             % (info[1]['name'], info[1]['budget'], info[1]['objetive']))
 sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
       'redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, client_id) ' \
       'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objetive'], info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', 2)
+       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', id_client)
 cur.execute(sql, val)
-
-""".format(info)
+""".format(info, client)
         db_functions(code)
 
     def test_campaign(self):
@@ -46,35 +51,37 @@ cur.execute(sql, val)
         sleep(1)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(client)
         sleep(2)
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]/i').click()
         sleep(1)
-        # Click en view
-        driver.find_element_by_xpath("//tr[1]/td[10]/a[2]/i[1]").click()
-        sleep(1)
+        # Click en edit
+        driver.find_element_by_xpath("//tr[1]/td[8]/a[2]").click()
+        sleep(2)
         path = "clients/campaigns/screenshot/"
         screenshot(self, path)
         # name
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[1]/input").clear()
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[1]/input").send_keys((info[1]["name"]))
+        driver.find_element_by_css_selector("#mod-camp-name").clear()
+        driver.find_element_by_css_selector("#mod-camp-name").send_keys((info[1]["name"]))
         # budget
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[5]/input").clear()
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[5]/input").send_keys((info[1]["budget"]))
+        driver.find_element_by_css_selector("#mod-camp-budget").clear()
+        driver.find_element_by_css_selector("#mod-camp-budget").send_keys((info[1]["budget"]))
         #  url
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[6]/input").clear()
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[6]/input").send_keys((info[1]["url"]))
+        driver.find_element_by_css_selector("#mod-camp-url").clear()
+        driver.find_element_by_css_selector("#mod-camp-url").send_keys((info[1]["url"]))
         # Objetive
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[7]/input").clear()
-        driver.find_element_by_xpath("//form[@id='form-edit-campaign']/div[7]/input")\
-            .send_keys((info[1]["objetive"]))
+        driver.find_element_by_css_selector("#mod-camp-objetive").clear()
+        driver.find_element_by_css_selector("#mod-camp-objetive").send_keys((info[1]["objetive"]))
+        driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[9]/div/p/a').click()
         # Save
-        driver.find_element_by_xpath("//div[@id='modal-edit-campaign']/div[1]/div[3]/button[1]").click()
+        driver.find_element_by_xpath("//*[@id='modal-edit-campaign']/div/div/div[3]/button").click()
         sleep(2)
         # asserts
         self.assertEqual(info[1]['name'], driver.find_element_by_xpath('//tr[1]/td[3]').text, msg=None)
-        self.assertEqual(float(info[1]['budget']), float(driver.find_element_by_xpath('//tr[1]/td[6]').text),
+        self.assertEqual(float(info[1]['budget']), float(driver.find_element_by_xpath('//tr[1]/td[5]').text),
                          msg=None)
-        self.assertEqual(float(info[1]['objetive']), float(driver.find_element_by_xpath('//tr[1]/td[7]').text),
+        self.assertEqual(float(info[1]['objetive']), float(driver.find_element_by_xpath('//tr[1]/td[6]').text),
                          msg=None)
+        sleep(10)
+        self.assertTrue(os.path.exists(file_path), msg=None)
 
     def tearDown(self):
         logout(self)

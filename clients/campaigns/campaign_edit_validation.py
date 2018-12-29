@@ -64,14 +64,14 @@ cur.execute(sql, val)
         driver.find_element_by_css_selector('#mod-camp-objetive').clear()
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         # asserts
-        self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[2]/span').text, msg=None)
-        self.assertEqual("This field is empty.",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span').text, msg=None)
-        self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
-        self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[8]/span').text, msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[2]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
 
     def test_min(self):
         driver = self.driver
@@ -84,13 +84,14 @@ cur.execute(sql, val)
         driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(1, "number"))
         # url
         driver.find_element_by_css_selector('#mod-camp-url').clear()
-        driver.find_element_by_css_selector('#mod-camp-url')\
-            .send_keys("https://%s" % randoms(1, "letter")+".com")
+        driver.find_element_by_css_selector('#mod-camp-url').send_keys("https://.com")
         # objeive
         driver.find_element_by_css_selector('#mod-camp-objetive').clear()
         driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(1, "number"))
         # click Save
-        # driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
+        driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
+        self.assertEqual('Enter a valid URL.', driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span')
+                         .get_attribute('innerHTML'))
 
     def test_max(self):
         driver = self.driver
@@ -98,25 +99,24 @@ cur.execute(sql, val)
         # name
         driver.find_element_by_css_selector('#mod-camp-name').clear()
         driver.find_element_by_css_selector('#mod-camp-name').send_keys(randoms(250, "letter"))
-        # budget
+        # Máximo 99999999999999999.99
         driver.find_element_by_css_selector('#mod-camp-budget').clear()
-        driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(250, "number"))
-        # url
+        driver.find_element_by_css_selector('#mod-camp-budget').send_keys(randoms(18, 'number'))
         driver.find_element_by_css_selector('#mod-camp-url').clear()
-        driver.find_element_by_css_selector('#mod-camp-url')\
-            .send_keys("https://%s" % randoms(250, "letter")+".com")
-        # objeive
+        driver.find_element_by_css_selector('#mod-camp-url').send_keys("https://%s" % randoms(501, "letter")+".com")
         driver.find_element_by_css_selector('#mod-camp-objetive').clear()
-        driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(250, "number"))
-        # click Save
+        driver.find_element_by_css_selector('#mod-camp-objetive').send_keys('21474836488')
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         sleep(2)
-        # asserts Budget
-        self.assertEqual("Enter a valid budget. Maximum allowed decimals: 2",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
-        # asserts objetive
-        self.assertEqual("Please input a value between 0-2147483647.",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
+        # asserts
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), "Enter a valid budget. Maximum allowed decimals: 2", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), "Please input a value between 0-2147483647.", msg=None)
+        self.assertEqual(len(driver.find_element_by_css_selector('#mod-camp-name').get_attribute("value")),
+                         250, msg=None)
+        self.assertEqual(len(driver.find_element_by_css_selector('#mod-camp-url').get_attribute("value")),
+                         500, msg=None)
 
     def test_special(self):
         driver = self.driver
@@ -130,7 +130,7 @@ cur.execute(sql, val)
         # url
         driver.find_element_by_css_selector('#mod-camp-url').clear()
         driver.find_element_by_css_selector('#mod-camp-url').send_keys("https://%s" %
-                                                                                     randoms(10, "special")+".com")
+                                                                       randoms(10, "special")+".com")
         # objetive
         driver.find_element_by_css_selector('#mod-camp-objetive').clear()
         driver.find_element_by_css_selector('#mod-camp-objetive').send_keys(randoms(100, "special"))
@@ -138,12 +138,11 @@ cur.execute(sql, val)
         driver.find_element_by_xpath('//*[@id="modal-edit-campaign"]/div/div/div[3]/button').click()
         sleep(2)
         # asserts Budget
-        self.assertEqual("Enter a valid budget. "
-                         "Maximum allowed decimals: 2",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[5]/span').text, msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), "Enter a valid budget. Maximum allowed decimals: 2", msg=None)
         # asserts objetive
-        self.assertEqual("This field is empty",
-                         driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[7]/span').text, msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-edit-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
 
     # noinspection PyUnresolvedReferences
     @classmethod

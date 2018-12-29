@@ -18,7 +18,7 @@ class CampaignValidation(unittest.TestCase):
         sleep(1)
         driver.find_element_by_xpath('//*[@id="search"]').send_keys(client)
         sleep(2)
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[6]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]/i').click()
         sleep(1)
         # Click en view
         driver.find_element_by_xpath('//*[@id="client-camp-header"]/div/button').click()
@@ -38,91 +38,104 @@ class CampaignValidation(unittest.TestCase):
     def test_assert_campaign(self):
         driver = self.driver
         sleep(2)
+        driver.find_element_by_css_selector("#add-camp-name").clear()
+        driver.find_element_by_css_selector("#add-camp-budget").clear()
+        driver.find_element_by_css_selector("#add-camp-url").clear()
+        driver.find_element_by_css_selector("#add-camp-objetive").clear()
         # validación name
-        self.assertEqual(driver.find_element_by_xpath("//div[1]/span[1]").text, 'This field is empty')
-        # validación budget
-        self.assertEqual(driver.find_element_by_xpath("//div[5]/span[1]").text, 'This field is empty.', msg=None)
-        # validación url
-        self.assertEqual(driver.find_element_by_xpath("//div[6]/span[1]").text, 'This field is empty', msg=None)
-        # validación url
-        self.assertEqual(driver.find_element_by_xpath("//div[6]/span[1]").text, 'This field is empty', msg=None)
-        # validación Objetivo
-        self.assertEqual(driver.find_element_by_xpath("//div[7]/span[1]").text, 'This field is empty', msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[2]/span')
+                         .get_attribute('innerHTML'), 'This field is empty', msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), 'This field is empty', msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/span')
+                         .get_attribute('innerHTML'), 'This field is empty', msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), 'This field is empty', msg=None)
         sleep(2)
-        self.assertEqual(driver.find_element_by_xpath("//div[@class='modal fade in']/div/div/div/h1").text,
-                         'Add Campaign', msg=None)
+        self.assertEqual(driver.find_element_by_xpath("//div[@class='modal fade in']/div/div/div/h1")
+                         .get_attribute('innerHTML'), 'Add Campaign', msg=None)
         # placesHolder
-        # name
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input')
-                         .get_attribute("placeholder"), 'Name', msg=None)
-        # Budget
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input')
-                         .get_attribute("placeholder"), 'Budget')
-        # url
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input')
-                         .get_attribute("placeholder"), 'Url')
-        # Objetive
-        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input')
-                         .get_attribute("placeholder"), 'Objective')
-
-    def test_max(self):
-        driver = self.driver
-        # name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys((randoms(256, "letter")))
-        sleep(1)
-        # BUGET
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(256, "number"))
-        # URL
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input')\
-            .send_keys("https://WWW.%s" % randoms(256, "number")+".com")
-        # OBJECTIVE
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(256, "number"))
-
-    def test_special(self):
-        driver = self.driver
-        # llenado de Form
-        # name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(randoms(5, "special"))
-        sleep(2)
-        # BUDGET
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(5, "special"))
-        # URL
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("http://www.google.com")
-        # OBJECTIVE
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(5, "special"))
-        # enter
-        driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
-        sleep(2)
-        #  self.screenshot()
+        self.assertEqual(driver.find_element_by_css_selector("#add-camp-name").get_attribute("placeholder"), 
+                         'Name', msg=None)
+        self.assertEqual(driver.find_element_by_css_selector("#add-camp-budget").get_attribute("placeholder"), 
+                         'Budget', msg=None)
+        self.assertEqual(driver.find_element_by_css_selector("#add-camp-url").get_attribute("placeholder"), 
+                         'Url', msg=None)
+        self.assertEqual(driver.find_element_by_css_selector("#add-camp-objetive").get_attribute("placeholder"), 
+                         'Objetive', msg=None)
 
     def test_min(self):
         driver = self.driver
-        # llenado de Form
+        sleep(2)
         # name
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[1]/input').send_keys(randoms(1, "letter"))
+        driver.find_element_by_css_selector('#add-camp-name').clear()
+        driver.find_element_by_css_selector('#add-camp-name').send_keys(randoms(1, "letter"))
+        # budget
+        driver.find_element_by_css_selector('#add-camp-budget').clear()
+        driver.find_element_by_css_selector('#add-camp-budget').send_keys(randoms(1, "number"))
+        # url
+        driver.find_element_by_css_selector('#add-camp-url').clear()
+        driver.find_element_by_css_selector('#add-camp-url').send_keys("https://.com")
+        # objeive
+        driver.find_element_by_css_selector('#add-camp-objetive').clear()
+        driver.find_element_by_css_selector('#add-camp-objetive').send_keys(randoms(1, "number"))
+        # click Save
+        driver.find_element_by_xpath('//div[10]/div[1]/div[1]/div[3]/button[1]').click()
         sleep(1)
-        # BUDGET
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[5]/input').send_keys(randoms(1, "number"))
-        # URL
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/input').send_keys("http://www.google.com")
-        # OBJECTIVE
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/input').send_keys(randoms(1, "number"))
-        # enter
-        driver.find_element_by_xpath("//div[10]/div[1]/div[1]/div[3]/button[1]").click()
-        path = "clients/campaigns/testCampaign/screenshot/"
-        screenshot(self, path)
+        self.assertEqual('Enter a valid URL.', driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[7]/span')
+                         .get_attribute('innerHTML'))
+
+    def test_max(self):
+        driver = self.driver
+        sleep(2)
+        # name
+        driver.find_element_by_css_selector('#add-camp-name').clear()
+        driver.find_element_by_css_selector('#add-camp-name').send_keys(randoms(250, "letter"))
+        # Máximo 99999999999999999.99
+        driver.find_element_by_css_selector('#add-camp-budget').clear()
+        driver.find_element_by_css_selector('#add-camp-budget').send_keys(randoms(18, 'number'))
+        driver.find_element_by_css_selector('#add-camp-url').clear()
+        driver.find_element_by_css_selector('#add-camp-url').send_keys("https://%s" % randoms(501, "letter")+".com")
+        driver.find_element_by_css_selector('#add-camp-objetive').clear()
+        driver.find_element_by_css_selector('#add-camp-objetive').send_keys('21474836488')
+        driver.find_element_by_xpath('//div[10]/div[1]/div[1]/div[3]/button[1]').click()
+        sleep(2)
+        # asserts
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), "Enter a valid budget. Maximum allowed decimals: 2", msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), "Please input a value between 0-2147483647.", msg=None)
+        self.assertEqual(len(driver.find_element_by_css_selector('#add-camp-name').get_attribute("value")),
+                         250, msg=None)
+        self.assertEqual(len(driver.find_element_by_css_selector('#add-camp-url').get_attribute("value")),
+                         500, msg=None)
+
+    def test_special(self):
+        driver = self.driver
+        sleep(4)
+        # name
+        driver.find_element_by_css_selector('#add-camp-name').clear()
+        driver.find_element_by_css_selector('#add-camp-name').send_keys(randoms(100, "special"))
+        # budget
+        driver.find_element_by_css_selector('#add-camp-budget').clear()
+        driver.find_element_by_css_selector('#add-camp-budget').send_keys(randoms(100, "special"))
+        # url
+        driver.find_element_by_css_selector('#add-camp-url').clear()
+        driver.find_element_by_css_selector('#add-camp-url').send_keys("https://%s" %
+                                                                       randoms(10, "special")+".com")
+        # objetive
+        driver.find_element_by_css_selector('#add-camp-objetive').clear()
+        driver.find_element_by_css_selector('#add-camp-objetive').send_keys(randoms(100, "special"))
+        # click Save
+        driver.find_element_by_xpath('//div[10]/div[1]/div[1]/div[3]/button[1]').click()
+        sleep(2)
+        # asserts Budget
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[6]/span')
+                         .get_attribute('innerHTML'), "Enter a valid budget. Maximum allowed decimals: 2", msg=None)
+        # asserts objetive
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-add-campaign"]/div[8]/span')
+                         .get_attribute('innerHTML'), "This field is empty", msg=None)
+
 
     # noinspection PyUnresolvedReferences
     @classmethod
