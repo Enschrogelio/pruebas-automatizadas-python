@@ -6,9 +6,10 @@ from util.functions import login, db_functions, screenshot, logout
 
 client = "arcapruebas2@gmail.com"
 campaign = '''
-    [{"name" : "RogelioElim", "budget":"2.00", "url":"https://www.google.com", "objective":"2", "industry":"Automotriz",
-      "category":"llantas", "camcode":"ENSCH-75"},
-    {"name" : "Rogelio 2", "budget":"4.0", "url":"https://www.facebook.com/a", "objective":"4.0"}]'''
+    [
+        {"name" : "RogelioElim", "budget":"2.00", "url":"https://www.google.com", "objective":"2", "industry":"Automotriz",
+         "category":"llantas", "camcode":"ENSCH-75"}
+    ]'''
 
 
 class EditCampaign(unittest.TestCase):
@@ -20,15 +21,18 @@ class EditCampaign(unittest.TestCase):
         info = json.loads(campaign)
         code = """
 info = {0}
-cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objective = %s"
+client = "{1}"
+cur.execute("SELECT id FROM clients WHERE email = '%s'" % client)
+id_client = cur.fetchone()[0]
+cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"
             % (info[0]['name'], info[0]['budget'], info[0]['objective']))
-sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objective, industry, category, created_at, updated_at,' \
+sql = 'INSERT INTO campaigns (url, cam_code, name, budget, objetive, industry, category, created_at, updated_at,' \
       'redirect_url, script_snippet, status, dbm_client_secret, dbm_client_id, client_id) ' \
       'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 val = (info[0]['url'], info[0]['camcode'], info[0]['name'], info[0]['budget'], info[0]['objective'], info[0]['industry'],
-       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', 2)
+       info[0]['category'], strftime("%Y/%m/%d"), strftime("%Y/%m/%d"), '', '', 1, '', '', id_client)
 cur.execute(sql, val)
-""".format(info)
+""".format(info, client)
         db_functions(code)
 
     def test_campaign(self):
@@ -46,14 +50,18 @@ cur.execute(sql, val)
         driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[5]/a[1]/i').click()
         sleep(2)
         # view campaign
-        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[10]/a[1]/i').click()
+        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[8]/a[1]').click()
         # asserts
         self.assertEqual(info[0]['name'], 
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').text, msg=None)
+        self.assertEqual(info[0]['industry'],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').text, msg=None)
+        self.assertEqual(info[0]['category'],
+                         driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').text, msg=None)
         self.assertEqual(float(info[0]['budget']), 
-                         float(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').text), msg=None)
+                         float(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').text), msg=None)
         self.assertEqual(float(info[0]['objective']), 
-                         float(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[8]/p').text), msg=None)
+                         float(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[7]/p').text), msg=None)
         path = "clients/campaigns/screenshot/"
         screenshot(self, path)
         sleep(2)
