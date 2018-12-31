@@ -1,8 +1,9 @@
 import json
 import unittest
 from time import sleep
-from util.functions import db_functions, login, logout
+
 from util.config import ModelConfig
+from util.functions import db_functions, login, logout
 
 # Variables
 client = "arcapruebas2@gmail.com"

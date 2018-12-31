@@ -1,7 +1,8 @@
 import json
-from time import sleep
 import re
 import unittest
+from time import sleep
+
 from util.config import ModelConfig
 from util.functions import login, logout, db_functions, randoms
 

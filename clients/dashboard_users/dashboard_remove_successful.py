@@ -1,5 +1,6 @@
 import time
 import unittest
+
 from util.config import ModelConfig
 from util.functions import login, logout
 
