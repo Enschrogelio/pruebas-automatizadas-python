@@ -57,7 +57,7 @@ cur.execute(sql, val)
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[3]/p').text, msg=None)
         self.assertEqual(info[0]['industry'],
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[4]/p').text, msg=None)
-        self.assertEqual(info[0]['category'],
+        self.assertEqual(info[0]['category'].capitalize(),
                          driver.find_element_by_xpath('//*[@id="client-info"]/div/div[5]/p').text, msg=None)
         self.assertEqual(float(info[0]['budget']), 
                          float(driver.find_element_by_xpath('//*[@id="client-info"]/div/div[6]/p').text), msg=None)
