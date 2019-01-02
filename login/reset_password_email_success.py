@@ -1,4 +1,5 @@
 import unittest
+
 from util.functions import ModelConfig, screenshot, sleep, logout
 
 
@@ -10,9 +11,9 @@ class ResetPasswordEmailSuccess(unittest.TestCase):
 
     def test_reset_password_email(self):
         driver = self.driver
-        email = 'sonia.amezcua@varangard.com'
-        password = 'serdan8520'
-        similary = 'sonia123'
+        email = 'arcapruebas@gmail.com'
+        password = '1a23456789'
+        similary = 'arca1234'
         path = "login/screenshot/test_reset_password_email"
         browser_name = self.driver.capabilities['browserName']
         # Precondición: Correo como primer registro en bandeja y cambiar valores de las variables email,
