@@ -35,9 +35,6 @@ sql = 'INSERT INTO users (name, password, status, email, created_at, updated_at,
       ' VALUES (%s, %s, %s, %s, current_timestamp, current_timestamp, %s, %s) returning email'
 val = (info[0]['name'], info[0]['password'], '1', info[0]['email'], 'true', 'false')
 cur.execute(sql, val)
-
-# print the returned value
-print(cur.fetchone()[0])
 """.format(info)
         db_functions(code)
 
