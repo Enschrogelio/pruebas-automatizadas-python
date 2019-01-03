@@ -1,5 +1,6 @@
-import unittest
 import json
+import unittest
+
 from util.functions import ModelConfig, login, logout, db_functions, sleep, screenshot
 
 # DATA SET
@@ -20,6 +21,7 @@ client_secret_correct = "F7BcoQXmw9JX3nA4hGaSxzJl"
 client_id_error = "361084056659-tjo3kas6ftsijf99ejsejnk93cuecdo0.apps.googleusercontent"
 client_secret_error = "F7BcoQXmw9JX3nA4hGaSxzJl2"
 path_screenshot = 'clients/campaigns/connections/screenshot/'
+current_url: None
 
 
 class ValidateDoubleClickManager(unittest.TestCase):
@@ -33,8 +35,6 @@ class ValidateDoubleClickManager(unittest.TestCase):
         login(cls)
 
         # ENVIROMENT SETTING
-        client1 = json.loads(clients)
-        campaign1 = json.loads(campaigns)
         code = """
 client = {0}
 campaign = {1}
@@ -60,11 +60,12 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         cls.driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         cls.driver.find_element_by_id('search').send_keys(client[0]['rfc'])
         sleep(2)
-        cls.driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td[6]/a[1]').click()
+        cls.driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td[5]/a[1]').click()
         sleep(2)
-        cls.driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[10]/a[1]').click()
+        cls.driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[8]/a[1]').click()
 
     def test_manager_data_required(self):
+        global current_url
         path = path_screenshot + "test_analytics_data_required"
         sleep(3)
         driver = self.driver
@@ -73,7 +74,7 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          .text, msg=None)
         self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+        self.assertEqual("To improve your campaign, connect with DoubleClick Manager. Check the connection guide",
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
         self.assertEqual("Client ID",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
@@ -82,21 +83,24 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         self.assertEqual("CONNECT",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[3]/div/button')
                          .text.upper(), msg=None)
+        driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/input').send_keys("a")
         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/input').clear()
-        driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/input[1]').clear()
+        driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/input').send_keys("b")
+        driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/input').clear()
         current_url = driver.current_url
         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[3]/div/button').click()
         sleep(3)
-        self.assertEqual("This field is empty",
+        self.assertEqual("Client ID is required",
                          driver.find_element_by_css_selector('#form-dbm > div > div:nth-child(1) > div > span')
                          .text, msg=None)
-        self.assertEqual("This field is empty",
+        self.assertEqual("Client Secret is required",
                          driver.find_element_by_css_selector('#form-dbm > div > div:nth-child(2) > div > span')
                          .text, msg=None)
         screenshot(self, path)
-        driver.get(current_url)
 
+    # ACTUALMENTE ESTE TEST NO PUEDE EJECUTARSE EN STAGE
     def test_manager_client_secret_error(self):
+        global current_url
         path = path_screenshot + "test_manager_client_secret_error"
         sleep(2)
         driver = self.driver
@@ -105,7 +109,7 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          .text, msg=None)
         self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+        self.assertEqual("To improve your campaign, connect with DoubleClick Manager. Check the connection guide",
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
         self.assertEqual("Client ID",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
@@ -123,9 +127,9 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          driver.find_element_by_xpath('//*[@id="dbm_tab"]/span[2]').text, msg=None)
         sleep(2)
         screenshot(self, path)
-        driver.get(current_url)
 
     def test_manager_client_id_error(self):
+        global current_url
         path = path_screenshot + "test_manager_client_id_error"
         sleep(2)
         driver = self.driver
@@ -134,7 +138,7 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          .text, msg=None)
         self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+        self.assertEqual("To improve your campaign, connect with DoubleClick Manager. Check the connection guide",
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
         self.assertEqual("Client ID",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
@@ -155,9 +159,9 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         self.assertEqual("The OAuth client was not found.",
                          driver.find_element_by_xpath('//*[@id="errorDescription"]').text, msg=None)
         screenshot(self, path)
-        driver.get(current_url)
 
     def test_manager_client_secret_client_id_error(self):
+        global current_url
         path = path_screenshot + "test_manager_client_secret_client_id_error"
         sleep(2)
         driver = self.driver
@@ -166,7 +170,7 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          .text, msg=None)
         self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+        self.assertEqual("To improve your campaign, connect with DoubleClick Manager. Check the connection guide",
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
         self.assertEqual("Client ID",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
@@ -188,8 +192,12 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
                          driver.find_element_by_xpath('//*[@id="errorDescription"]').text, msg=None)
         sleep(2)
         screenshot(self, path)
+
+    def tearDown(self):
+        driver = self.driver
         driver.get(current_url)
 
+    # noinspection PyUnresolvedReferences
     @classmethod
     def tearDownClass(cls):
         logout(cls)
