@@ -1,4 +1,5 @@
 import os
+
 from selenium import webdriver
 
 root_files = os.path.dirname(os.path.abspath(__file__))+'\\'
@@ -42,7 +43,7 @@ class ModelConfig:
                     else:
                         return None
 
-    driver_web = drivers("ch")
+    driver_web = drivers("ed")
 
 
 

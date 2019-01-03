@@ -2,6 +2,13 @@ import unittest
 
 from util.functions import ModelConfig, screenshot, sleep, logout
 
+# Precondiciones:
+# - Correo como primer registro en bandeja
+# - no tener más de un correo del mismo
+# - Cambiar valores de las variables email, password y similary
+email = "arcapruebas@gmail.com"
+password = 'pruebasarca1'
+similary = 'arcapruebas1234'
 
 class ResetPasswordEmailSuccess(unittest.TestCase):
 
@@ -11,24 +18,20 @@ class ResetPasswordEmailSuccess(unittest.TestCase):
 
     def test_reset_password_email(self):
         driver = self.driver
-        email = 'arcapruebas@gmail.com'
-        password = '1a23456789'
-        similary = 'arca1234'
         path = "login/screenshot/test_reset_password_email"
         browser_name = self.driver.capabilities['browserName']
-        # Precondición: Correo como primer registro en bandeja y cambiar valores de las variables email,
-        # password y similary
+
         driver.get('https://mail.google.com/mail/u/0/#inbox')
 
         sleep(8)
         driver.find_element_by_css_selector('#identifierId').send_keys(email)
         driver.find_element_by_css_selector('#identifierNext > content').click()
         sleep(5)
-        driver.find_element_by_css_selector('#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input')\
+        driver.find_element_by_css_selector('#password > div > div > div > input')\
             .send_keys(password)
         driver.find_element_by_css_selector('#passwordNext > content').click()
         sleep(5)
-        driver.find_element_by_xpath('//*[@class="Cp"]/div/table/tbody/tr[1]/td[5]').click()
+        driver.find_element_by_xpath('//table/tbody/tr[1]/td[5]').click()
         sleep(10)
         self.assertIn("Password reset on",
                       driver.find_element_by_xpath('//*[@role="main"]/div/table/tr/td[1]/div[2]/div[1]/div[2]'

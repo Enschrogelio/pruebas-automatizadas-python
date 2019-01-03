@@ -1,4 +1,5 @@
 import unittest
+
 from util.functions import ModelConfig, logout, screenshot, sleep
 
 
@@ -6,6 +7,7 @@ class RedirectLoginSuccess(unittest.TestCase):
 
     def setUp(self):
         self.driver = ModelConfig.driver_web
+        self.driver.maximize_window()
 
     def test_redirect_login_success(self):
         driver = self.driver
