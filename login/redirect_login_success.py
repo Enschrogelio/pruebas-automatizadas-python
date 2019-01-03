@@ -1,5 +1,4 @@
 import unittest
-
 from util.functions import ModelConfig, logout, screenshot, sleep
 
 

@@ -8,6 +8,7 @@ from util.functions import ModelConfig, screenshot, sleep
 email = "arcapruebas@gmail.com"
 password = 'pruebasarca1'
 
+
 class ResetPasswordEmailSuccess(unittest.TestCase):
 
     def setUp(self):

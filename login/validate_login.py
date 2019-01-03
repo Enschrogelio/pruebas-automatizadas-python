@@ -3,6 +3,8 @@ from util.functions import ModelConfig, sleep, screenshot
 
 email_inexist = "sonia.amezcua1@varangard.com"
 password_inexist = "123"
+
+
 class ValidateLogin(unittest.TestCase):
 
     @classmethod

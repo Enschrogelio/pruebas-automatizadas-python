@@ -73,6 +73,7 @@ class ValidatePasswordReset(unittest.TestCase):
     # screenshot(self, path)
     # sleep(5)
 
+    # noinspection PyUnresolvedReferences
     @classmethod
     def tearDownClass(cls):
         cls.driver.close()

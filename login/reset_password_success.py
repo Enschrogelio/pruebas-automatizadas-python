@@ -1,5 +1,4 @@
 import unittest
-
 from util.functions import ModelConfig, screenshot, sleep, db_functions
 
 users = [
