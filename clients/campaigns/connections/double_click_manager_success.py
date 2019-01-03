@@ -61,39 +61,18 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         sleep(3)
         driver.find_element_by_xpath('//*[@id="inputSrc"]/img').click()
         driver.find_element_by_id('search').send_keys(client[0]['rfc'])
-        sleep(3)
-        self.assertEqual(client[0]['email'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[1]')
-                         .text, msg=None)
-        self.assertEqual(client[0]['name'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[2]')
-                         .text, msg=None)
-        self.assertEqual(client[0]['rfc'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[3]')
-                         .text, msg=None)
-        self.assertEqual(client[0]['cpm'], driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr[1]/td[4]')
-                         .text, msg=None)
-        screenshot(self, path)
-        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td[6]/a[1]').click()
+        sleep(2)
+        driver.find_element_by_xpath('//*[@id="clienttable"]/tbody/tr/td[5]/a[1]').click()
         sleep(3)
         self.assertIn(ModelConfig.base_url+"/admin/client/detail/", driver.current_url, msg=None)
-        self.assertEqual(client[0]['company'], driver.find_element_by_xpath('//*[@id="client-info-header"]/h2')
-                         .text, msg=None)
-        sleep(3)
-        self.assertEqual(campaign[0]['camcode'],
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[2]').text, msg=None)
-        self.assertEqual(campaign[0]['name'],
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[3]').text, msg=None)
-        self.assertEqual(campaign[0]['industry'],
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[4]').text, msg=None)
-        self.assertEqual(campaign[0]['category'],
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[5]').text, msg=None)
-        screenshot(self, path)
-        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[10]/a[1]').click()
+        driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr/td[8]/a[1]').click()
         sleep(3)
         self.assertIn(ModelConfig.base_url+"/admin/campaign/detail/", driver.current_url, msg=None)
         self.assertEqual(campaign[0]['name'], driver.find_element_by_xpath('//*[@id="client-info-header"]/h2')
                          .text, msg=None)
         self.assertEqual("DoubleClick Manager", driver.find_element_by_xpath('/html/body/div[4]/h2')
                          .text, msg=None)
-        self.assertEqual("To improve your campaign, connect with DoubleClick Mannager. Check the connection guide",
+        self.assertEqual("To improve your campaign, connect with DoubleClick Manager. Check the connection guide",
                          driver.find_element_by_xpath('/html/body/div[4]/div/div/span').text, msg=None)
         self.assertEqual("Client ID",
                          driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/label').text, msg=None)
@@ -105,14 +84,17 @@ cur.execute(sql_campaign, val_campaign)""".format(client, campaign)
         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/input').send_keys(client_id)
         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/input').send_keys(client_secret)
         driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[3]/div/button').click()
-        self.assertEqual("Successful connection",
-                         driver.find_element_by_css_selector('//*[@id="dbm_tab"]/span[2]').text.upper(), msg=None)
+        # ESTE TEXTO SE COMENTÓ DEBIDO A QUE NO PUEDE REALIZARSE LA CONEXIÓN EN STAGE
+        #self.assertEqual("Successful connection",
+        #                 driver.find_element_by_css_selector('//*[@id="dbm_tab"]/span[2]').text.upper(), msg=None)
         screenshot(self, path)
+        driver.refresh()
+        sleep(2)
         driver.find_element_by_xpath('//*[@id="client-info-header"]/a[1]').click()
-        self.assertEqual(campaign[0]['name'],
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[3]').text, msg=None)
-        self.assertEqual(client_secret,
-                         driver.find_element_by_xpath('//*[@id="campaigntable"]/tbody/tr[1]/td[9]').text, msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[1]/div/input')
+                         .get_attribute("value"), client_id, msg=None)
+        self.assertEqual(driver.find_element_by_xpath('//*[@id="form-dbm"]/div/div[2]/div/input')
+                         .get_attribute("value"), client_secret, msg=None)
         screenshot(self, path)
 
     def tearDown(self):
