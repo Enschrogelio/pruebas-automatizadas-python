@@ -27,7 +27,7 @@ class EditCampaign(unittest.TestCase):
         self.driver.maximize_window()
         code = """
 info = {0}
-client = "{1]"
+client = "{1}"
 cur.execute("SELECT id FROM clients WHERE email = '%s'" % client)
 id_client = cur.fetchone()[0]
 cur.execute("DELETE FROM campaigns WHERE name = '%s' AND budget = %s AND objetive = %s"

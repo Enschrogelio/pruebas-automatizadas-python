@@ -8,14 +8,14 @@ base_driver = root_files+"drivers/"
 class ModelConfig:
 
     # Attributes
-    base_url = "http://stage.eupam5k9mb.us-west-2.elasticbeanstalk.com"
+    base_url = ""
     url_login = base_url + "/admin/login/"
-    email = "admin@admin.com"
-    password = "admin"
-    connection = "dbname='cerebro' " \
-                 "user='cerebro' " \
-                 "host='cerebro-stage.ct2o8jgma4vs.us-west-2.rds.amazonaws.com' " \
-                 "password='N23E4Jz8KLRuSvGb' " \
+    email = ""
+    password = ""
+    connection = "dbname='' " \
+                 "user='' " \
+                 "host='' " \
+                 "password='' " \
                  "connect_timeout=10 "
 
     # Screenshot
